@@ -1,34 +1,15 @@
+import { Route, BrowserRouter, Routes } from 'react-router'
 import './App.css'
-import { useEffect, useState } from 'react'
-import Topbar from './components/Topbar/Topbar'
-import Sidebar from './components/Sidebar/Sidebar'
-import { getCurrentUser } from './services/api'
-import type { User } from './types/user'
+import Home from './pages/Home'
+import { Login } from './components/login/Login'
 
-function App() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    // beforeRender 
-    const fetchCurrentUser = async () => {
-      try {
-        const user = await getCurrentUser();
-        setCurrentUser(user);
-        // Usuario obtenido correctamente
-      } catch (error) {
-        console.error('Error obteniendo usuario actual:', error);
-      }
-    };
-
-    fetchCurrentUser();
-  }, []);
-
+export const App = () => {
   return (
-    <div className="App">
-      <Topbar currentUser={currentUser} />
-      <Sidebar />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
-
-export default App
