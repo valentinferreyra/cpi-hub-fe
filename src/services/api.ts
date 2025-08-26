@@ -1,7 +1,8 @@
 import axios from 'axios';
+import type { SearchSpacesResponse } from '../types/space';
 
 const api = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com',
+  baseURL: 'http://localhost:8080/v1',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -29,5 +30,17 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+
+// spaces
+export const getSpaces = async (): Promise<SearchSpacesResponse> => {
+  try {
+    const response = await api.get('/spaces');
+    return response.data;
+  } catch (error) {
+    console.error('Error getting spaces:', error);
+    throw error;
+  }
+};
 
 export default api;

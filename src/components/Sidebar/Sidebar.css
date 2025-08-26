@@ -1,0 +1,26 @@
+.sidebar {
+  background-color: #9F283B;
+  width: 250px;
+  height: calc(100vh - 70px);
+  top: 70px;
+  position: fixed;
+  left: 0;
+  padding: 20px;
+}
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-item {
+  color: white;
+  text-align: left;
+  padding: 5px 0;
+}
+
+.sidebar-loading {
+  color: white;
+  text-align: center;
+}

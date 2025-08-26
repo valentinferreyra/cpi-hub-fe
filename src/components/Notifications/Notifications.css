@@ -1,0 +1,21 @@
+.notifications-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notifications-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.notifications-icon {
+  height: 24px;
+  width: 28px;
+  filter: brightness(0) invert(1);
+}

@@ -1,11 +1,12 @@
 import './App.css'
+import Topbar from './components/Topbar/Topbar'
+import Sidebar from './components/Sidebar/Sidebar'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Hola mundo</h1>
-      </header>
+      <Topbar />
+      <Sidebar />
     </div>
   )
 }
