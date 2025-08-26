@@ -6,10 +6,26 @@ import Notifications from '../Notifications/Notifications';
 import cpihubLogo from '../../assets/cpihub-logo.png';
 import unqLogo from '../../assets/unq-logo.png';
 import homeLogo from '../../assets/home.png';
+import type { User } from '../../types/user';
 
-const Topbar: React.FC = () => {
+interface TopbarProps {
+  currentUser: User | null;
+}
+
+const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
   const handleHomeClick = () => {
     console.log('click on home');
+  };
+
+  const handleUserClick = () => {
+    if (currentUser) {
+      console.log('Usuario actual:', {
+        id: currentUser.id,
+        nombre: currentUser.name,
+        apellido: currentUser.last_name,
+        email: currentUser.email
+      });
+    }
   };
 
   return (
@@ -33,6 +49,15 @@ const Topbar: React.FC = () => {
           <div className="actions-container">
             <Messages />
             <Notifications />
+            {currentUser && (
+              <button className="user-avatar-button" onClick={handleUserClick}>
+                <img 
+                  src={currentUser.image} 
+                  alt={`${currentUser.name} ${currentUser.last_name}`} 
+                  className="user-avatar" 
+                />
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -19,6 +19,7 @@ html, body {
   width: 100%;
   overflow-x: hidden;
   box-sizing: border-box;
+  background-color: #faf8f3;
 }
 
 * {

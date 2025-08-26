@@ -7,7 +7,7 @@
   left: 0;
   padding: 20px;
 }
-
+ 
 .sidebar-container {
   display: flex;
   flex-direction: column;
@@ -18,6 +18,11 @@
   color: white;
   text-align: left;
   padding: 5px 0;
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  font-weight: bold;
 }
 
 .sidebar-loading {

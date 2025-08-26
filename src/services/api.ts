@@ -1,5 +1,7 @@
 import axios from 'axios';
 import type { SearchSpacesResponse } from '../types/space';
+import type { User } from '../types/user';
+import { mockCurrentUser } from '../data/mockCurrentUser';
 
 const api = axios.create({
   baseURL: 'http://localhost:8080/v1',
@@ -39,6 +41,21 @@ export const getSpaces = async (): Promise<SearchSpacesResponse> => {
     return response.data;
   } catch (error) {
     console.error('Error getting spaces:', error);
+    throw error;
+  }
+};
+
+// users
+export const getCurrentUser = async (): Promise<User> => {
+  try {
+    // Simulamos una request a la api
+    // en una futura integración, seria buscar el usuario actual por token
+  // delay
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    return mockCurrentUser;
+  } catch (error) {
+    console.error('Error getting current user:', error);
     throw error;
   }
 };
