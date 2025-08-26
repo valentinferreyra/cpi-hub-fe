@@ -7,7 +7,7 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ 
-  placeholder = "¿En qué estás pensando hoy?", 
+  placeholder = "Buscar un tópico...",
   className = "" 
 }) => {
   const [searchValue, setSearchValue] = useState('');

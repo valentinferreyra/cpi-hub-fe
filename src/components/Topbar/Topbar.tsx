@@ -41,7 +41,7 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
             <button className="home-button" onClick={handleHomeClick}>
               <img src={homeLogo} alt="Home" className="home-icon" />
             </button>
-            <Search placeholder="¿En qué estás pensando hoy?" />
+            <Search placeholder="Buscar un tópico..." />
           </div>
         </div>
         
