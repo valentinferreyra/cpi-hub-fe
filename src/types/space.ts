@@ -7,7 +7,3 @@ export interface Space {
   updated_at: string;
   updated_by: string;
 }
-
-export interface SearchSpacesResponse {
-  spaces: Space[];
-}

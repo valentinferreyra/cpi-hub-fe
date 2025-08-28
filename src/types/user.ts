@@ -1,3 +1,5 @@
+import type { Space } from "./space";
+
 export interface User {
   id: string;
   name: string;
@@ -6,4 +8,6 @@ export interface User {
   created_at: string;
   updated_at: string;
   image: string;
+  spaces: Space[];
 }
+
