@@ -60,7 +60,21 @@ function Home() {
       <Sidebar spaces={currentUser?.spaces || []} />
       <div className="posts-container">
         <div className="posts-section">
-          <h2 className="posts-title">Últimas actualizaciones</h2>
+          <div className="posts-header">
+            <h2 className="posts-title">Últimas actualizaciones</h2>
+            <button 
+              className="refresh-btn"
+              onClick={async () => {
+                if (currentUser?.spaces && currentUser.spaces.length > 0) {
+                  const spaceIds = currentUser.spaces.map(space => space.id);
+                  const posts = await getPostsBySpaceIds(spaceIds);
+                  setLatestPosts(posts);
+                }
+              }}
+            >
+              <img src="/src/assets/refresh.png" alt="Refresh" className="refresh-icon" />
+            </button>
+          </div>
           <div className="posts-list">
             {latestPosts.map((post) => (
               <PostCard key={post.id} post={post} />
