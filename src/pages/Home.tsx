@@ -16,18 +16,18 @@ function Home() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        
-        const userId = "01K3J0Q7380Z62WMD721JKNH8P";
-        
+
+        const userId = "5";
+
         const user = await getCurrentUser(userId);
         setCurrentUser(user);
-        
+
         if (user.spaces && user.spaces.length > 0) {
           const spaceIds = user.spaces.map(space => space.id);
           const posts = await getPostsBySpaceIds(spaceIds);
           setLatestPosts(posts);
         }
-        
+
       } catch (error) {
         console.error('Error en la carga de datos:', error);
       } finally {
@@ -40,10 +40,10 @@ function Home() {
 
   if (isLoading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: '100vh',
         fontSize: '20px',
         fontWeight: '500',
@@ -62,7 +62,7 @@ function Home() {
         <div className="posts-section">
           <div className="posts-header">
             <h2 className="posts-title">Últimas actualizaciones</h2>
-            <button 
+            <button
               className="refresh-btn"
               onClick={async () => {
                 if (currentUser?.spaces && currentUser.spaces.length > 0) {
