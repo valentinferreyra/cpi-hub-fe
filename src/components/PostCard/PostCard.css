@@ -1,0 +1,116 @@
+.post-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.2s ease;
+  width: 100%;
+  max-width: none;
+}
+
+.post-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.author-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.post-space {
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.post-space:hover {
+  color: #333;
+  opacity: 0.9;
+}
+
+.post-date {
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+}
+
+.post-content {
+  margin-bottom: 16px;
+}
+
+.post-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.post-text {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+}
+
+.read-more-btn {
+  background: none;
+  border: none;
+  color: #9F283B;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+  display: inline;
+  margin-left: 4px;
+}
+
+.read-more-btn:hover {
+  color: #7a1f2e;
+}
+
+.post-footer {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 12px;
+}
+
+.comments-count {
+  font-size: 12px;
+  color: #999;
+  cursor: pointer;
+}
+
+.comments-count:hover {
+  color: #666;
+}

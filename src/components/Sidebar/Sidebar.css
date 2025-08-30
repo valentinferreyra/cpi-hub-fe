@@ -1,0 +1,38 @@
+.sidebar {
+  background-color: #9F283B;
+  width: 250px;
+  height: calc(100vh - 70px);
+  top: 70px;
+  position: fixed;
+  left: 0;
+  padding: 20px;
+}
+
+.sidebar-separator {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 15px 0;
+  width: 100%;
+}
+ 
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-item {
+  color: white;
+  text-align: left;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  font-weight: bold;
+}
+
+.sidebar-loading {
+  color: white;
+  text-align: center;
+}

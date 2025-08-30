@@ -1,17 +1,18 @@
-import axios from 'axios';
+import axios from "axios";
+import type { User } from "../types/user";
+import type { Post } from "../types/post";
+import { mockLatestPosts } from "../data/mockLatestPosts";
 
 const api = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com',
+  baseURL: "http://localhost:8080/v1",
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
-
 api.interceptors.request.use(
   (config) => {
-    console.log('Enviando request:', config.method?.toUpperCase(), config.url);
     return config;
   },
   (error) => {
@@ -21,13 +22,39 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    console.log('Response recibido:', response.status, response.config.url);
     return response;
   },
   (error) => {
-    console.error('Error en request:', error.message);
     return Promise.reject(error);
   }
 );
+
+export const getCurrentUser = async (_userId: string): Promise<User> => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    const response = await api.get(`/users/${_userId}`);
+    console.log("API Response:", response.data.data);
+    return response.data.data;
+  } catch (error) {
+    console.error("Error getting current user:", error);
+    throw error;
+  }
+};
+
+export const getPostsBySpaceIds = async (
+  _spaceIds: string[]
+): Promise<Post[]> => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 400));
+
+    const mockResponse = mockLatestPosts;
+
+    return mockResponse;
+  } catch (error) {
+    console.error("Error getting posts by space ids:", error);
+    throw error;
+  }
+};
 
 export default api;
