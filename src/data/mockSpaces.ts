@@ -18,5 +18,14 @@ export const mockSpaces: Space[] = [
     created_by: "01K3KK5NW74GBVQMWP1NA8G75H",
     updated_at: "2025-08-26T13:38:17.2197773-03:00",
     updated_by: "01K3KK5NW74GBVQMWP1NA8G75H"
+  },
+  {
+    id: "01K3KKX7C3RSTQ75GCME16DYS9",
+    name: "General UNQUI",
+    description: "Espacio para hablar de cualquier cosa sobre la universidad",
+    created_at: "2025-08-26T13:38:17.2197773-03:00",
+    created_by: "01K3KK5NW74GBVQMWP1NA8G7 5H",
+    updated_at: "2025-08-26T13:38:17.2197773-03:00",
+    updated_by: "01K3KK5NW74GBVQMWP1NA8G75H"
   }
 ];

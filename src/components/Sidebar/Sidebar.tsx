@@ -1,31 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import type { Space } from '../../types/space';
-import { mockSpaces } from '../../data/mockSpaces';
 import './Sidebar.css';
 
-const Sidebar: React.FC = () => {
-  const [spaces, setSpaces] = useState<Space[]>([]);
-  const [loading, setLoading] = useState(true);
+interface SidebarProps {
+  spaces: Space[];
+}
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSpaces(mockSpaces);
-      setLoading(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
+const Sidebar: React.FC<SidebarProps> = ({ spaces }) => {
+  if (!spaces || spaces.length === 0) {
     return (
       <div className="sidebar">
-        <div className="sidebar-loading">Cargando espacios...</div>
+        <div className="sidebar-loading">No hay spaces suscritos</div>
       </div>
     );
   }
 
   return (
     <div className="sidebar">
+      <div className="sidebar-separator"></div>
       <div className="sidebar-container">
         {spaces.map((space) => (
           <div
@@ -36,6 +28,7 @@ const Sidebar: React.FC = () => {
           </div>
         ))}
       </div>
+      <div className="sidebar-separator"></div>
     </div>
   );
 };

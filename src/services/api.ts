@@ -1,7 +1,8 @@
 import axios from 'axios';
-import type { SearchSpacesResponse } from '../types/space';
 import type { User } from '../types/user';
+import type { Post } from '../types/post';
 import { mockCurrentUser } from '../data/mockCurrentUser';
+import { mockLatestPosts } from '../data/mockLatestPosts';
 
 const api = axios.create({
   baseURL: 'http://localhost:8080/v1',
@@ -11,10 +12,8 @@ const api = axios.create({
   },
 });
 
-
 api.interceptors.request.use(
   (config) => {
-    console.log('Enviando request:', config.method?.toUpperCase(), config.url);
     return config;
   },
   (error) => {
@@ -24,38 +23,35 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    console.log('Response recibido:', response.status, response.config.url);
     return response;
   },
   (error) => {
-    console.error('Error en request:', error.message);
     return Promise.reject(error);
   }
 );
 
-
-// spaces
-export const getSpaces = async (): Promise<SearchSpacesResponse> => {
+export const getCurrentUser = async (_userId: string): Promise<User> => {
   try {
-    const response = await api.get('/spaces');
-    return response.data;
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    const mockResponse = mockCurrentUser;
+    
+    return mockResponse;
   } catch (error) {
-    console.error('Error getting spaces:', error);
+    console.error('Error getting current user:', error);
     throw error;
   }
 };
 
-// users
-export const getCurrentUser = async (): Promise<User> => {
+export const getPostsBySpaceIds = async (_spaceIds: string[]): Promise<Post[]> => {
   try {
-    // Simulamos una request a la api
-    // en una futura integración, seria buscar el usuario actual por token
-  // delay
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 400));
     
-    return mockCurrentUser;
+    const mockResponse = mockLatestPosts;
+    
+    return mockResponse;
   } catch (error) {
-    console.error('Error getting current user:', error);
+    console.error('Error getting posts by space ids:', error);
     throw error;
   }
 };
