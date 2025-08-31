@@ -1,47 +1,16 @@
 import Sidebar from "../components/Sidebar/Sidebar";
 import Topbar from "../components/Topbar/Topbar";
 import PostCard from "../components/PostCard/PostCard";
-import { useState, useEffect } from "react";
-import type { User } from "../types/user";
-import type { Post } from "../types/post";
-import { getPostsBySpaceIds } from "../services/api";
+import { useEffect } from "react";
 import "./Home.css";
-import { mockCurrentUser } from "../data/mockCurrentUser";
+import { useAppContext } from "../context/AppContext";
 
 function Home() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [latestPosts, setLatestPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const { currentUser, latestPosts, isLoading, fetchData } = useAppContext();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (isFirstLoad) {
-          setIsLoading(true);
-        }
-
-        const user = mockCurrentUser;
-        setCurrentUser(user);
-
-        if (user.spaces && user.spaces.length > 0) {
-          const spaceIds = user.spaces.map(space => space.id);
-          const posts = await getPostsBySpaceIds(spaceIds);
-          setLatestPosts(posts);
-        }
-
-      } catch (error) {
-        console.error('Error en la carga de datos:', error);
-      } finally {
-        if (isFirstLoad) {
-          setIsLoading(false);
-          setIsFirstLoad(false);
-        }
-      }
-    };
-
     fetchData();
-  }, [isFirstLoad]);
+  }, [fetchData]);
 
   if (isLoading) {
     return (
@@ -69,13 +38,7 @@ function Home() {
             <h2 className="posts-title">Últimas actualizaciones</h2>
             <button
               className="refresh-btn"
-              onClick={async () => {
-                if (currentUser?.spaces && currentUser.spaces.length > 0) {
-                  const spaceIds = currentUser.spaces.map(space => space.id);
-                  const posts = await getPostsBySpaceIds(spaceIds);
-                  setLatestPosts(posts);
-                }
-              }}
+              onClick={fetchData}
             >
               <img src="/src/assets/refresh.png" alt="Refresh" className="refresh-icon" />
             </button>

@@ -13,7 +13,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const shouldTruncate = post.content.length > maxLength;
   
   const handlePostClick = () => {
-    navigate(`/posts/${post.id}`);
+    navigate(`/post/${post.id}`);
   };
 
   return (
