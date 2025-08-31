@@ -4,22 +4,24 @@ import PostCard from "../components/PostCard/PostCard";
 import { useState, useEffect } from "react";
 import type { User } from "../types/user";
 import type { Post } from "../types/post";
-import { getCurrentUser, getPostsBySpaceIds } from "../services/api";
+import { getPostsBySpaceIds } from "../services/api";
 import "./Home.css";
+import { mockCurrentUser } from "../data/mockCurrentUser";
 
 function Home() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [latestPosts, setLatestPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
+        if (isFirstLoad) {
+          setIsLoading(true);
+        }
 
-        const userId = "5";
-
-        const user = await getCurrentUser(userId);
+        const user = mockCurrentUser;
         setCurrentUser(user);
 
         if (user.spaces && user.spaces.length > 0) {
@@ -31,12 +33,15 @@ function Home() {
       } catch (error) {
         console.error('Error en la carga de datos:', error);
       } finally {
-        setIsLoading(false);
+        if (isFirstLoad) {
+          setIsLoading(false);
+          setIsFirstLoad(false);
+        }
       }
     };
 
     fetchData();
-  }, []);
+  }, [isFirstLoad]);
 
   if (isLoading) {
     return (

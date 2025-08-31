@@ -4,9 +4,10 @@
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: box-shadow 0.2s ease;
+  transition: all 0.2s ease;
   width: 100%;
   max-width: none;
+  cursor: pointer;
 }
 
 .post-card:hover {
@@ -67,8 +68,8 @@
   margin-bottom: 16px;
 }
 
-.post-title {
-  font-size: 18px;
+.post-card .post-title {
+  font-size: 16px;
   font-weight: 600;
   color: #333;
   margin: 0 0 12px 0;
@@ -82,23 +83,7 @@
   margin: 0 0 12px 0;
 }
 
-.read-more-btn {
-  background: none;
-  border: none;
-  color: #9F283B;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  transition: color 0.2s ease;
-  display: inline;
-  margin-left: 4px;
-}
 
-.read-more-btn:hover {
-  color: #7a1f2e;
-}
 
 .post-footer {
   border-top: 1px solid #f0f0f0;
