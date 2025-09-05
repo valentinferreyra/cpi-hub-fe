@@ -1,0 +1,264 @@
+.post-container {
+  position: absolute;
+  top: 80px;
+  right: 15px;
+  left: 270px;
+  bottom: 20px;
+  background-color: #f8f9fa;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.post-section {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.posts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+
+.post-content-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  position: relative;
+}
+
+.post-space-badge-inline {
+  background-color: #9F283B;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.post-space-badge-inline.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.post-space-badge-inline.clickable:hover {
+  background-color: #7a1f2e;
+}
+
+.post-title-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex: 1;
+  border: none;
+  border-top: none;
+  border-bottom: none;
+}
+
+.post-author-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.post-title-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.post-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.post-author-date-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.post-author-date {
+  opacity: 0.7;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.post-page .post-author.clickable {
+  cursor: pointer;
+  transition: color 0.2s ease;
+  color: #9F283B;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  display: inline;
+}
+
+.post-page .post-author.clickable:hover {
+  color: #7a1f2e;
+  text-decoration: underline;
+}
+
+.post-page .post-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #666;
+}
+
+.post-page .post-author,
+.post-page .post-date,
+.post-page .post-space {
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.post-content {
+  margin-bottom: 32px;
+  line-height: 1.6;
+  font-size: 16px;
+  color: #333;
+}
+
+.post-comments h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+.comment {
+  background: #f9f9f9;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-left: 3px solid #9F283B;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.comment-author-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.comment-author-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: #9F283B;
+}
+
+.comment-author.clickable {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.comment-author.clickable:hover {
+  color: #7a1f2e;
+  text-decoration: underline;
+}
+
+.comment-date {
+  color: #666;
+}
+
+.comment-content {
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.add-comment-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.add-comment-section h4 {
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 80px;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #9F283B;
+  box-shadow: 0 0 0 2px rgba(159, 40, 59, 0.1);
+}
+
+.add-comment-btn {
+  align-self: flex-start;
+  background-color: #9F283B;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-comment-btn:hover {
+  background-color: #7a1f2e;
+}
+
+.add-comment-btn.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.add-comment-btn.disabled:hover {
+  background-color: #ccc;
+}

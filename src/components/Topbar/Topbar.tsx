@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Topbar.css';
 import Search from '../Search/Search';
 import Messages from '../Messages/Messages';
@@ -13,8 +14,10 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
+  const navigate = useNavigate();
+  
   const handleHomeClick = () => {
-    console.log('click on home');
+    navigate('/');
   };
 
   const handleUserClick = () => {
