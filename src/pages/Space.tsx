@@ -1,4 +1,3 @@
-import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Topbar from "../components/Topbar/Topbar";
 import PostCard from "../components/PostCard/PostCard";
@@ -7,20 +6,22 @@ import { useEffect } from "react";
 import "./Home.css";
 import { useAppContext } from "../context/AppContext";
 
-function Home() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { currentUser, latestPosts, selectedSpace, selectedSpacePosts, isLoading, fetchData, selectSpace, goToHome } = useAppContext();
+function Space() {
+  const { currentUser, selectedSpace, selectedSpacePosts, isLoading, fetchData, selectSpace } = useAppContext();
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  useEffect(() => {
-    if (location.pathname === '/' && selectedSpace) {
-      goToHome();
-    }
-  }, [location.pathname, selectedSpace, goToHome]);
+  const goToSpace = () => {
+    // Ya estamos en la página del space, no hacer nada
+    // O podríamos refrescar la página si es necesario
+  };
+
+  const breadcrumbItems = selectedSpace ? [
+    { label: selectedSpace.name, onClick: goToSpace },
+    { label: "Inicio", isActive: true }
+  ] : [];
 
   if (isLoading) {
     return (
@@ -33,20 +34,10 @@ function Home() {
         fontWeight: '500',
         color: '#333'
       }}>
-        Ingresando...
+        Cargando...
       </div>
     );
   }
-
-  const handleGoToHome = () => {
-    goToHome();
-    navigate('/');
-  };
-
-  const breadcrumbItems = selectedSpace ? [
-    { label: selectedSpace.name, isActive: true },
-    { label: "Inicio", onClick: handleGoToHome }
-  ] : [];
 
   return (
     <>
@@ -58,7 +49,7 @@ function Home() {
             {selectedSpace ? (
               <Breadcrumb items={breadcrumbItems} />
             ) : (
-              <h2 className="posts-title">Últimas novedades</h2>
+              <h2 className="posts-title">Space no encontrado</h2>
             )}
             <button
               className="refresh-btn"
@@ -67,10 +58,24 @@ function Home() {
               <img src="/src/assets/refresh.png" alt="Refresh" className="refresh-icon" />
             </button>
           </div>
+          {selectedSpace && (
+            <div className="space-info">
+              <p className="space-description">{selectedSpace.description}</p>
+              <p className="space-creator">
+                Creado por: {selectedSpace.created_by?.name} {selectedSpace.created_by?.last_name}
+              </p>
+              <div className="space-separator"></div>
+            </div>
+          )}
           <div className="posts-list">
-            {(selectedSpace ? selectedSpacePosts : latestPosts).map((post) => (
+            {selectedSpace ? selectedSpacePosts.map((post) => (
               <PostCard key={post.id} post={post} />
-            ))}
+            )) : (
+              <div className="posts-placeholder">
+                <h2>Space no encontrado</h2>
+                <p>El space que buscas no existe o no tienes acceso a él.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -78,4 +83,4 @@ function Home() {
   )
 }
 
-export default Home;
+export default Space;

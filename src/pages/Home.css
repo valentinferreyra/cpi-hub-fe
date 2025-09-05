@@ -18,7 +18,7 @@
 
 .posts-header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   border-bottom: 2px solid #f0f0f0;
@@ -32,6 +32,43 @@
   font-size: 22px;
   font-weight: 600;
   text-align: center;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.space-title {
+  color: #9F283B;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.space-info {
+  margin: 20px 0;
+  padding: 0;
+}
+
+.space-description {
+  color: #333;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 8px 0;
+}
+
+.space-creator {
+  color: #666;
+  font-size: 14px;
+  margin: 0 0 20px 0;
+  font-style: italic;
+}
+
+.space-separator {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 20px 0;
+  width: 100%;
 }
 
 .refresh-btn {

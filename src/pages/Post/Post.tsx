@@ -1,20 +1,36 @@
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Topbar from "../../components/Topbar/Topbar";
-import { useParams } from 'react-router-dom';
+import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
+import { useParams, useNavigate } from 'react-router-dom';
 import { mockPost } from '../../data/mockPost';
 import { mockCurrentUser } from '../../data/mockCurrentUser';
 import { useState, useEffect } from "react";
 import type { User } from "../../types/user";
+import { useAppContext } from "../../context/AppContext";
 import "./Post.css";
 
 export const Post = () => {
   const { post_id } = useParams();
+  const navigate = useNavigate();
+  const { selectSpace } = useAppContext();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
   const post = mockPost;
   
-  console.log('Post ID from URL:', post_id);
+
+  const handleGoToSpace = () => {
+    navigate(`/space/${post.space.id}`);
+  };
+
+  const handleGoToHome = () => {
+    navigate('/');
+  };
+
+  const breadcrumbItems = [
+    { label: post.space.name, onClick: handleGoToSpace },
+    { label: `Post de ${post.created_by.name} ${post.created_by.last_name}`, isActive: true }
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,11 +67,13 @@ export const Post = () => {
   return (
     <div className="post-page">
       <Topbar currentUser={currentUser} />
-      <Sidebar spaces={currentUser?.spaces || []} />
+      <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
       <div className="post-container">
         <div className="post-section">
-          <div className="post-header">
-            <div className="post-title-section">
+          <div className="posts-header">
+            <Breadcrumb items={breadcrumbItems} />
+          </div>
+          <div className="post-title-section">
               <img 
                 src={post.created_by.image} 
                 alt={`${post.created_by.name} ${post.created_by.last_name}`}
@@ -81,7 +99,6 @@ export const Post = () => {
                 </div>
               </div>
             </div>
-          </div>
 
           <div className="post-content">
             <p>{post.content}</p>
