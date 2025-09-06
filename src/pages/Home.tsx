@@ -60,12 +60,6 @@ function Home() {
             ) : (
               <h2 className="posts-title">Últimas novedades</h2>
             )}
-            <button
-              className="refresh-btn"
-              onClick={fetchData}
-            >
-              <img src="/src/assets/refresh.png" alt="Refresh" className="refresh-icon" />
-            </button>
           </div>
           <div className="posts-list">
             {(selectedSpace ? selectedSpacePosts : latestPosts).map((post) => (

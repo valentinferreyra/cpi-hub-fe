@@ -1,11 +1,8 @@
-import React, { createContext, useContext, useState, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import type { User } from '../types/user';
 import type { Post } from '../types/post';
 import type { Space } from '../types/space';
-import { mockCurrentUser } from '../data/mockCurrentUser';
-import { getPostsBySpaceIds } from '../services/api';
-import { mockGetSpace } from '../data/mockGetSpace';
-import { mockGetPostsBySpace } from '../data/mockGetPostsBySpace';
+import { getCurrentUser, getPostsBySpaceId, getPostsByUserId, getSpaceById } from '../services/api';
 
 interface AppContextType {
   currentUser: User | null;
@@ -19,6 +16,8 @@ interface AppContextType {
   goToHome: () => void;
   setCurrentUser: (user: User | null) => void;
   setLatestPosts: (posts: Post[]) => void;
+  setSelectedSpace: (space: Space | null) => void;
+  setSelectedSpacePosts: (posts: Post[] | ((prevPosts: Post[]) => Post[])) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -43,20 +42,18 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       if (isFirstLoad) {
         setIsLoading(true);
       }
 
-      const user = mockCurrentUser;
+      const user = await getCurrentUser(16);
       setCurrentUser(user);
 
-      if (user.spaces && user.spaces.length > 0) {
-        const spaceIds = user.spaces.map(space => space.id);
-        const posts = await getPostsBySpaceIds(spaceIds);
-        setLatestPosts(posts);
-      }
+      // Obtener posts de todos los espacios del usuario usando el nuevo endpoint
+      const posts = await getPostsByUserId(16);
+      setLatestPosts(posts);
 
     } catch (error) {
       console.error('Error en la carga de datos:', error);
@@ -66,11 +63,24 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setIsFirstLoad(false);
       }
     }
-  };
+  }, [isFirstLoad]);
 
-  const selectSpace = (_space: Space) => {
-    setSelectedSpace(mockGetSpace); // Siempre devuelve el mismo space mockeado
-    setSelectedSpacePosts(mockGetPostsBySpace); // Siempre devuelve los mismos posts mockeados
+  const selectSpace = async (space: Space) => {
+    try {
+      // Fetch complete space details with author information
+      const completeSpace = await getSpaceById(space.id);
+      const posts = await getPostsBySpaceId(space.id);
+      
+      // Use the complete space data if available, otherwise fall back to the space from user's spaces
+      setSelectedSpace(completeSpace || space);
+      setSelectedSpacePosts(posts);
+    } catch (error) {
+      console.error('Error fetching space details:', error);
+      // Fallback to the original space data if API call fails
+      const posts = await getPostsBySpaceId(space.id);
+      setSelectedSpace(space);
+      setSelectedSpacePosts(posts);
+    }
   };
 
   const goToHome = () => {
@@ -90,6 +100,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     goToHome,
     setCurrentUser,
     setLatestPosts,
+    setSelectedSpace,
+    setSelectedSpacePosts,
   };
 
   return (

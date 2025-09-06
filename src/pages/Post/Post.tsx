@@ -2,11 +2,12 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import Topbar from "../../components/Topbar/Topbar";
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 import { useParams, useNavigate } from 'react-router-dom';
-import { mockPost } from '../../data/mockPost';
-import { mockCurrentUser } from '../../data/mockCurrentUser';
 import { useState, useEffect } from "react";
 import type { User } from "../../types/user";
 import { useAppContext } from "../../context/AppContext";
+import { getCurrentUser, getPostById, addCommentToPost } from "../../services/api";
+import type { Post as PostType } from "../../types/post";
+import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
 import "./Post.css";
 
 export const Post = () => {
@@ -14,30 +15,57 @@ export const Post = () => {
   const navigate = useNavigate();
   const { selectSpace } = useAppContext();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [post, setPost] = useState<PostType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
-  const post = mockPost;
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   
 
   const handleGoToSpace = () => {
-    navigate(`/space/${post.space.id}`);
+    if (post) {
+      navigate(`/space/${post.space.id}`);
+    }
   };
 
-  const handleGoToHome = () => {
-    navigate('/');
+  const handleAddComment = async () => {
+    if (!post || !newComment.trim() || isSubmittingComment) return;
+
+    try {
+      setIsSubmittingComment(true);
+      await addCommentToPost(post.id, newComment.trim());
+      
+      setShowSuccessMessage(true);
+      
+      setNewComment('');
+      
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000);
+      
+      const updatedPost = await getPostById(post.id);
+      if (updatedPost) {
+        setPost(updatedPost);
+      }
+    } catch (error) {
+      console.error('Error al agregar comentario:', error);
+    } finally {
+      setIsSubmittingComment(false);
+    }
   };
 
-  const breadcrumbItems = [
-    { label: post.space.name, onClick: handleGoToSpace },
-    { label: `Post de ${post.created_by.name} ${post.created_by.last_name}`, isActive: true }
-  ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const user = mockCurrentUser;
+        const user = await getCurrentUser(14);
         setCurrentUser(user);
+        
+        if (post_id) {
+          const postData = await getPostById(post_id);
+          setPost(postData);
+        }
       } catch (error) {
         console.error('Error en la carga de datos:', error);
       } finally {
@@ -46,7 +74,7 @@ export const Post = () => {
     };
 
     fetchData();
-  }, []);
+  }, [post_id]);
 
   if (isLoading) {
     return (
@@ -63,6 +91,27 @@ export const Post = () => {
       </div>
     );
   }
+
+  if (!post) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontSize: '20px',
+        fontWeight: '500',
+        color: '#333'
+      }}>
+        Post no encontrado
+      </div>
+    );
+  }
+
+  const breadcrumbItems = [
+    { label: post.space.name, onClick: handleGoToSpace },
+    { label: `Post de ${post.created_by.name} ${post.created_by.last_name}`, isActive: true }
+  ];
 
   return (
     <div className="post-page">
@@ -88,7 +137,7 @@ export const Post = () => {
                       onClick={() => console.log('User ID:', post.created_by.id)}
                     >
                       {post.created_by.name} {post.created_by.last_name}
-                    </span>, el {new Date(post.created_at).toLocaleDateString()} a las {new Date(post.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    </span>, el {formatPostDetailDate(post.created_at)} a las {formatPostDetailTime(post.created_at)}
                   </div>
                   <span 
                     className="post-space-badge-inline clickable"
@@ -123,7 +172,7 @@ export const Post = () => {
                     </span>
                   </div>
                   <span className="comment-date">
-                    {new Date(comment.created_at).toLocaleDateString()} a las {new Date(comment.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    {formatPostDetailDate(comment.created_at)} a las {formatPostDetailTime(comment.created_at)}
                   </span>
                 </div>
                 <p className="comment-content">{comment.content}</p>
@@ -132,6 +181,11 @@ export const Post = () => {
             
             <div className="add-comment-section">
               <h4>Agregar comentario</h4>
+              {showSuccessMessage && (
+                <div className="success-message">
+                  ✅ Comentario agregado correctamente
+                </div>
+              )}
               <div className="comment-form">
                 <textarea 
                   className="comment-input"
@@ -139,12 +193,14 @@ export const Post = () => {
                   rows={3}
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
+                  disabled={isSubmittingComment}
                 />
                 <button 
-                  className={`add-comment-btn ${newComment.trim() ? 'active' : 'disabled'}`}
-                  disabled={!newComment.trim()}
+                  className={`add-comment-btn ${newComment.trim() && !isSubmittingComment ? 'active' : 'disabled'}`}
+                  disabled={!newComment.trim() || isSubmittingComment}
+                  onClick={handleAddComment}
                 >
-                  Agregar comentario
+                  {isSubmittingComment ? 'Agregando...' : 'Agregar comentario'}
                 </button>
               </div>
             </div>

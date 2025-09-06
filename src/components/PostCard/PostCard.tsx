@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Post } from '../../types/post';
+import { formatPostDate } from '../../utils/dateUtils';
 import './PostCard.css';
 
 interface PostCardProps {
@@ -36,12 +37,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           </div>
         </div>
         <span className="post-date">
-          {new Date(post.created_at).toLocaleDateString('es-ES', {
-            day: 'numeric',
-            month: 'short',
-            hour: '2-digit',
-            minute: '2-digit'
-          })}
+          {formatPostDate(post.created_at)}
         </span>
       </div>
       
