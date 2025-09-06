@@ -32,6 +32,48 @@
   font-weight: bold;
 }
 
+.explore-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  padding: 8px 12px;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+  border-radius: 6px;
+}
+
+.explore-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+}
+
+.sidebar-icon {
+  width: 27px;
+  height: 27px;
+  filter: brightness(0) invert(1);
+}
+
+.trends-icon {
+  width: 26px;
+  height: 24px;
+}
+
+.explore-icon {
+  width: 28px;
+  height: 24px;
+}
+
+.sidebar-section-title {
+  color: white;
+  text-align: center;
+  font-weight: 900;
+  font-size: 14px;
+  margin: 5px 0 8px 0;
+  opacity: 0.9;
+}
+
 .sidebar-loading {
   color: white;
   text-align: center;

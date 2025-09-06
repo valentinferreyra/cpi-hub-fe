@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Post } from '../../types/post';
+import { formatPostDate } from '../../utils/dateUtils';
 import './PostCard.css';
 
 interface PostCardProps {
@@ -7,12 +9,16 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const maxLength = 150;
+  const navigate = useNavigate();
+  const maxLength = 160;
   const shouldTruncate = post.content.length > maxLength;
-  const displayContent = post.content.slice(0, maxLength) + '...';
+  
+  const handlePostClick = () => {
+    navigate(`/post/${post.id}`);
+  };
 
   return (
-    <div className="post-card">
+    <div className="post-card" onClick={handlePostClick}>
       <div className="post-header">
         <div className="post-author">
           <img 
@@ -31,12 +37,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           </div>
         </div>
         <span className="post-date">
-          {new Date(post.created_at).toLocaleDateString('es-ES', {
-            day: 'numeric',
-            month: 'short',
-            hour: '2-digit',
-            minute: '2-digit'
-          })}
+          {formatPostDate(post.created_at)}
         </span>
       </div>
       
@@ -44,17 +45,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <h3 className="post-title">{post.title}</h3>
         <p className="post-text">
           {post.content.slice(0, maxLength)}
-          {shouldTruncate && (
-            <>
-              ...{' '}
-              <button 
-                className="read-more-btn"
-                onClick={() => console.log('Post ID:', post.id)}
-              >
-                Ver más
-              </button>
-            </>
-          )}
+          {shouldTruncate && '...'}
         </p>
       </div>
       

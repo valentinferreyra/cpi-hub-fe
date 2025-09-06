@@ -1,42 +1,26 @@
+import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Topbar from "../components/Topbar/Topbar";
 import PostCard from "../components/PostCard/PostCard";
-import { useState, useEffect } from "react";
-import type { User } from "../types/user";
-import type { Post } from "../types/post";
-import { getCurrentUser, getPostsBySpaceIds } from "../services/api";
+import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
+import { useEffect } from "react";
 import "./Home.css";
+import { useAppContext } from "../context/AppContext";
 
 function Home() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [latestPosts, setLatestPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { currentUser, latestPosts, selectedSpace, selectedSpacePosts, isLoading, fetchData, selectSpace, goToHome } = useAppContext();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        const userId = "5";
-
-        const user = await getCurrentUser(userId);
-        setCurrentUser(user);
-
-        if (user.spaces && user.spaces.length > 0) {
-          const spaceIds = user.spaces.map(space => space.id);
-          const posts = await getPostsBySpaceIds(spaceIds);
-          setLatestPosts(posts);
-        }
-
-      } catch (error) {
-        console.error('Error en la carga de datos:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
-  }, []);
+  }, [fetchData]);
+
+  useEffect(() => {
+    if (location.pathname === '/' && selectedSpace) {
+      goToHome();
+    }
+  }, [location.pathname, selectedSpace, goToHome]);
 
   if (isLoading) {
     return (
@@ -54,29 +38,31 @@ function Home() {
     );
   }
 
+  const handleGoToHome = () => {
+    goToHome();
+    navigate('/');
+  };
+
+  const breadcrumbItems = selectedSpace ? [
+    { label: selectedSpace.name, isActive: true },
+    { label: "Inicio", onClick: handleGoToHome }
+  ] : [];
+
   return (
     <>
       <Topbar currentUser={currentUser} />
-      <Sidebar spaces={currentUser?.spaces || []} />
+      <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
       <div className="posts-container">
         <div className="posts-section">
           <div className="posts-header">
-            <h2 className="posts-title">Últimas actualizaciones</h2>
-            <button
-              className="refresh-btn"
-              onClick={async () => {
-                if (currentUser?.spaces && currentUser.spaces.length > 0) {
-                  const spaceIds = currentUser.spaces.map(space => space.id);
-                  const posts = await getPostsBySpaceIds(spaceIds);
-                  setLatestPosts(posts);
-                }
-              }}
-            >
-              <img src="/src/assets/refresh.png" alt="Refresh" className="refresh-icon" />
-            </button>
+            {selectedSpace ? (
+              <Breadcrumb items={breadcrumbItems} />
+            ) : (
+              <h2 className="posts-title">Últimas novedades</h2>
+            )}
           </div>
           <div className="posts-list">
-            {latestPosts.map((post) => (
+            {(selectedSpace ? selectedSpacePosts : latestPosts).map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </div>
