@@ -236,7 +236,7 @@ function Space() {
                     Crear post
                   </button>
                 ) : (
-                  <button className="create-post-btn" onClick={handleJoinSpace}>
+                  <button className="join-space-btn" onClick={handleJoinSpace}>
                     Unirse al space
                   </button>
                 )}

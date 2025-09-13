@@ -38,7 +38,7 @@
 }
 
 .space-title {
-  color: #9F283B;
+  color: #9f283b;
   margin: 0;
   font-size: 22px;
   font-weight: 600;
@@ -67,7 +67,7 @@
 }
 
 .create-post-btn {
-  background-color: #9F283B;
+  background-color: #9f283b;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -86,6 +86,28 @@
 
 .create-post-btn:active {
   background-color: #6b1a26;
+}
+
+.join-space-btn {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.join-space-btn:hover {
+  background-color: #0e9f6e;
+}
+
+.join-space-btn:active {
+  background-color: #0c8f62;
 }
 
 .space-creator {
@@ -270,7 +292,7 @@
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #9F283B;
+  border-color: #9f283b;
   box-shadow: 0 0 0 2px rgba(159, 40, 59, 0.1);
 }
 
@@ -318,7 +340,7 @@
 }
 
 .btn-create {
-  background-color: #9F283B;
+  background-color: #9f283b;
   color: white;
 }
 
@@ -392,7 +414,8 @@
 .space-settings-icon {
   width: 28px;
   height: 28px;
-  filter: brightness(0) saturate(100%) invert(20%) sepia(15%) saturate(2000%) hue-rotate(320deg) brightness(0.6) contrast(0.8);
+  filter: brightness(0) saturate(100%) invert(20%) sepia(15%) saturate(2000%)
+    hue-rotate(320deg) brightness(0.6) contrast(0.8);
   cursor: pointer;
   opacity: 0.7;
   transition: opacity 0.2s ease;
@@ -468,7 +491,7 @@
 }
 
 .leave-modal-body strong {
-  color: #9F283B;
+  color: #9f283b;
   font-weight: 600;
 }
 
