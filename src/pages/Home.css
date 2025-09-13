@@ -375,3 +375,150 @@
     transform: translateX(0);
   }
 }
+
+.space-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.space-settings-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.space-settings-icon {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) saturate(100%) invert(20%) sepia(15%) saturate(2000%) hue-rotate(320deg) brightness(0.6) contrast(0.8);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+.space-settings-icon:hover {
+  opacity: 1;
+  background-color: rgba(159, 40, 59, 0.1);
+}
+
+.space-settings-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 8px 0;
+  min-width: 120px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  color: #333;
+  padding: 8px 12px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Leave Space Modal Styles */
+.leave-modal-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.leave-modal-header {
+  padding: 20px 24px 0 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.leave-modal-header h2 {
+  margin: 0 0 16px 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.leave-modal-body {
+  padding: 20px 24px;
+}
+
+.leave-modal-body p {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.leave-modal-body strong {
+  color: #9F283B;
+  font-weight: 600;
+}
+
+.leave-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 0 24px 20px 24px;
+}
+
+.btn-cancel-leave {
+  background-color: white;
+  color: #666;
+  border: 1px solid #e0e0e0;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel-leave:hover {
+  background-color: #f8f9fa;
+  color: #333;
+  border-color: #d0d0d0;
+}
+
+.btn-confirm-leave {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-confirm-leave:hover {
+  background-color: #c82333;
+}
+
+.btn-confirm-leave:active {
+  background-color: #bd2130;
+}
+
+.btn-confirm-leave:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
