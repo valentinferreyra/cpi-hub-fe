@@ -3,11 +3,11 @@ import Topbar from "../components/Topbar/Topbar";
 import PostCard from "../components/PostCard/PostCard";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import CreatePostModal from "../components/CreatePostModal/CreatePostModal";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Home.css";
 import { useAppContext } from "../context/AppContext";
-import { getSpaceById, getPostsBySpaceId, createPost } from "../services/api";
+import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser } from "../services/api";
 import type { Post } from "../types/post";
 
 function Space() {
@@ -18,10 +18,27 @@ function Space() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
+  const [showSpaceSettings, setShowSpaceSettings] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [isLeavingSpace, setIsLeavingSpace] = useState(false);
+  const settingsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+        setShowSpaceSettings(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const loadSpaceFromUrl = async () => {
@@ -90,9 +107,42 @@ function Space() {
     }
   };
 
+  const handleSettingsClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowSpaceSettings(!showSpaceSettings);
+  };
+
+  const handleLeaveSpace = () => {
+    setShowLeaveModal(true);
+    setShowSpaceSettings(false);
+  };
+
+  const handleConfirmLeave = async () => {
+    if (selectedSpace && currentUser && !isLeavingSpace) {
+      setIsLeavingSpace(true);
+      try {  
+        await removeSpaceFromUser(currentUser.id, selectedSpace.id);
+ 
+        setShowLeaveModal(false);
+        
+        navigate('/');
+        
+        await fetchData();
+      } catch (error) {
+        console.error('Error al remover space:', error);
+      } finally {
+        setIsLeavingSpace(false);
+      }
+    }
+  };
+
+  const handleCancelLeave = () => {
+    setShowLeaveModal(false);
+  };
+
   const breadcrumbItems = selectedSpace ? [
-    { label: selectedSpace.name, onClick: goToSpace },
-    { label: "Inicio", isActive: true }
+    { label: selectedSpace.name, isActive: true },
+    { label: "Inicio", isActive: false }
   ] : [];
 
   if (isLoading) {
@@ -129,7 +179,27 @@ function Space() {
         <div className="posts-section">
           <div className="posts-header">
             {selectedSpace ? (
-              <Breadcrumb items={breadcrumbItems} />
+              <div className="space-header-container">
+                <Breadcrumb items={breadcrumbItems} />
+                <div className="space-settings-container" ref={settingsRef}>
+                  <img 
+                    src="/src/assets/settings.png" 
+                    alt="Configuración" 
+                    className="space-settings-icon"
+                    onClick={handleSettingsClick}
+                  />
+                  {showSpaceSettings && (
+                    <div className="space-settings-dropdown">
+                      <button 
+                        className="dropdown-item"
+                        onClick={handleLeaveSpace}
+                      >
+                        Dejar space
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             ) : (
               <h2 className="posts-title">Space no encontrado</h2>
             )}
@@ -167,6 +237,34 @@ function Space() {
         onCreatePost={handleCreatePost}
         isLoading={isCreatingPost}
       />
+
+      {showLeaveModal && (
+        <div className="modal-overlay">
+          <div className="leave-modal-content">
+            <div className="leave-modal-header">
+              <h2>¿Estás seguro?</h2>
+            </div>
+            <div className="leave-modal-body">
+              <p>¿Estás seguro que deseas abandonar el Space <strong>"{selectedSpace?.name}"</strong>?</p>
+            </div>
+            <div className="leave-modal-actions">
+              <button 
+                className="btn-cancel-leave"
+                onClick={handleCancelLeave}
+              >
+                Cancelar
+              </button>
+              <button 
+                className="btn-confirm-leave"
+                onClick={handleConfirmLeave}
+                disabled={isLeavingSpace}
+              >
+                {isLeavingSpace ? 'Abandonando...' : 'Confirmar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

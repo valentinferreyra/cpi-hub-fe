@@ -133,4 +133,14 @@ export const searchPosts = async (query: string): Promise<Post[]> => {
   }
 };
 
+export const removeSpaceFromUser = async (userId: number, spaceId: number): Promise<void> => {
+  try {
+    const response = await api.put(`/users/${userId}/spaces/${spaceId}/remove`);
+    return response.data;
+  } catch (error) {
+    console.error("Error removing space from user:", error);
+    throw error;
+  }
+};
+
 export default api;
