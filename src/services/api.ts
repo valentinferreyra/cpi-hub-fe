@@ -95,11 +95,15 @@ export const getSpaceById = async (spaceId: number): Promise<Space | null> => {
   }
 };
 
-export const addCommentToPost = async (postId: string, content: string): Promise<any> => {
+export const addCommentToPost = async (
+  created_by: number,
+  postId: string,
+  content: string
+): Promise<any> => {
   try {
     const response = await api.post(`/posts/${postId}/comments`, {
       content: content,
-      created_by: 16
+      created_by: created_by,
     });
     return response.data;
   } catch (error) {
@@ -108,13 +112,18 @@ export const addCommentToPost = async (postId: string, content: string): Promise
   }
 };
 
-export const createPost = async (title: string, content: string, spaceId: number): Promise<Post> => {
+export const createPost = async (
+  title: string,
+  content: string,
+  created_by: number,
+  spaceId: number
+): Promise<Post> => {
   try {
     const response = await api.post(`/posts`, {
       title: title,
       content: content,
-      created_by: 16,
-      space_id: spaceId
+      created_by: created_by,
+      space_id: spaceId,
     });
     return response.data.data || response.data;
   } catch (error) {
@@ -125,7 +134,9 @@ export const createPost = async (title: string, content: string, spaceId: number
 
 export const searchPosts = async (query: string): Promise<Post[]> => {
   try {
-    const response = await api.get(`/posts/search?q=${encodeURIComponent(query)}`);
+    const response = await api.get(
+      `/posts/search?q=${encodeURIComponent(query)}`
+    );
     return response.data.data || response.data;
   } catch (error) {
     console.error("Error searching posts:", error);
@@ -133,12 +144,28 @@ export const searchPosts = async (query: string): Promise<Post[]> => {
   }
 };
 
-export const removeSpaceFromUser = async (userId: number, spaceId: number): Promise<void> => {
+export const removeSpaceFromUser = async (
+  userId: number,
+  spaceId: number
+): Promise<void> => {
   try {
     const response = await api.put(`/users/${userId}/spaces/${spaceId}/remove`);
     return response.data;
   } catch (error) {
     console.error("Error removing space from user:", error);
+    throw error;
+  }
+};
+
+export const addSpaceToUser = async (
+  userId: number,
+  spaceId: number
+): Promise<void> => {
+  try {
+    const response = await api.put(`/users/${userId}/spaces/${spaceId}/add`);
+    return response.data;
+  } catch (error) {
+    console.log("Error adding space to user:", error);
     throw error;
   }
 };
