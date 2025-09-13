@@ -48,11 +48,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setIsLoading(true);
       }
 
-      const user = await getCurrentUser(16);
+      const user = await getCurrentUser(18);
       setCurrentUser(user);
 
       // Obtener posts de todos los espacios del usuario usando el nuevo endpoint
-      const posts = await getPostsByUserId(16);
+      const posts = await getPostsByUserId(18);
       setLatestPosts(posts);
 
     } catch (error) {
