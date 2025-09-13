@@ -91,7 +91,7 @@ function Space() {
   }
 
   const handleCreatePost = async (title: string, content: string) => {
-    if (!selectedSpace || isCreatingPost || typeof currentUser?.id !== "number") return;
+    if (!selectedSpace || isCreatingPost || !currentUser?.id) return;
 
     setIsCreatingPost(true);
 
