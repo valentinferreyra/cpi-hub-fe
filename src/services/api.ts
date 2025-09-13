@@ -96,13 +96,14 @@ export const getSpaceById = async (spaceId: number): Promise<Space | null> => {
 };
 
 export const addCommentToPost = async (
+  created_by: number,
   postId: string,
   content: string
 ): Promise<any> => {
   try {
     const response = await api.post(`/posts/${postId}/comments`, {
       content: content,
-      created_by: 16,
+      created_by: created_by,
     });
     return response.data;
   } catch (error) {

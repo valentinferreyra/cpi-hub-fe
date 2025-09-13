@@ -17,6 +17,7 @@ function Space() {
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessageText, setSuccessMessageText] = useState<string>("");
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [showSpaceSettings, setShowSpaceSettings] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
@@ -99,6 +100,7 @@ function Space() {
 
       setSelectedSpacePosts((prevPosts: Post[]) => [newPost, ...prevPosts]);
 
+      setSuccessMessageText("Post creado correctamente");
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
 
@@ -110,7 +112,6 @@ function Space() {
       setIsCreatingPost(false);
     }
   };
-
 
 
   const handleSettingsClick = (e: React.MouseEvent) => {
@@ -148,6 +149,9 @@ function Space() {
     try {
       await addSpaceToUser(currentUser.id, selectedSpace.id);
       await fetchData();
+      setSuccessMessageText(`Te has unido correctamente al space "${selectedSpace.name}"`);
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
     } catch (error) {
       console.error('Error joining space:', error);
     }
@@ -187,7 +191,7 @@ function Space() {
         <div className="success-notification">
           <div className="success-content">
             <span className="success-icon">✓</span>
-            <span>Post creado correctamente</span>
+            <span>{successMessageText}</span>
           </div>
         </div>
       )}
