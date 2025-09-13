@@ -48,11 +48,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setIsLoading(true);
       }
 
-      const user = await getCurrentUser(18);
+      const user = await getCurrentUser(1);
       setCurrentUser(user);
 
       // Obtener posts de todos los espacios del usuario usando el nuevo endpoint
-      const posts = await getPostsByUserId(18);
+      const posts = await getPostsByUserId(1);
       setLatestPosts(posts);
 
     } catch (error) {
@@ -70,7 +70,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       // Fetch complete space details with author information
       const completeSpace = await getSpaceById(space.id);
       const posts = await getPostsBySpaceId(space.id);
-      
+
       // Use the complete space data if available, otherwise fall back to the space from user's spaces
       setSelectedSpace(completeSpace || space);
       setSelectedSpacePosts(posts);
