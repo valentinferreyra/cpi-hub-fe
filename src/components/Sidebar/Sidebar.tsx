@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Space } from '../../types/space';
+import { useAppContext } from '../../context/AppContext';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -10,6 +11,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
   const navigate = useNavigate();
+  const { selectedSpace, currentUser } = useAppContext();
 
   const handleSpaceClick = (space: Space) => {
     onSpaceClick(space);
@@ -32,9 +34,9 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
             className="sidebar-item explore-item"
             onClick={handleTrendsClick}
           >
-            <img 
-              src="/src/assets/trends.png" 
-              alt="Tendencias" 
+            <img
+              src="/src/assets/trends.png"
+              alt="Tendencias"
               className="sidebar-icon trends-icon"
             />
             Tendencias
@@ -43,9 +45,9 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
             className="sidebar-item explore-item"
             onClick={handleExploreClick}
           >
-            <img 
-              src="/src/assets/explore.png" 
-              alt="Explorar" 
+            <img
+              src="/src/assets/explore.png"
+              alt="Explorar"
               className="sidebar-icon"
             />
             Explorar
@@ -63,9 +65,9 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
           className="sidebar-item explore-item"
           onClick={handleTrendsClick}
         >
-          <img 
-            src="/src/assets/trends.png" 
-            alt="Tendencias" 
+          <img
+            src="/src/assets/trends.png"
+            alt="Tendencias"
             className="sidebar-icon trends-icon"
           />
           Tendencias
@@ -74,23 +76,27 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
           className="sidebar-item explore-item"
           onClick={handleExploreClick}
         >
-          <img 
-            src="/src/assets/explore.png" 
-            alt="Explorar" 
+          <img
+            src="/src/assets/explore.png"
+            alt="Explorar"
             className="sidebar-icon"
           />
           Explorar
         </div>
         <div className="sidebar-separator"></div>
-        {spaces.map((space) => (
-          <div
-            key={space.id}
-            className="sidebar-item"
-            onClick={() => handleSpaceClick(space)}
-          >
-            {space.name}
-          </div>
-        ))}
+        {spaces.map((space) => {
+          const isActive = selectedSpace && space.id === selectedSpace.id && currentUser?.spaces?.some(s => s.id === space.id);
+          return (
+            <div
+              key={space.id}
+              className={`sidebar-item${isActive ? ' active-space' : ''}`}
+              onClick={() => handleSpaceClick(space)}
+              style={isActive ? { fontWeight: 'bold', color: '#ffff' } : {}}
+            >
+              {space.name}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
