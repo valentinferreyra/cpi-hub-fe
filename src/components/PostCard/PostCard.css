@@ -68,6 +68,14 @@
   margin-bottom: 16px;
 }
 
+.post-content:has(.post-text) {
+  margin-bottom: 16px;
+}
+
+.post-content:not(:has(.post-text)) {
+  margin-bottom: 8px;
+}
+
 .post-card .post-title {
   font-size: 16px;
   font-weight: 600;
@@ -80,7 +88,7 @@
   font-size: 14px;
   color: #555;
   line-height: 1.6;
-  margin: 0 0 12px 0;
+  margin: 0;
 }
 
 
