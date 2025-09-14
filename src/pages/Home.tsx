@@ -62,9 +62,21 @@ function Home() {
             )}
           </div>
           <div className="posts-list">
-            {(selectedSpace ? selectedSpacePosts : latestPosts).map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
+            {(() => {
+              const postsToShow = selectedSpace ? selectedSpacePosts : latestPosts;
+              
+              if (!Array.isArray(postsToShow)) {
+                return <div>No hay posts disponibles</div>;
+              }
+              
+              if (postsToShow.length === 0) {
+                return <div>No hay posts disponibles</div>;
+              }
+              
+              return postsToShow.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ));
+            })()}
           </div>
         </div>
       </div>

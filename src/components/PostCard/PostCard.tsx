@@ -11,7 +11,8 @@ interface PostCardProps {
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const navigate = useNavigate();
   const maxLength = 160;
-  const shouldTruncate = post.content.length > maxLength;
+  const hasContent = post.content && post.content.trim();
+  const shouldTruncate = hasContent && post.content.length > maxLength;
   
   const handlePostClick = () => {
     navigate(`/post/${post.id}`);
@@ -43,10 +44,12 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       
       <div className="post-content">
         <h3 className="post-title">{post.title}</h3>
-        <p className="post-text">
-          {post.content.slice(0, maxLength)}
-          {shouldTruncate && '...'}
-        </p>
+        {post.content && post.content.trim() && (
+          <p className="post-text">
+            {post.content.slice(0, maxLength)}
+            {shouldTruncate && '...'}
+          </p>
+        )}
       </div>
       
       <div className="post-footer">
