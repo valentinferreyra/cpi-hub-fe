@@ -33,11 +33,11 @@ export const getCurrentUser = async (userId: number): Promise<User> => {
   try {
     const response = await api.get(`/users/${userId}`);
     console.log("User API Response:", response.data);
-    
+
     if (response.data && response.data.id) {
       return response.data;
     }
-    
+
     console.warn("Unexpected user API response structure:", response.data);
     throw new Error("Invalid user data structure");
   } catch (error) {
@@ -58,21 +58,26 @@ export const getPostsBySpaceIds = async (
   }
 };
 
-export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
+export const getPostsByUserId = async (
+  userId: number,
+  page: number
+): Promise<{
+  data: Post[];
+  page: number;
+  page_size: number;
+  total: number;
+}> => {
   try {
-    const response = await api.get(`/users/${userId}/interested-posts`);
+    const response = await api.get(
+      `/users/${userId}/interested-posts?page=${page}&page_size=20`
+    );
     console.log("Posts API Response:", response.data);
-    
-    if (response.data && response.data.data && Array.isArray(response.data.data)) {
-      return response.data.data;
-    }
-    
-    console.warn("Unexpected API response structure:", response.data);
-    return [];
+
+    return response.data;
   } catch (error) {
     console.error("Error getting posts by user id:", error);
     console.log("No posts available");
-    return [];
+    return { data: [], page: 1, page_size: 20, total: 0 };
   }
 };
 
@@ -91,12 +96,19 @@ export const getPostsBySpaceId = async (spaceId: number): Promise<Post[]> => {
   try {
     const response = await api.get(`/posts?space_id=${spaceId}`);
     console.log("Posts by space API Response:", response.data);
-    
-    if (response.data && response.data.data && Array.isArray(response.data.data)) {
+
+    if (
+      response.data &&
+      response.data.data &&
+      Array.isArray(response.data.data)
+    ) {
       return response.data.data;
     }
-    
-    console.warn("Unexpected API response structure for space posts:", response.data);
+
+    console.warn(
+      "Unexpected API response structure for space posts:",
+      response.data
+    );
     return [];
   } catch (error) {
     console.error("Error getting posts by space id:", error);
@@ -108,13 +120,13 @@ export const getSpaceById = async (spaceId: number): Promise<Space | null> => {
   try {
     const response = await api.get(`/spaces/${spaceId}`);
     console.log("Space API Response:", response.data);
-    
+
     if (response.data && response.data.id) {
       return response.data;
     } else if (response.data && response.data.data && response.data.data.id) {
       return response.data.data;
     }
-    
+
     console.warn("Unexpected space API response structure:", response.data);
     return null;
   } catch (error) {
@@ -198,16 +210,28 @@ export const addSpaceToUser = async (
   }
 };
 
-export const getSpacesByCreatedAt = async (page: number = 1, pageSize: number = 20): Promise<Space[]> => {
+export const getSpacesByCreatedAt = async (
+  page: number = 1,
+  pageSize: number = 20
+): Promise<Space[]> => {
   try {
-    const response = await api.get(`/spaces?order_by=created_at&page=${page}&page_size=${pageSize}`);
+    const response = await api.get(
+      `/spaces?order_by=created_at&page=${page}&page_size=${pageSize}`
+    );
     console.log("Spaces by created_at API Response:", response.data);
-    
-    if (response.data && response.data.data && Array.isArray(response.data.data)) {
+
+    if (
+      response.data &&
+      response.data.data &&
+      Array.isArray(response.data.data)
+    ) {
       return response.data.data;
     }
-    
-    console.warn("Unexpected API response structure for spaces by created_at:", response.data);
+
+    console.warn(
+      "Unexpected API response structure for spaces by created_at:",
+      response.data
+    );
     return [];
   } catch (error) {
     console.error("Error getting spaces by created_at:", error);
@@ -215,16 +239,28 @@ export const getSpacesByCreatedAt = async (page: number = 1, pageSize: number = 
   }
 };
 
-export const getSpacesByUpdatedAt = async (page: number = 1, pageSize: number = 20): Promise<Space[]> => {
+export const getSpacesByUpdatedAt = async (
+  page: number = 1,
+  pageSize: number = 20
+): Promise<Space[]> => {
   try {
-    const response = await api.get(`/spaces?order_by=updated_at&page=${page}&page_size=${pageSize}`);
+    const response = await api.get(
+      `/spaces?order_by=updated_at&page=${page}&page_size=${pageSize}`
+    );
     console.log("Spaces by updated_at API Response:", response.data);
-    
-    if (response.data && response.data.data && Array.isArray(response.data.data)) {
+
+    if (
+      response.data &&
+      response.data.data &&
+      Array.isArray(response.data.data)
+    ) {
       return response.data.data;
     }
-    
-    console.warn("Unexpected API response structure for spaces by updated_at:", response.data);
+
+    console.warn(
+      "Unexpected API response structure for spaces by updated_at:",
+      response.data
+    );
     return [];
   } catch (error) {
     console.error("Error getting spaces by updated_at:", error);
