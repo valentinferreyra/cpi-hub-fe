@@ -26,6 +26,7 @@ function Home() {
     const fetchPosts = async () => {
       if (currentUser) {
         try {
+          setIsLoadingMore(true);
           const response = await getPostsByUserId(1, currentPage);
           const posts = response.data || [];
 
@@ -40,6 +41,8 @@ function Home() {
           setHasMore(currentTotalLoaded < totalPosts);
         } catch (error) {
           console.error('Error fetching posts:', error);
+        } finally {
+          setIsLoadingMore(false);
         }
       }
     };
@@ -76,9 +79,7 @@ function Home() {
 
   const handleLoadMore = async () => {
     if (!isLoadingMore && hasMore) {
-      setIsLoadingMore(true);
       setCurrentPage(prev => prev + 1);
-      setIsLoadingMore(false);
     }
   };
 
