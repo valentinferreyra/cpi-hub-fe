@@ -120,7 +120,7 @@ function Home() {
           {!selectedSpace && hasMore && latestPosts.length > 0 && (
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
               <button
-                className="create-post-btn"
+                className="load-more-btn"
                 onClick={handleLoadMore}
                 disabled={isLoadingMore}
               >
