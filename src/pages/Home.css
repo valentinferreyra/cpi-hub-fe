@@ -53,9 +53,31 @@
 .space-description-container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
   margin-bottom: 8px;
+}
+
+.space-meta {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin: 12px 0 10px 0;
+  font-size: 13px;
+  color: #9f283b;
+  font-weight: 500;
+  align-items: center;
+}
+
+.space-users,
+.space-posts {
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: #9f283b;
+  font-weight: 500;
+  font-size: 13px;
+  box-shadow: 0 1px 4px rgba(159, 40, 59, 0.07);
 }
 
 .space-description {

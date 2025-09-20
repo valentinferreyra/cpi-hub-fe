@@ -162,7 +162,7 @@ function Space() {
   };
 
   const breadcrumbItems = selectedSpace ? [
-    { label: selectedSpace.name, isActive: true },
+    { label: <span className="space-title">{selectedSpace.name}</span>, isActive: true },
     { label: "Inicio", isActive: false }
   ] : [];
 
@@ -240,6 +240,10 @@ function Space() {
                     Unirse al space
                   </button>
                 )}
+              </div>
+              <div className="space-meta">
+                <span className="space-users">Usuarios: {selectedSpace.users}</span>
+                <span className="space-posts">Publicaciones: {selectedSpace.posts}</span>
               </div>
               <p className="space-creator">
                 Creado por: {selectedSpace.created_by?.name || 'N/A'} {selectedSpace.created_by?.last_name || ''}

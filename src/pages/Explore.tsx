@@ -26,12 +26,12 @@ const Explore: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         const [updatedSpaces, createdSpaces] = await Promise.all([
           getSpacesByUpdatedAt(1, 18),
           getSpacesByCreatedAt(1, 18)
         ]);
-        
+
         setSpacesByUpdatedAt(updatedSpaces);
         setSpacesByCreatedAt(createdSpaces);
       } catch (err) {
@@ -52,12 +52,12 @@ const Explore: React.FC = () => {
 
   const loadMoreUpdated = async () => {
     if (loadingMoreUpdated || !hasMoreUpdated) return;
-    
+
     try {
       setLoadingMoreUpdated(true);
       const nextPage = currentPageUpdated + 1;
       const newSpaces = await getSpacesByUpdatedAt(nextPage, 18);
-      
+
       if (newSpaces.length === 0) {
         setHasMoreUpdated(false);
       } else {
@@ -73,12 +73,12 @@ const Explore: React.FC = () => {
 
   const loadMoreCreated = async () => {
     if (loadingMoreCreated || !hasMoreCreated) return;
-    
+
     try {
       setLoadingMoreCreated(true);
       const nextPage = currentPageCreated + 1;
       const newSpaces = await getSpacesByCreatedAt(nextPage, 18);
-      
+
       if (newSpaces.length === 0) {
         setHasMoreCreated(false);
       } else {
@@ -125,8 +125,8 @@ const Explore: React.FC = () => {
             <div className="error-container">
               <div className="error-icon">⚠️</div>
               <p className="error-message">{error}</p>
-              <button 
-                className="retry-button" 
+              <button
+                className="retry-button"
                 onClick={() => window.location.reload()}
               >
                 Reintentar
@@ -148,109 +148,117 @@ const Explore: React.FC = () => {
             <h2 className="posts-title">Explorar</h2>
           </div>
           <div className="explore-content">
-          
-          <div className="carousel-section">
-            <h2 className="carousel-title">Spaces actualizados recientemente</h2>
-            <div className="carousel-container">
-              <div className="carousel-scroll">
-                {spacesByUpdatedAt.length > 0 ? (
-                  spacesByUpdatedAt.map((space) => (
-                    <div
-                      key={space.id}
-                      className="space-card"
-                      onClick={() => handleSpaceClick(space)}
-                    >
-                      <div className="space-card-header">
-                        <h3 className="space-card-name">{space.name}</h3>
-                      </div>
-                      <p className="space-card-description">{space.description}</p>
-                      <div className="space-card-footer">
-                        <span className="space-card-creator">
-                          Actualizado: {new Date(space.updated_at).toLocaleString('es-ES', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </span>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="no-spaces-message">
-                    <p>No hay espacios actualizados recientemente</p>
-                  </div>
-                )}
-                {hasMoreUpdated && (
-                  <div className="load-more-card" onClick={loadMoreUpdated}>
-                    <div className="load-more-content">
-                      {loadingMoreUpdated ? (
-                        <div className="loading-spinner-small"></div>
-                      ) : (
-                        <>
-                          <div className="load-more-icon">+</div>
-                          <p>Ver más</p>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
 
-          {/* Carrusel de Spaces Creados */}
-          <div className="carousel-section">
-            <h2 className="carousel-title">Spaces creados</h2>
-            <div className="carousel-container">
-              <div className="carousel-scroll">
-                {spacesByCreatedAt.length > 0 ? (
-                  spacesByCreatedAt.map((space) => (
-                    <div
-                      key={space.id}
-                      className="space-card"
-                      onClick={() => handleSpaceClick(space)}
-                    >
-                      <div className="space-card-header">
-                        <h3 className="space-card-name">{space.name}</h3>
+            <div className="carousel-section">
+              <h2 className="carousel-title">Spaces actualizados recientemente</h2>
+              <div className="carousel-container">
+                <div className="carousel-scroll">
+                  {spacesByUpdatedAt.length > 0 ? (
+                    spacesByUpdatedAt.map((space) => (
+                      <div
+                        key={space.id}
+                        className="space-card"
+                        onClick={() => handleSpaceClick(space)}
+                      >
+                        <div className="space-card-header">
+                          <h3 className="space-card-name">{space.name}</h3>
+                        </div>
+                        <p className="space-card-description">{space.description}</p>
+                        <div className="space-card-meta">
+                          <span className="space-card-users">Usuarios: {space.users}</span>
+                          <span className="space-card-posts">Publicaciones: {space.posts}</span>
+                        </div>
+                        <div className="space-card-footer">
+                          <span className="space-card-creator">
+                            Actualizado: {new Date(space.updated_at).toLocaleString('es-ES', {
+                              year: 'numeric',
+                              month: '2-digit',
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
+                        </div>
                       </div>
-                      <p className="space-card-description">{space.description}</p>
-                      <div className="space-card-footer">
-                        <span className="space-card-creator">
-                          Creado: {new Date(space.created_at).toLocaleString('es-ES', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </span>
+                    ))
+                  ) : (
+                    <div className="no-spaces-message">
+                      <p>No hay espacios actualizados recientemente</p>
+                    </div>
+                  )}
+                  {hasMoreUpdated && (
+                    <div className="load-more-card" onClick={loadMoreUpdated}>
+                      <div className="load-more-content">
+                        {loadingMoreUpdated ? (
+                          <div className="loading-spinner-small"></div>
+                        ) : (
+                          <>
+                            <div className="load-more-icon">+</div>
+                            <p>Ver más</p>
+                          </>
+                        )}
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="no-spaces-message">
-                    <p>No hay espacios creados recientemente</p>
-                  </div>
-                )}
-                {hasMoreCreated && (
-                  <div className="load-more-card" onClick={loadMoreCreated}>
-                    <div className="load-more-content">
-                      {loadingMoreCreated ? (
-                        <div className="loading-spinner-small"></div>
-                      ) : (
-                        <>
-                          <div className="load-more-icon">+</div>
-                          <p>Ver más</p>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+
+            {/* Carrusel de Spaces Creados */}
+            <div className="carousel-section">
+              <h2 className="carousel-title">Spaces creados</h2>
+              <div className="carousel-container">
+                <div className="carousel-scroll">
+                  {spacesByCreatedAt.length > 0 ? (
+                    spacesByCreatedAt.map((space) => (
+                      <div
+                        key={space.id}
+                        className="space-card"
+                        onClick={() => handleSpaceClick(space)}
+                      >
+                        <div className="space-card-header">
+                          <h3 className="space-card-name">{space.name}</h3>
+                        </div>
+                        <p className="space-card-description">{space.description}</p>
+                        <div className="space-card-meta">
+                          <span className="space-card-users">Usuarios: {space.users}</span>
+                          <span className="space-card-posts">Publicaciones: {space.posts}</span>
+                        </div>
+                        <div className="space-card-footer">
+                          <span className="space-card-creator">
+                            Creado: {new Date(space.created_at).toLocaleString('es-ES', {
+                              year: 'numeric',
+                              month: '2-digit',
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="no-spaces-message">
+                      <p>No hay espacios creados recientemente</p>
+                    </div>
+                  )}
+                  {hasMoreCreated && (
+                    <div className="load-more-card" onClick={loadMoreCreated}>
+                      <div className="load-more-content">
+                        {loadingMoreCreated ? (
+                          <div className="loading-spinner-small"></div>
+                        ) : (
+                          <>
+                            <div className="load-more-icon">+</div>
+                            <p>Ver más</p>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
