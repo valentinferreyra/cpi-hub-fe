@@ -174,9 +174,7 @@ export const createPost = async (
 
 export const searchPosts = async (query: string): Promise<Post[]> => {
   try {
-    const response = await api.get(
-      `/posts/search?q=${encodeURIComponent(query)}`
-    );
+    const response = await api.get(`/posts?q=${encodeURIComponent(query)}`);
     return response.data.data || response.data;
   } catch (error) {
     console.error("Error searching posts:", error);
