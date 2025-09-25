@@ -148,6 +148,8 @@ function Space() {
 
     try {
       await addSpaceToUser(currentUser.id, selectedSpace.id);
+      const updatedSpace = await getSpaceById(selectedSpace.id);
+      if (updatedSpace) setSelectedSpace(updatedSpace);
       await fetchData();
       setSuccessMessageText(`Te has unido correctamente al space "${selectedSpace.name}"`);
       setShowSuccessMessage(true);
