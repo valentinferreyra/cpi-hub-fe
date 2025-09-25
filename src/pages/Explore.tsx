@@ -3,7 +3,7 @@ import Topbar from "../components/Topbar/Topbar";
 import { useAppContext } from "../context/AppContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSpacesByCreatedAt, getSpacesByUpdatedAt, createSpace } from "../services/api";
+import { getSpacesByCreatedAt, getSpacesByUpdatedAt, createSpace, GetSpacesByName } from "../services/api";
 import type { Space } from "../types/space";
 import CreateSpaceModal from "../components/CreateSpaceModal/CreateSpaceModal";
 import "./Explore.css";
@@ -16,10 +16,32 @@ const Explore: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isCreateSpaceModalOpen, setIsCreateSpaceModalOpen] = useState(false);
   const [isCreatingSpace, setIsCreatingSpace] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [spacesWithSameName, setSpacesWithSameName] = useState<Space[]>([]);
+  const [pendingSpace, setPendingSpace] = useState<{ name: string; description: string } | null>(null);
   const openCreateSpaceModal = () => setIsCreateSpaceModalOpen(true);
   const closeCreateSpaceModal = () => setIsCreateSpaceModalOpen(false);
 
   const handleCreateSpace = async (name: string, description: string) => {
+    if (!currentUser?.id) return;
+    setIsCreatingSpace(true);
+    try {
+      const foundSpaces = await GetSpacesByName(name);
+      if (foundSpaces.length > 0) {
+        setSpacesWithSameName(foundSpaces);
+        setPendingSpace({ name, description });
+        setShowConfirmModal(true);
+        setIsCreatingSpace(false);
+        return;
+      }
+      await proceedCreateSpace(name, description);
+    } catch {
+      setError("Error al crear el space. Intenta de nuevo.");
+      setIsCreatingSpace(false);
+    }
+  };
+
+  const proceedCreateSpace = async (name: string, description: string) => {
     if (!currentUser?.id) return;
     setIsCreatingSpace(true);
     try {
@@ -28,6 +50,9 @@ const Explore: React.FC = () => {
         setSpacesByCreatedAt(prev => [newSpace, ...prev]);
         setSpacesByUpdatedAt(prev => [newSpace, ...prev]);
         closeCreateSpaceModal();
+        setShowConfirmModal(false);
+        setSpacesWithSameName([]);
+        setPendingSpace(null);
         navigate(`/space/${newSpace.id}`);
       }
     } catch {
@@ -35,6 +60,25 @@ const Explore: React.FC = () => {
     } finally {
       setIsCreatingSpace(false);
     }
+  };
+
+  const handleConfirmCreate = () => {
+    if (pendingSpace) {
+      proceedCreateSpace(pendingSpace.name, pendingSpace.description);
+    }
+  };
+
+  const handleCancelCreate = () => {
+    setShowConfirmModal(false);
+    setSpacesWithSameName([]);
+    setPendingSpace(null);
+    setIsCreatingSpace(false);
+    closeCreateSpaceModal();
+  };
+
+  const handleNavigateExistingSpace = (space: Space) => {
+    const url = `/space/${space.id}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
   const [error, setError] = useState<string | null>(null);
   const [currentPageUpdated, setCurrentPageUpdated] = useState(1);
@@ -181,6 +225,42 @@ const Explore: React.FC = () => {
               onCreateSpace={handleCreateSpace}
               isLoading={isCreatingSpace}
             />
+
+            {showConfirmModal && (
+              <div className="modal-overlay" onClick={handleCancelCreate}>
+                <div className="confirm-space-modal" onClick={e => e.stopPropagation()}>
+                  <div className="modal-header">
+                    <h2>Ya existen spaces con ese nombre</h2>
+                  </div>
+                  <div className="modal-body">
+                    <p>Se encontraron los siguientes spaces con el nombre <strong>"{pendingSpace?.name}"</strong> (podrías unirte o revisarlos antes de crear uno nuevo):</p>
+                    <ul className="confirm-space-existing-list">
+                      {spacesWithSameName.map(space => (
+                        <li key={space.id}>
+                          <button
+                            type="button"
+                            className="confirm-space-link"
+                            onClick={() => handleNavigateExistingSpace(space)}
+                            aria-label={`Ir al space ${space.name}`}
+                          >
+                            <span className="confirm-space-link-text">{space.name}</span>
+                            <span className="confirm-space-link-arrow" aria-hidden="true">↗</span>
+                          </button>
+                          {space.description && <span className="confirm-space-desc"> — {space.description}</span>}
+                        </li>
+                      ))}
+                    </ul>
+                    <p style={{ marginTop: 4 }}>¿Querés crearlo de todas formas?</p>
+                  </div>
+                  <div className="form-actions">
+                    <button className="btn-cancel" onClick={handleCancelCreate}>Cancelar</button>
+                    <button className="btn-create" onClick={handleConfirmCreate} disabled={isCreatingSpace}>
+                      {isCreatingSpace ? "Creando..." : "Crear igual"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="carousel-section">
               <h2 className="carousel-title">Spaces actualizados recientemente</h2>

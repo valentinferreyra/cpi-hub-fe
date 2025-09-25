@@ -285,4 +285,35 @@ export const getSpacesByUpdatedAt = async (
   }
 };
 
+export const GetSpacesByName = async (
+  name: string,
+  page: number = 1,
+  pageSize: number = 20
+): Promise<Space[]> => {
+  try {
+    const response = await api.get(
+      `/spaces?name=${encodeURIComponent(
+        name
+      )}&page=${page}&page_size=${pageSize}`
+    );
+
+    if (
+      response.data &&
+      response.data.data &&
+      Array.isArray(response.data.data)
+    ) {
+      return response.data.data;
+    }
+
+    console.warn(
+      "Unexpected API response structure for spaces by name:",
+      response.data
+    );
+    return [];
+  } catch (error) {
+    console.error("Error getting spaces by name:", error);
+    return [];
+  }
+};
+
 export default api;
