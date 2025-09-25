@@ -208,6 +208,25 @@ export const addSpaceToUser = async (
   }
 };
 
+export const createSpace = async (
+  userId: number,
+  name: string,
+  description: string
+): Promise<Space | null> => {
+  try {
+    const response = await api.post(`/spaces`, {
+      name: name,
+      description: description,
+      created_by: userId,
+    });
+    console.log("Create Space API Response:", response.data);
+    return response.data.data || response.data;
+  } catch (error) {
+    console.error("Error creating space:", error);
+    return null;
+  }
+};
+
 export const getSpacesByCreatedAt = async (
   page: number = 1,
   pageSize: number = 20

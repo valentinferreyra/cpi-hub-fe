@@ -3,8 +3,9 @@ import Topbar from "../components/Topbar/Topbar";
 import { useAppContext } from "../context/AppContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSpacesByCreatedAt, getSpacesByUpdatedAt } from "../services/api";
+import { getSpacesByCreatedAt, getSpacesByUpdatedAt, createSpace } from "../services/api";
 import type { Space } from "../types/space";
+import CreateSpaceModal from "../components/CreateSpaceModal/CreateSpaceModal";
 import "./Explore.css";
 
 const Explore: React.FC = () => {
@@ -13,6 +14,28 @@ const Explore: React.FC = () => {
   const [spacesByUpdatedAt, setSpacesByUpdatedAt] = useState<Space[]>([]);
   const [spacesByCreatedAt, setSpacesByCreatedAt] = useState<Space[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isCreateSpaceModalOpen, setIsCreateSpaceModalOpen] = useState(false);
+  const [isCreatingSpace, setIsCreatingSpace] = useState(false);
+  const openCreateSpaceModal = () => setIsCreateSpaceModalOpen(true);
+  const closeCreateSpaceModal = () => setIsCreateSpaceModalOpen(false);
+
+  const handleCreateSpace = async (name: string, description: string) => {
+    if (!currentUser?.id) return;
+    setIsCreatingSpace(true);
+    try {
+      const newSpace = await createSpace(currentUser.id, name, description);
+      if (newSpace) {
+        setSpacesByCreatedAt(prev => [newSpace, ...prev]);
+        setSpacesByUpdatedAt(prev => [newSpace, ...prev]);
+        closeCreateSpaceModal();
+        navigate(`/space/${newSpace.id}`);
+      }
+    } catch {
+      setError("Error al crear el space. Intenta de nuevo.");
+    } finally {
+      setIsCreatingSpace(false);
+    }
+  };
   const [error, setError] = useState<string | null>(null);
   const [currentPageUpdated, setCurrentPageUpdated] = useState(1);
   const [currentPageCreated, setCurrentPageCreated] = useState(1);
@@ -146,8 +169,18 @@ const Explore: React.FC = () => {
         <div className="posts-section">
           <div className="posts-header">
             <h2 className="posts-title">Explorar</h2>
+            <button className="create-post-btn" style={{ marginLeft: 16 }} onClick={openCreateSpaceModal}>
+              Crear space
+            </button>
           </div>
           <div className="explore-content">
+
+            <CreateSpaceModal
+              isOpen={isCreateSpaceModalOpen}
+              onClose={closeCreateSpaceModal}
+              onCreateSpace={handleCreateSpace}
+              isLoading={isCreatingSpace}
+            />
 
             <div className="carousel-section">
               <h2 className="carousel-title">Spaces actualizados recientemente</h2>
