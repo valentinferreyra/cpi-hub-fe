@@ -208,6 +208,25 @@ export const addSpaceToUser = async (
   }
 };
 
+export const createSpace = async (
+  userId: number,
+  name: string,
+  description: string
+): Promise<Space | null> => {
+  try {
+    const response = await api.post(`/spaces`, {
+      name: name,
+      description: description,
+      created_by: userId,
+    });
+    console.log("Create Space API Response:", response.data);
+    return response.data.data || response.data;
+  } catch (error) {
+    console.error("Error creating space:", error);
+    return null;
+  }
+};
+
 export const getSpacesByCreatedAt = async (
   page: number = 1,
   pageSize: number = 20
@@ -262,6 +281,37 @@ export const getSpacesByUpdatedAt = async (
     return [];
   } catch (error) {
     console.error("Error getting spaces by updated_at:", error);
+    return [];
+  }
+};
+
+export const GetSpacesByName = async (
+  name: string,
+  page: number = 1,
+  pageSize: number = 20
+): Promise<Space[]> => {
+  try {
+    const response = await api.get(
+      `/spaces?name=${encodeURIComponent(
+        name
+      )}&page=${page}&page_size=${pageSize}`
+    );
+
+    if (
+      response.data &&
+      response.data.data &&
+      Array.isArray(response.data.data)
+    ) {
+      return response.data.data;
+    }
+
+    console.warn(
+      "Unexpected API response structure for spaces by name:",
+      response.data
+    );
+    return [];
+  } catch (error) {
+    console.error("Error getting spaces by name:", error);
     return [];
   }
 };
