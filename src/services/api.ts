@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { User } from "../types/user";
+import type { User, SpaceUser } from "../types/user";
 import type { Post } from "../types/post";
 import type { Space } from "../types/space";
 
@@ -312,6 +312,16 @@ export const GetSpacesByName = async (
     return [];
   } catch (error) {
     console.error("Error getting spaces by name:", error);
+    return [];
+  }
+};
+
+export const getSpaceUsers = async (spaceId: number): Promise<SpaceUser[]> => {
+  try {
+    const response = await api.get(`/spaces/${spaceId}/users`);
+    return response.data;
+  } catch (error) {
+    console.error("Error getting space users:", error);
     return [];
   }
 };

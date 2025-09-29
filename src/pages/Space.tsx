@@ -3,12 +3,14 @@ import Topbar from "../components/Topbar/Topbar";
 import PostCard from "../components/PostCard/PostCard";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import CreatePostModal from "../components/CreatePostModal/CreatePostModal";
+import SpaceUsersModal from "../components/SpaceUsersModal/SpaceUsersModal";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Home.css";
 import { useAppContext } from "../context/AppContext";
-import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser } from "../services/api";
+import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser, getSpaceUsers } from "../services/api";
 import type { Post } from "../types/post";
+import type { SpaceUser } from "../types/user";
 
 function Space() {
   const { spaceId } = useParams<{ spaceId: string }>();
@@ -22,6 +24,9 @@ function Space() {
   const [showSpaceSettings, setShowSpaceSettings] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [isLeavingSpace, setIsLeavingSpace] = useState(false);
+  const [showUsersModal, setShowUsersModal] = useState(false);
+  const [spaceUsers, setSpaceUsers] = useState<SpaceUser[]>([]);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const settingsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -163,6 +168,26 @@ function Space() {
     setShowLeaveModal(false);
   };
 
+  const handleShowUsers = async () => {
+    if (!selectedSpace) return;
+
+    try {
+      setIsLoadingUsers(true);
+      const users = await getSpaceUsers(selectedSpace.id);
+      setSpaceUsers(users);
+      setShowUsersModal(true);
+    } catch (error) {
+      console.error('Error al cargar usuarios del space:', error);
+    } finally {
+      setIsLoadingUsers(false);
+    }
+  };
+
+  const handleCloseUsersModal = () => {
+    setShowUsersModal(false);
+    setSpaceUsers([]);
+  };
+
   const breadcrumbItems = selectedSpace ? [
     { label: <span className="space-title">{selectedSpace.name}</span>, isActive: true },
     { label: "Inicio", isActive: false }
@@ -244,7 +269,12 @@ function Space() {
                 )}
               </div>
               <div className="space-meta">
-                <span className="space-users">Usuarios: {selectedSpace.users}</span>
+                <span 
+                  className="space-users clickable"
+                  onClick={handleShowUsers}
+                >
+                  Usuarios: {selectedSpace.users}
+                </span>
                 <span className="space-posts">Publicaciones: {selectedSpace.posts}</span>
               </div>
               <p className="space-creator">
@@ -300,6 +330,13 @@ function Space() {
           </div>
         </div>
       )}
+
+      <SpaceUsersModal
+        isOpen={showUsersModal}
+        onClose={handleCloseUsersModal}
+        users={spaceUsers}
+        spaceName={selectedSpace?.name || ''}
+      />
     </>
   )
 }
