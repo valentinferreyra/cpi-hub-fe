@@ -22,12 +22,7 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
 
   const handleUserClick = () => {
     if (currentUser) {
-      console.log('Usuario actual:', {
-        id: currentUser.id,
-        nombre: currentUser.name,
-        apellido: currentUser.last_name,
-        email: currentUser.email
-      });
+      navigate(`/users/${currentUser.id}`);
     }
   };
 

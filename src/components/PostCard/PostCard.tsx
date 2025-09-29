@@ -18,6 +18,16 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     navigate(`/post/${post.id}`);
   };
 
+  const handleSpaceClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/space/${post.space.id}`);
+  };
+
+  const handleAuthorClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/users/${post.created_by.id}`);
+  };
+
   return (
     <div className="post-card" onClick={handlePostClick}>
       <div className="post-header">
@@ -28,10 +38,15 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             className="author-avatar"
           />
           <div className="author-info">
-            <span className="author-name">{post.created_by.name} {post.created_by.last_name}</span>
             <span 
-              className="post-space"
-              onClick={() => console.log('Space ID:', post.space.id)}
+              className="author-name clickable" 
+              onClick={handleAuthorClick}
+            >
+              {post.created_by.name} {post.created_by.last_name}
+            </span>
+            <span 
+              className="post-space clickable"
+              onClick={handleSpaceClick}
             >
               en {post.space.name}
             </span>

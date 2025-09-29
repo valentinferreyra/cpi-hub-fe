@@ -18,7 +18,8 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   max-width: 500px;
   width: 90%;
-  height: 500px;
+  max-height: 80vh;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -32,11 +33,12 @@
   padding: 20px 24px;
   border-bottom: 1px solid #e0e0e0;
   background-color: white;
+  flex-shrink: 0;
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   color: #333;
 }
@@ -70,7 +72,6 @@
   box-shadow: none;
   border: none;
   min-height: 0;
-  max-height: calc(500px - 120px);
 }
 
 .loading-container {
@@ -115,8 +116,8 @@
 .user-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
+  gap: 8px;
+  padding: 8px 16px;
   transition: background-color 0.2s ease;
   border-bottom: 1px solid #f0f0f0;
   background: white;
@@ -133,9 +134,9 @@
   box-shadow: none;
 }
 
-.user-avatar {
-  width: 40px;
-  height: 40px;
+.space-users-modal .user-avatar {
+  width: 28px !important;
+  height: 28px !important;
   border-radius: 50%;
   object-fit: cover;
   border: none;
@@ -147,15 +148,28 @@
   gap: 2px;
 }
 
-.user-name {
+.space-users-modal .user-name {
   font-weight: 500;
   color: #333;
-  font-size: 14px;
+  font-size: 14px !important;
+  margin: 0 !important;
 }
 
-.user-email {
-  font-size: 12px;
+.space-users-modal .user-name.clickable {
+  cursor: pointer;
+  color: #9F283B;
+  transition: color 0.2s ease;
+}
+
+.space-users-modal .user-name.clickable:hover {
+  color: #8B1E2F;
+  text-decoration: underline;
+}
+
+.space-users-modal .user-email {
+  font-size: 12px !important;
   color: #666;
+  margin: 0 !important;
 }
 
 .modal-footer {
@@ -164,6 +178,7 @@
   background-color: white;
   display: flex;
   justify-content: flex-end;
+  flex-shrink: 0;
 }
 
 .close-modal-btn {

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { SpaceUser } from '../../types/user';
 import './SpaceUsersModal.css';
 
@@ -15,6 +16,7 @@ const SpaceUsersModal: React.FC<SpaceUsersModalProps> = ({
   users,
   spaceName
 }) => {
+  const navigate = useNavigate();
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -54,7 +56,10 @@ const SpaceUsersModal: React.FC<SpaceUsersModalProps> = ({
                     className="user-avatar"
                   />
                   <div className="user-info">
-                    <span className="user-name">
+                    <span 
+                      className="user-name clickable"
+                      onClick={() => navigate(`/users/${user.id}`)}
+                    >
                       {user.name} {user.last_name}
                     </span>
                     <span className="user-email">{user.email}</span>
