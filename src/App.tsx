@@ -11,8 +11,8 @@ import { AppProvider } from './context/AppContext'
 
 export const App = () => {
   return (
-    <AppProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AppProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/space/:spaceId" element={<Space />} />
@@ -22,7 +22,7 @@ export const App = () => {
           <Route path="/users/:userId" element={<UserView />} />
           <Route path="/tendencias" element={<ComingSoon title="Tendencias" description="Mantente al día con los temas más populares y trending." />} />
         </Routes>
-      </BrowserRouter>
-    </AppProvider>
+      </AppProvider>
+    </BrowserRouter>
   )
 }

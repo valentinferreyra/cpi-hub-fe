@@ -148,7 +148,7 @@ const Search: React.FC<SearchProps> = ({
                       <span className="search-result-space">#{post.space.name}</span>
                       <span 
                         className="search-result-author clickable"
-                        onClick={(e) => handleAuthorClick(e, post.created_by.id)}
+                        onClick={(e) => handleAuthorClick(e, parseInt(post.created_by.id))}
                       >
                         por {post.created_by.name} {post.created_by.last_name}
                       </span>
