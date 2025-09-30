@@ -7,14 +7,9 @@ interface NotificationsProps {
 }
 
 const Notifications: React.FC<NotificationsProps> = ({ className = "" }) => {
-  const handleNotificationsClick = () => {
-    console.log('Notifications clicked');
-  };
-
   return (
     <button 
       className={`notifications-button ${className}`}
-      onClick={handleNotificationsClick}
     >
       <img src={notificationIcon} alt="Notifications" className="notifications-icon" />
     </button>
