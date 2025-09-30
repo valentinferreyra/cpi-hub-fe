@@ -116,7 +116,7 @@
   display: block;
   font-size: 1.8rem;
   font-weight: 700;
-  color: #3498db;
+  color: #9f283b;
 }
 
 .stat-label {
@@ -337,7 +337,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
+  border-top: 4px solid #9f283b;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 15px;
@@ -375,7 +375,7 @@
 }
 
 .btn-primary {
-  background: #3498db;
+  background: #9f283b;
   color: white;
   border: none;
   padding: 12px 25px;
@@ -387,7 +387,7 @@
 }
 
 .btn-primary:hover {
-  background: #2980b9;
+  background: #7a1f2e;
   transform: translateY(-1px);
 }
 
@@ -401,10 +401,10 @@
 }
 
 .comment-card:hover {
-  background: #e9ecef;
-  border-color: #3498db;
+  background: #f8f9fa;
+  border-color: #9f283b;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.15);
+  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.15);
 }
 
 .comment-content {
@@ -429,7 +429,7 @@
 }
 
 .comment-space {
-  background: #3498db;
+  background: #9f283b;
   color: white;
   padding: 2px 8px;
   border-radius: 4px;
@@ -461,7 +461,7 @@
 }
 
 .pagination-btn {
-  background: #3498db;
+  background: #9f283b;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -474,9 +474,9 @@
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background: #2980b9;
+  background: #7a1f2e;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 4px 12px rgba(159, 40, 59, 0.3);
 }
 
 .pagination-btn:disabled {

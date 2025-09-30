@@ -1,12 +1,12 @@
-import Sidebar from "../components/Sidebar/Sidebar";
-import Topbar from "../components/Topbar/Topbar";
-import PostCard from "../components/PostCard/PostCard";
-import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
-import CreatePostModal from "../components/CreatePostModal/CreatePostModal";
-import SpaceUsersModal from "../components/SpaceUsersModal/SpaceUsersModal";
+import Sidebar from "@components/Sidebar/Sidebar";
+import Topbar from "@components/Topbar/Topbar";
+import PostCard from "@components/PostCard/PostCard";
+import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
+import CreatePostModal from "@components/modals/CreatePostModal/CreatePostModal";
+import SpaceUsersModal from "@components/modals/SpaceUsersModal/SpaceUsersModal";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./Home.css";
+import "./Home/Home.css";
 import { useAppContext } from "../context/AppContext";
 import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser, getSpaceUsers } from "../api";
 import type { Post } from "../types/post";
@@ -264,7 +264,7 @@ function Space() {
                 )}
               </div>
               <div className="space-meta">
-                <span 
+                <span
                   className="space-users clickable"
                   onClick={handleShowUsers}
                 >

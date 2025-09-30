@@ -48,12 +48,12 @@
 
 .author-name.clickable {
   cursor: pointer;
-  color: #9F283B;
+  color: #9f283b;
   transition: color 0.2s ease;
 }
 
 .author-name.clickable:hover {
-  color: #8B1E2F;
+  color: #8b1e2f;
   text-decoration: underline;
 }
 
@@ -69,14 +69,14 @@
   opacity: 0.9;
 }
 
-.post-space.clickable {
-  color: #9F283B;
+.post-space .clickable {
+  color: #9f283b;
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
-.post-space.clickable:hover {
-  color: #8B1E2F;
+.post-space .clickable:hover {
+  color: #8b1e2f;
   text-decoration: underline;
 }
 
@@ -112,8 +112,6 @@
   line-height: 1.6;
   margin: 0;
 }
-
-
 
 .post-footer {
   border-top: 1px solid #f0f0f0;

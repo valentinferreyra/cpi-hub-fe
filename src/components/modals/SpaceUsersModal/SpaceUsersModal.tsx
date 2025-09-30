@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { SpaceUser } from '../../types/user';
+import type { SpaceUser } from '../../../types/user';
 import './SpaceUsersModal.css';
 
 interface SpaceUsersModalProps {
@@ -34,51 +34,49 @@ const SpaceUsersModal: React.FC<SpaceUsersModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="space-users-overlay" onClick={onClose}>
       <div className="space-users-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>Usuarios de {spaceName}</h2>
-          <button className="close-btn" onClick={onClose}>
-            ×
-          </button>
+        <div className="space-users-header">
+          <h2>Usuarios de <span className='space-users-space-name'>{spaceName}</span></h2>
         </div>
-        
-        <div className="modal-content">
+
+        <div className="space-users-content">
           {isLoading ? (
-            <div className="loading-state">
-              <div className="loading-spinner"></div>
+            <div className="space-users-loading-state">
+              <div className="space-users-loading-spinner"></div>
               <p>Cargando usuarios...</p>
             </div>
           ) : users.length === 0 ? (
-            <div className="empty-state">
+            <div className="space-users-empty-state">
               <p>No hay usuarios en este space</p>
             </div>
           ) : (
-            <div className="users-list">
+            <div className="space-users-list">
               {users.map((user) => (
-                <div key={user.id} className="user-item">
+                <div
+                  key={user.id}
+                  className="space-users-item"
+                  onClick={() => navigate(`/users/${user.id}`)}
+                >
                   <img
                     src={user.image}
                     alt={`${user.name} ${user.last_name}`}
-                    className="user-avatar"
+                    className="space-users-avatar"
                   />
-                  <div className="user-info">
-                    <span 
-                      className="user-name clickable"
-                      onClick={() => navigate(`/users/${user.id}`)}
-                    >
+                  <div className="space-users-info">
+                    <span className="space-users-name">
                       {user.name} {user.last_name}
                     </span>
-                    <span className="user-email">{user.email}</span>
+                    <span className="space-users-email">{user.email}</span>
                   </div>
                 </div>
               ))}
             </div>
           )}
         </div>
-        
-        <div className="modal-footer">
-          <button className="close-modal-btn" onClick={onClose}>
+
+        <div className="space-users-footer">
+          <button className="space-users-close-modal-btn" onClick={onClose}>
             Cerrar
           </button>
         </div>

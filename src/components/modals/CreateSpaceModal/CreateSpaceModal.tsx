@@ -26,16 +26,13 @@ function CreateSpaceModal({ isOpen, onClose, onCreateSpace, isLoading = false }:
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={handleClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>Crear space</h2>
-          <button className="modal-close-btn" onClick={handleClose}>
-            ×
-          </button>
+    <div className="create-space-overlay" onClick={handleClose}>
+      <div className="create-space-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="create-space-header">
+          <h2>Crear Space</h2>
         </div>
-        <div className="modal-body">
-          <form className="create-post-form">
+        <div className="create-space-body">
+          <form className="create-space-form">
             <div className="form-group">
               <label htmlFor="space-name" className="form-label">
                 Nombre del space

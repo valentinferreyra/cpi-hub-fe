@@ -1,6 +1,6 @@
-import Sidebar from "../components/Sidebar/Sidebar";
-import Topbar from "../components/Topbar/Topbar";
-import { useAppContext } from "../context/AppContext";
+import Sidebar from "@components/Sidebar/Sidebar";
+import Topbar from "@components/Topbar/Topbar";
+import { useAppContext } from "../../context/AppContext";
 import "./ComingSoon.css";
 
 interface ComingSoonProps {

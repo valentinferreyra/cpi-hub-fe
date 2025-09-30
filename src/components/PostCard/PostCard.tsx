@@ -13,7 +13,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const maxLength = 160;
   const hasContent = post.content && post.content.trim();
   const shouldTruncate = hasContent && post.content.length > maxLength;
-  
+
   const handlePostClick = () => {
     navigate(`/post/${post.id}`);
   };
@@ -32,23 +32,20 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     <div className="post-card" onClick={handlePostClick}>
       <div className="post-header">
         <div className="post-author">
-          <img 
-            src={post.created_by.image} 
+          <img
+            src={post.created_by.image}
             alt={`${post.created_by.name} ${post.created_by.last_name}`}
             className="author-avatar"
           />
           <div className="author-info">
-            <span 
-              className="author-name clickable" 
+            <span
+              className="author-name clickable"
               onClick={handleAuthorClick}
             >
               {post.created_by.name} {post.created_by.last_name}
             </span>
-            <span 
-              className="post-space clickable"
-              onClick={handleSpaceClick}
-            >
-              en {post.space.name}
+            <span className="post-space">
+              en <span className="clickable" onClick={handleSpaceClick}>{post.space.name}</span>
             </span>
           </div>
         </div>
@@ -56,7 +53,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           {formatPostDate(post.created_at)}
         </span>
       </div>
-      
+
       <div className="post-content">
         <h3 className="post-title">{post.title}</h3>
         {post.content && post.content.trim() && (
@@ -66,7 +63,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           </p>
         )}
       </div>
-      
+
       <div className="post-footer">
         <span className="comments-count">
           {post.comments.length} comentarios

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar/Sidebar';
-import Topbar from '../components/Topbar/Topbar';
-import Breadcrumb from '../components/Breadcrumb/Breadcrumb';
-import UserPosts from '../components/UserPosts/UserPosts';
-import UserComments from '../components/UserComments/UserComments';
-import { useAppContext } from '../context/AppContext';
-import { getUserById, getUserPosts, getUserComments } from '../api';
-import type { User } from '../types/user';
-import LogoutModal from '../components/LogoutModal/LogoutModal';
+import Sidebar from '@components/Sidebar/Sidebar';
+import Topbar from '@components/Topbar/Topbar';
+import Breadcrumb from '@components/Breadcrumb/Breadcrumb';
+import UserPosts from '@components/UserPosts/UserPosts';
+import UserComments from '@components/UserComments/UserComments';
+import { useAppContext } from '../../context/AppContext';
+import { getUserById, getUserPosts, getUserComments } from '../../api';
+import type { User } from '../../types/user';
+import LogoutModal from '@components/LogoutModal/LogoutModal';
 import './UserView.css';
 
 const UserView: React.FC = () => {
