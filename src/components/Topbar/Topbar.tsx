@@ -15,19 +15,14 @@ interface TopbarProps {
 
 const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
   const navigate = useNavigate();
-  
+
   const handleHomeClick = () => {
     navigate('/');
   };
 
   const handleUserClick = () => {
     if (currentUser) {
-      console.log('Usuario actual:', {
-        id: currentUser.id,
-        nombre: currentUser.name,
-        apellido: currentUser.last_name,
-        email: currentUser.email
-      });
+      navigate(`/users/${currentUser.id}`);
     }
   };
 
@@ -36,9 +31,9 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
       <div className="topbar-content">
         <div className="topbar-left">
           <img src={unqLogo} alt="UNQ Logo" className="topbar-unq-logo" />
-          <img src={cpihubLogo} alt="CPIHub Logo" className="topbar-logo" />
+          <img src={cpihubLogo} alt="CPIHub Logo" className="topbar-logo" onClick={handleHomeClick} />
         </div>
-        
+
         <div className="topbar-center">
           <div className="search-container">
             <button className="home-button" onClick={handleHomeClick}>
@@ -47,17 +42,17 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
             <Search placeholder="Buscar un tópico..." />
           </div>
         </div>
-        
+
         <div className="topbar-right">
           <div className="actions-container">
             <Messages />
             <Notifications />
             {currentUser && (
               <button className="user-avatar-button" onClick={handleUserClick}>
-                <img 
-                  src={currentUser.image} 
-                  alt={`${currentUser.name} ${currentUser.last_name}`} 
-                  className="user-avatar" 
+                <img
+                  src={currentUser.image}
+                  alt={`${currentUser.name} ${currentUser.last_name}`}
+                  className="user-avatar"
                 />
               </button>
             )}

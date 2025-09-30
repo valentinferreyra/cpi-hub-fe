@@ -1,10 +1,20 @@
 import type { SimpleUser } from "./post";
 
 export interface Comment {
-    id: string;
+    id: number;
+    post_id: number;
     content: string;
     created_at: string;
     created_by: SimpleUser;
-    updated_at: string;
-    updated_by: string;
-  }
+    space: {
+        id: number;
+        name: string;
+    };
+}
+
+export interface CommentsResponse {
+    data: Comment[];
+    page: number;
+    page_size: number;
+    total: number;
+}

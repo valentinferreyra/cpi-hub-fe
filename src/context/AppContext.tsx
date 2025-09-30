@@ -1,12 +1,12 @@
-import React, { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
 import type { User } from '../types/user';
 import type { Post } from '../types/post';
 import type { Space } from '../types/space';
-import { getCurrentUser, getPostsBySpaceId, getPostsByUserId, getSpaceById } from '../services/api';
+import { getCurrentUser, getPostsBySpaceId, getSpaceById } from '../services/api';
 
 interface AppContextType {
   currentUser: User | null;
-  latestPosts: Post[];
   selectedSpace: Space | null;
   selectedSpacePosts: Post[];
   isLoading: boolean;
@@ -15,7 +15,6 @@ interface AppContextType {
   selectSpace: (space: Space) => void;
   goToHome: () => void;
   setCurrentUser: (user: User | null) => void;
-  setLatestPosts: (posts: Post[]) => void;
   setSelectedSpace: (space: Space | null) => void;
   setSelectedSpacePosts: (posts: Post[] | ((prevPosts: Post[]) => Post[])) => void;
 }
@@ -36,11 +35,20 @@ interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [latestPosts, setLatestPosts] = useState<Post[]>([]);
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
   const [selectedSpacePosts, setSelectedSpacePosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const location = useLocation();
+
+  // Clear selectedSpace when navigating away from space routes
+  useEffect(() => {
+    const isSpaceRoute = location.pathname.startsWith('/space/');
+    if (!isSpaceRoute && selectedSpace) {
+      setSelectedSpace(null);
+      setSelectedSpacePosts([]);
+    }
+  }, [location.pathname, selectedSpace]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -48,12 +56,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setIsLoading(true);
       }
 
-      const user = await getCurrentUser(16);
+      const user = await getCurrentUser(1);
       setCurrentUser(user);
-
-      // Obtener posts de todos los espacios del usuario usando el nuevo endpoint
-      const posts = await getPostsByUserId(16);
-      setLatestPosts(posts);
 
     } catch (error) {
       console.error('Error en la carga de datos:', error);
@@ -70,7 +74,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       // Fetch complete space details with author information
       const completeSpace = await getSpaceById(space.id);
       const posts = await getPostsBySpaceId(space.id);
-      
+
       // Use the complete space data if available, otherwise fall back to the space from user's spaces
       setSelectedSpace(completeSpace || space);
       setSelectedSpacePosts(posts);
@@ -90,7 +94,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const value = {
     currentUser,
-    latestPosts,
     selectedSpace,
     selectedSpacePosts,
     isLoading,
@@ -99,7 +102,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     selectSpace,
     goToHome,
     setCurrentUser,
-    setLatestPosts,
     setSelectedSpace,
     setSelectedSpacePosts,
   };
