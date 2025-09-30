@@ -123,17 +123,6 @@
   font-style: italic;
 }
 
-.search-result-author.clickable {
-  cursor: pointer;
-  color: #9F283B;
-  transition: color 0.2s ease;
-}
-
-.search-result-author.clickable:hover {
-  color: #8B1E2F;
-  text-decoration: underline;
-}
-
 .search-loading {
   display: flex;
   align-items: center;
