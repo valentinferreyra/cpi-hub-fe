@@ -3,7 +3,7 @@ import Topbar from "../components/Topbar/Topbar";
 import { useAppContext } from "../context/AppContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSpacesByCreatedAt, getSpacesByUpdatedAt, createSpace, GetSpacesByName } from "../services/api";
+import { getSpacesByCreatedAt, getSpacesByUpdatedAt, createSpace, GetSpacesByName } from "../api";
 import type { Space } from "../types/space";
 import CreateSpaceModal from "../components/CreateSpaceModal/CreateSpaceModal";
 import "./Explore.css";

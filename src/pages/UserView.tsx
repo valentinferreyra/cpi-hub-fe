@@ -6,7 +6,7 @@ import Breadcrumb from '../components/Breadcrumb/Breadcrumb';
 import UserPosts from '../components/UserPosts/UserPosts';
 import UserComments from '../components/UserComments/UserComments';
 import { useAppContext } from '../context/AppContext';
-import { getUserById, getUserPosts, getUserComments } from '../services/api';
+import { getUserById, getUserPosts, getUserComments } from '../api';
 import type { User } from '../types/user';
 import './UserView.css';
 

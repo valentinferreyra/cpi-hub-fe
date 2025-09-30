@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import type { User } from '../types/user';
 import type { Post } from '../types/post';
 import type { Space } from '../types/space';
-import { getCurrentUser, getPostsBySpaceId, getSpaceById } from '../services/api';
+import { getCurrentUser, getPostsBySpaceId, getSpaceById } from '../api';
 
 interface AppContextType {
   currentUser: User | null;

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Search.css';
-import { searchPosts } from '../../services/api';
+import { searchPosts, searchUsers } from '../../api';
 import type { Post } from '../../types/post';
+import type { User } from '../../types/user';
 
 interface SearchProps {
   placeholder?: string;
@@ -10,11 +11,14 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ 
-  placeholder = "Buscar un tópico...",
+  placeholder = "Buscar en CPIHub...",
   className = "" 
 }) => {
   const [searchValue, setSearchValue] = useState('');
-  const [searchResults, setSearchResults] = useState<Post[]>([]);
+  const [searchResults, setSearchResults] = useState<{
+    posts: Post[];
+    users: User[];
+  }>({ posts: [], users: [] });
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const navigate = useNavigate();
@@ -30,7 +34,7 @@ const Search: React.FC<SearchProps> = ({
     }
 
     if (value.length < 3) {
-      setSearchResults([]);
+      setSearchResults({ posts: [], users: [] });
       setShowResults(false);
       return;
     }
@@ -38,12 +42,15 @@ const Search: React.FC<SearchProps> = ({
     debounceRef.current = setTimeout(async () => {
       setIsSearching(true);
       try {
-        const results = await searchPosts(value);
-        setSearchResults(results);
+        const [postsResults, usersResults] = await Promise.all([
+          searchPosts(value),
+          searchUsers(value)
+        ]);
+        setSearchResults({ posts: postsResults, users: usersResults });
         setShowResults(true);
       } catch (error) {
-        console.error('Error searching posts:', error);
-        setSearchResults([]);
+        console.error('Error searching:', error);
+        setSearchResults({ posts: [], users: [] });
       } finally {
         setIsSearching(false);
       }
@@ -51,7 +58,7 @@ const Search: React.FC<SearchProps> = ({
   };
 
   const handleInputClick = () => {
-    if (searchResults.length > 0) {
+    if (searchResults.posts.length > 0 || searchResults.users.length > 0) {
       setShowResults(true);
     }
   };
@@ -69,20 +76,24 @@ const Search: React.FC<SearchProps> = ({
     navigate(`/users/${userId}`);
   };
 
+  const handleUserClick = (user: User) => {
+    setShowResults(false);
+    setSearchValue('');
+    navigate(`/users/${user.id}`);
+  };
+
   const handleInputFocus = () => {
-    if (searchResults.length > 0) {
+    if (searchResults.posts.length > 0 || searchResults.users.length > 0) {
       setShowResults(true);
     }
   };
 
   const handleInputBlur = () => {
-    // Delay para permitir clicks en los resultados
     setTimeout(() => {
       setShowResults(false);
     }, 200);
   };
 
-  // Limpiar el timeout cuando el componente se desmonte
   useEffect(() => {
     return () => {
       if (debounceRef.current) {
@@ -91,7 +102,6 @@ const Search: React.FC<SearchProps> = ({
     };
   }, []);
 
-  // Cerrar resultados cuando se hace click fuera
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -125,37 +135,82 @@ const Search: React.FC<SearchProps> = ({
               <div className="loading-spinner"></div>
               <span>Buscando...</span>
             </div>
-          ) : searchResults.length > 0 ? (
+          ) : (searchResults.posts.length > 0 || searchResults.users.length > 0) ? (
             <>
               <div className="search-results-header">
-                <span>{searchResults.length} resultado{searchResults.length !== 1 ? 's' : ''} encontrado{searchResults.length !== 1 ? 's' : ''}</span>
+                <span>
+                  {searchResults.posts.length + searchResults.users.length} resultado{(searchResults.posts.length + searchResults.users.length) !== 1 ? 's' : ''} encontrado{(searchResults.posts.length + searchResults.users.length) !== 1 ? 's' : ''}
+                </span>
               </div>
-              {searchResults.map((post) => (
-                <div
-                  key={post.id}
-                  className="search-result-item"
-                  onClick={() => handlePostClick(post)}
-                >
-                  <div className="search-result-content">
-                    <h4 className="search-result-title">{post.title}</h4>
-                    <p className="search-result-preview">
-                      {post.content.length > 100 
-                        ? `${post.content.substring(0, 100)}...` 
-                        : post.content
-                      }
-                    </p>
-                    <div className="search-result-meta">
-                      <span className="search-result-space">#{post.space.name}</span>
-                      <span 
-                        className="search-result-author clickable"
-                        onClick={(e) => handleAuthorClick(e, parseInt(post.created_by.id))}
-                      >
-                        por {post.created_by.name} {post.created_by.last_name}
-                      </span>
-                    </div>
+              
+              {searchResults.users.length > 0 && (
+                <>
+                  <div className="search-section-header">
+                    <span>Usuarios ({searchResults.users.length})</span>
                   </div>
-                </div>
-              ))}
+                  {searchResults.users.map((user) => (
+                    <div
+                      key={user.id}
+                      className="search-result-item search-user-item"
+                      onClick={() => handleUserClick(user)}
+                    >
+                      <div className="search-result-content">
+                        <div className="search-user-info">
+                          <div className="search-user-avatar">
+                            {user.image ? (
+                              <img src={user.image} alt={`${user.name} ${user.last_name}`} />
+                            ) : (
+                              <div className="search-user-avatar-placeholder">
+                                {user.name.charAt(0).toUpperCase()}
+                              </div>
+                            )}
+                          </div>
+                          <div className="search-user-details">
+                            <h4 className="search-result-title">
+                              {user.name} {user.last_name}
+                            </h4>
+                            <p className="search-user-email">{user.email}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+
+              {searchResults.posts.length > 0 && (
+                <>
+                  <div className="search-section-header">
+                    <span>Posts ({searchResults.posts.length})</span>
+                  </div>
+                  {searchResults.posts.map((post) => (
+                    <div
+                      key={post.id}
+                      className="search-result-item"
+                      onClick={() => handlePostClick(post)}
+                    >
+                      <div className="search-result-content">
+                        <h4 className="search-result-title">{post.title}</h4>
+                        <p className="search-result-preview">
+                          {post.content.length > 100 
+                            ? `${post.content.substring(0, 100)}...` 
+                            : post.content
+                          }
+                        </p>
+                        <div className="search-result-meta">
+                          <span className="search-result-space">#{post.space.name}</span>
+                          <span 
+                            className="search-result-author clickable"
+                            onClick={(e) => handleAuthorClick(e, parseInt(post.created_by.id))}
+                          >
+                            por {post.created_by.name} {post.created_by.last_name}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
             </>
           ) : searchValue.length >= 3 ? (
             <div className="search-no-results">

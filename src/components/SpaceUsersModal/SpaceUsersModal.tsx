@@ -8,13 +8,15 @@ interface SpaceUsersModalProps {
   onClose: () => void;
   users: SpaceUser[];
   spaceName: string;
+  isLoading?: boolean;
 }
 
 const SpaceUsersModal: React.FC<SpaceUsersModalProps> = ({
   isOpen,
   onClose,
   users,
-  spaceName
+  spaceName,
+  isLoading = false
 }) => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -42,7 +44,12 @@ const SpaceUsersModal: React.FC<SpaceUsersModalProps> = ({
         </div>
         
         <div className="modal-content">
-          {users.length === 0 ? (
+          {isLoading ? (
+            <div className="loading-state">
+              <div className="loading-spinner"></div>
+              <p>Cargando usuarios...</p>
+            </div>
+          ) : users.length === 0 ? (
             <div className="empty-state">
               <p>No hay usuarios en este space</p>
             </div>
