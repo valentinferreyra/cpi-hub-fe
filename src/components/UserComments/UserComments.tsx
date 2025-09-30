@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserComments } from '../../services/api';
+import { getUserComments } from '../../api';
 import type { Comment } from '../../types/comment';
 import './UserComments.css';
 

@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Home.css";
 import { useAppContext } from "../context/AppContext";
-import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser, getSpaceUsers } from "../services/api";
+import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser, getSpaceUsers } from "../api";
 import type { Post } from "../types/post";
 import type { SpaceUser } from "../types/user";
 
@@ -76,12 +76,7 @@ function Space() {
     };
 
     loadSpaceFromUrl();
-  }, [spaceId, currentUser, selectedSpace, selectSpace]);
-
-  const goToSpace = () => {
-    // Ya estamos en la página del space, no hacer nada
-    // O podríamos refrescar la página si es necesario
-  };
+  }, [spaceId, currentUser, selectedSpace, selectSpace, setSelectedSpace, setSelectedSpacePosts]);
 
   const openCreatePostModal = () => {
     setIsCreatePostModalOpen(true);
@@ -336,6 +331,7 @@ function Space() {
         onClose={handleCloseUsersModal}
         users={spaceUsers}
         spaceName={selectedSpace?.name || ''}
+        isLoading={isLoadingUsers}
       />
     </>
   )

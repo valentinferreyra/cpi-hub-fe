@@ -6,7 +6,7 @@ import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import { useEffect, useState } from "react";
 import "./Home.css";
 import { useAppContext } from "../context/AppContext";
-import { getPostsByUserId } from "../services/api";
+import { getPostsByUserId } from "../api";
 import type { Post } from "../types/post";
 
 function Home() {

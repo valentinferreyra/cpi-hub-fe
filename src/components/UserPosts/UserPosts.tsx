@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import PostCard from '../PostCard/PostCard';
-import { getUserPosts } from '../../services/api';
+import { getUserPosts } from '../../api';
 import type { Post } from '../../types/post';
 import './UserPosts.css';
 
 interface UserPostsProps {
   userId: number;
-  userName: string;
 }
 
-const UserPosts: React.FC<UserPostsProps> = ({ userId, userName }) => {
-  const navigate = useNavigate();
+const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,9 +40,6 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId, userName }) => {
     return Math.ceil(totalPosts / pageSize);
   };
 
-  const handlePostClick = (postId: number) => {
-    navigate(`/post/${postId}`);
-  };
 
   return (
     <div className="user-posts-section">
