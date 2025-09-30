@@ -4,7 +4,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #9f283b;
+  background: linear-gradient(
+    135deg,
+    #9f283b 0%,
+    #9f283b 30%,
+    #b8324a 70%,
+    #8b1e2f 100%
+  );
   padding: 20px;
   gap: 24px;
 }
