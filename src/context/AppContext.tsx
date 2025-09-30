@@ -56,11 +56,24 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setIsLoading(true);
       }
 
-      const user = await getCurrentUser(1);
-      setCurrentUser(user);
-
+      // Solo intentar obtener el usuario si hay un token
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        try {
+          const user = await getCurrentUser();
+          setCurrentUser(user);
+        } catch (error) {
+          console.error('Error getting current user:', error);
+          // Si hay error de autenticación, limpiar el token y el estado
+          localStorage.removeItem('auth_token');
+          setCurrentUser(null);
+        }
+      } else {
+        setCurrentUser(null);
+      }
     } catch (error) {
       console.error('Error en la carga de datos:', error);
+      setCurrentUser(null);
     } finally {
       if (isFirstLoad) {
         setIsLoading(false);
