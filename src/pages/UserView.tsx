@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Topbar from '../components/Topbar/Topbar';
@@ -16,6 +16,8 @@ const UserView: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser, isLoading, fetchData } = useAppContext();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const settingsRef = useRef<HTMLDivElement>(null);
 
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
@@ -25,6 +27,19 @@ const UserView: React.FC = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+        setShowSettings(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -130,12 +145,27 @@ const UserView: React.FC = () => {
                   {user.name} {user.last_name}
                 </h1>
                 {currentUser && currentUser.id === user.id && (
-                  <img
-                    src="/src/assets/settings.png"
-                    alt="Configuración"
-                    className="space-settings-icon"
-                    onClick={() => setIsLogoutModalOpen(true)}
-                  />
+                  <div className="space-settings-container" ref={settingsRef}>
+                    <img
+                      src="/src/assets/settings.png"
+                      alt="Configuración"
+                      className="space-settings-icon"
+                      onClick={() => setShowSettings(!showSettings)}
+                    />
+                    {showSettings && (
+                      <div className="space-settings-dropdown">
+                        <button
+                          className="dropdown-item"
+                          onClick={() => {
+                            setShowSettings(false);
+                            setIsLogoutModalOpen(true);
+                          }}
+                        >
+                          Cerrar sesión
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
               <p className="user-email">{user.email}</p>
