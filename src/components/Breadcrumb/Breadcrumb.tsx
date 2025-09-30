@@ -35,7 +35,6 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
   };
 
   const handleLeaveSpace = (spaceId: number) => {
-    console.log('Dejar space con ID:', spaceId);
     setOpenDropdown(null);
   };
 

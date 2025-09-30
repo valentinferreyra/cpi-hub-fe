@@ -80,6 +80,16 @@
   box-shadow: 0 1px 4px rgba(159, 40, 59, 0.07);
 }
 
+.space-users.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.space-users.clickable:hover {
+  background-color: #9f283b;
+  color: white;
+}
+
 .space-description {
   color: #333;
   font-size: 16px;

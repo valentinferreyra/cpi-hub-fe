@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
 import type { User } from '../types/user';
 import type { Post } from '../types/post';
 import type { Space } from '../types/space';
@@ -38,6 +39,16 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [selectedSpacePosts, setSelectedSpacePosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const location = useLocation();
+
+  // Clear selectedSpace when navigating away from space routes
+  useEffect(() => {
+    const isSpaceRoute = location.pathname.startsWith('/space/');
+    if (!isSpaceRoute && selectedSpace) {
+      setSelectedSpace(null);
+      setSelectedSpacePosts([]);
+    }
+  }, [location.pathname, selectedSpace]);
 
   const fetchData = useCallback(async () => {
     try {

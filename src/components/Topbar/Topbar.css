@@ -147,8 +147,8 @@
 }
 
 .user-avatar {
-  height: 44px;
-  width: 44px;
+  height: 44px !important;
+  width: 44px !important;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.3);

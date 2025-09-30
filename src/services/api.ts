@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { User } from "../types/user";
+import type { User, SpaceUser } from "../types/user";
 import type { Post } from "../types/post";
 import type { Space } from "../types/space";
 
@@ -32,7 +32,6 @@ api.interceptors.response.use(
 export const getCurrentUser = async (userId: number): Promise<User> => {
   try {
     const response = await api.get(`/users/${userId}`);
-    console.log("User API Response:", response.data);
 
     if (response.data && response.data.id) {
       return response.data;
@@ -71,12 +70,10 @@ export const getPostsByUserId = async (
     const response = await api.get(
       `/users/${userId}/interested-posts?page=${page}&page_size=20`
     );
-    console.log("Posts API Response:", response.data);
 
     return response.data;
   } catch (error) {
     console.error("Error getting posts by user id:", error);
-    console.log("No posts available");
     return { data: [], page: 1, page_size: 20, total: 0 };
   }
 };
@@ -84,7 +81,6 @@ export const getPostsByUserId = async (
 export const getPostById = async (postId: string): Promise<Post | null> => {
   try {
     const response = await api.get(`/posts/${postId}`);
-    console.log("Post API Response:", response.data);
     return response.data.data || response.data;
   } catch (error) {
     console.error("Error getting post by id:", error);
@@ -95,7 +91,6 @@ export const getPostById = async (postId: string): Promise<Post | null> => {
 export const getPostsBySpaceId = async (spaceId: number): Promise<Post[]> => {
   try {
     const response = await api.get(`/posts?space_id=${spaceId}`);
-    console.log("Posts by space API Response:", response.data);
 
     if (
       response.data &&
@@ -119,7 +114,6 @@ export const getPostsBySpaceId = async (spaceId: number): Promise<Post[]> => {
 export const getSpaceById = async (spaceId: number): Promise<Space | null> => {
   try {
     const response = await api.get(`/spaces/${spaceId}`);
-    console.log("Space API Response:", response.data);
 
     if (response.data && response.data.id) {
       return response.data;
@@ -203,7 +197,6 @@ export const addSpaceToUser = async (
     const response = await api.put(`/users/${userId}/spaces/${spaceId}/add`);
     return response.data;
   } catch (error) {
-    console.log("Error adding space to user:", error);
     throw error;
   }
 };
@@ -219,7 +212,6 @@ export const createSpace = async (
       description: description,
       created_by: userId,
     });
-    console.log("Create Space API Response:", response.data);
     return response.data.data || response.data;
   } catch (error) {
     console.error("Error creating space:", error);
@@ -235,7 +227,6 @@ export const getSpacesByCreatedAt = async (
     const response = await api.get(
       `/spaces?order_by=created_at&page=${page}&page_size=${pageSize}`
     );
-    console.log("Spaces by created_at API Response:", response.data);
 
     if (
       response.data &&
@@ -264,7 +255,6 @@ export const getSpacesByUpdatedAt = async (
     const response = await api.get(
       `/spaces?order_by=updated_at&page=${page}&page_size=${pageSize}`
     );
-    console.log("Spaces by updated_at API Response:", response.data);
 
     if (
       response.data &&
@@ -313,6 +303,62 @@ export const GetSpacesByName = async (
   } catch (error) {
     console.error("Error getting spaces by name:", error);
     return [];
+  }
+};
+
+export const getSpaceUsers = async (spaceId: number): Promise<SpaceUser[]> => {
+  try {
+    const response = await api.get(`/spaces/${spaceId}/users`);
+    return response.data;
+  } catch (error) {
+    console.error("Error getting space users:", error);
+    return [];
+  }
+};
+
+export const getUserById = async (userId: number): Promise<User> => {
+  try {
+    const response = await api.get(`/users/${userId}`);
+
+    if (response.data && response.data.id) {
+      return response.data;
+    }
+
+    console.warn("Unexpected user by ID API response structure:", response.data);
+    throw new Error("Invalid user data structure");
+  } catch (error) {
+    console.error("Error getting user by ID:", error);
+    throw error;
+  }
+};
+
+export const getUserComments = async (userId: number, page: number = 1, pageSize: number = 5): Promise<{
+  data: any[];
+  page: number;
+  page_size: number;
+  total: number;
+}> => {
+  try {
+    const response = await api.get(`/comments?user_id=${userId}&page=${page}&page_size=${pageSize}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error getting user comments:", error);
+    return { data: [], page: 1, page_size: 5, total: 0 };
+  }
+};
+
+export const getUserPosts = async (userId: number, page: number = 1, pageSize: number = 5): Promise<{
+  data: Post[];
+  page: number;
+  page_size: number;
+  total: number;
+}> => {
+  try {
+    const response = await api.get(`/posts?user_id=${userId}&page=${page}&page_size=${pageSize}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error getting user posts:", error);
+    return { data: [], page: 1, page_size: 5, total: 0 };
   }
 };
 

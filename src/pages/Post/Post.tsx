@@ -131,16 +131,16 @@ export const Post = () => {
                 <h1 className="post-title">{post.title}</h1>
                 <div className="post-author-date-container">
                   <div className="post-author-date">
-                    Por <span
+                    Por                     <span
                       className="post-author clickable"
-                      onClick={() => console.log('User ID:', post.created_by.id)}
+                      onClick={() => navigate(`/users/${post.created_by.id}`)}
                     >
                       {post.created_by.name} {post.created_by.last_name}
                     </span>, el {formatPostDetailDate(post.created_at)} a las {formatPostDetailTime(post.created_at)}
                   </div>
                   <span
                     className="post-space-badge-inline clickable"
-                    onClick={() => console.log('Space ID:', post.space.id)}
+                    onClick={() => navigate(`/space/${post.space.id}`)}
                   >
                     {post.space.name}
                   </span>
@@ -165,7 +165,7 @@ export const Post = () => {
                       />
                       <span
                         className="comment-author clickable"
-                        onClick={() => console.log('User ID:', comment.created_by.id)}
+                        onClick={() => navigate(`/users/${comment.created_by.id}`)}
                       >
                         {comment.created_by.name} {comment.created_by.last_name}
                       </span>
