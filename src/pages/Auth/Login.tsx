@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/users';
+import cpihubLogo from '../../assets/cpihub-logo.png';
+import unqLogo from '../../assets/unq-logo.png';
 import './Auth.css';
 
 function Login() {
@@ -40,32 +42,36 @@ function Login() {
 
   return (
     <div className="auth-container">
+      <div className="auth-logos">
+        <img src={unqLogo} alt="Logo UNQ" />
+        <img src={cpihubLogo} alt="Logo CPIHub" />
+      </div>
       <div className="auth-box">
-        <h2>Iniciar Sesión</h2>
+        <h2 className='auth-title'>Iniciar Sesión</h2>
         <form className="auth-form" onSubmit={handleLogin}>
           {error && (
             <div className="error-message">
               {error}
             </div>
           )}
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">Email</label>
+          <div className="auth-form-group">
+            <label htmlFor="email" className="auth-form-label">Email</label>
             <input
               type="email"
               id="email"
-              className="form-input"
+              className="auth-form-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Tu email..."
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="password" className="form-label">Contraseña</label>
+          <div className="auth-form-group">
+            <label htmlFor="password" className="auth-form-label">Contraseña</label>
             <input
               type="password"
               id="password"
-              className="form-input"
+              className="auth-form-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Tu contraseña..."

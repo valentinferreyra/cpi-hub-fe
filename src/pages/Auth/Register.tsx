@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../api/users';
+import cpihubLogo from '../../assets/cpihub-logo.png';
+import unqLogo from '../../assets/unq-logo.png';
 import './Auth.css';
 
 function Register() {
@@ -44,68 +46,74 @@ function Register() {
 
   return (
     <div className="auth-container">
+      <div className="auth-logos">
+        <img src={unqLogo} alt="Logo UNQ" />
+        <img src={cpihubLogo} alt="Logo CPIHub" />
+      </div>
       <div className="auth-box">
-        <h2>Registrarse</h2>
+        <h2 className='auth-title'>Registrarse</h2>
         <form className="auth-form" onSubmit={handleRegister}>
           {error && (
             <div className="error-message">
               {error}
             </div>
           )}
-          <div className="form-group">
-            <label htmlFor="name" className="form-label">Nombre</label>
-            <input
-              type="text"
-              id="name"
-              className="form-input"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Tu nombre..."
-              required
-            />
+          <div className="auth-form-row">
+            <div className="auth-form-group">
+              <label htmlFor="name" className="auth-form-label">Nombre</label>
+              <input
+                type="text"
+                id="name"
+                className="auth-form-input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Tu nombre..."
+                required
+              />
+            </div>
+            <div className="auth-form-group">
+              <label htmlFor="lastName" className="auth-form-label">Apellido</label>
+              <input
+                type="text"
+                id="lastName"
+                className="auth-form-input"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Tu apellido..."
+                required
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="lastName" className="form-label">Apellido</label>
-            <input
-              type="text"
-              id="lastName"
-              className="form-input"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              placeholder="Tu apellido..."
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">Email</label>
+          <div className="auth-form-group">
+            <label htmlFor="email" className="auth-form-label">Email</label>
             <input
               type="email"
               id="email"
-              className="form-input"
+              className="auth-form-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Tu email..."
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="password" className="form-label">Contraseña</label>
+          <div className="auth-form-group">
+            <label htmlFor="password" className="auth-form-label">Contraseña</label>
             <input
               type="password"
               id="password"
-              className="form-input"
+              className="auth-form-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Tu contraseña..."
               required
             />
           </div>
-          <div className='form-group'>
-            <label htmlFor='image' className='form-label'>URL de imagen de perfil (opcional)</label>
+          <div className='auth-form-group'>
+            <label htmlFor='image' className='auth-form-label'>URL de imagen de perfil (opcional)</label>
             <input
               type='url'
               id='image'
-              className='form-input'
+              className='auth-form-input'
               value={image}
               onChange={(e) => setImage(e.target.value)}
               placeholder='URL de tu imagen de perfil...'
