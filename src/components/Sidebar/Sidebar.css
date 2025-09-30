@@ -1,16 +1,11 @@
 .sidebar {
-  background: linear-gradient(135deg, #9F283B 0%, #B8324A 50%, #8B1E2F 100%);
+  background-color: #9F283B;
   width: 250px;
   height: calc(100vh - 70px);
   top: 70px;
   position: fixed;
   left: 0;
   padding: 20px;
-  box-shadow: 
-    inset -2px 0 10px rgba(0, 0, 0, 0.1),
-    4px 0 20px rgba(0, 0, 0, 0.15);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
 }
 
 .sidebar-separator {
@@ -83,4 +78,3 @@
   color: white;
   text-align: center;
 }
-

@@ -11,21 +11,10 @@ interface PostCardProps {
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const navigate = useNavigate();
   const maxLength = 160;
-  const hasContent = post.content && post.content.trim();
-  const shouldTruncate = hasContent && post.content.length > maxLength;
+  const shouldTruncate = post.content.length > maxLength;
   
   const handlePostClick = () => {
     navigate(`/post/${post.id}`);
-  };
-
-  const handleSpaceClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigate(`/space/${post.space.id}`);
-  };
-
-  const handleAuthorClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigate(`/users/${post.created_by.id}`);
   };
 
   return (
@@ -38,15 +27,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             className="author-avatar"
           />
           <div className="author-info">
+            <span className="author-name">{post.created_by.name} {post.created_by.last_name}</span>
             <span 
-              className="author-name clickable" 
-              onClick={handleAuthorClick}
-            >
-              {post.created_by.name} {post.created_by.last_name}
-            </span>
-            <span 
-              className="post-space clickable"
-              onClick={handleSpaceClick}
+              className="post-space"
+              onClick={() => console.log('Space ID:', post.space.id)}
             >
               en {post.space.name}
             </span>
@@ -59,12 +43,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       
       <div className="post-content">
         <h3 className="post-title">{post.title}</h3>
-        {post.content && post.content.trim() && (
-          <p className="post-text">
-            {post.content.slice(0, maxLength)}
-            {shouldTruncate && '...'}
-          </p>
-        )}
+        <p className="post-text">
+          {post.content.slice(0, maxLength)}
+          {shouldTruncate && '...'}
+        </p>
       </div>
       
       <div className="post-footer">

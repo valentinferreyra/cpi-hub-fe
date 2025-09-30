@@ -62,13 +62,6 @@ const Search: React.FC<SearchProps> = ({
     navigate(`/post/${post.id}`);
   };
 
-  const handleAuthorClick = (e: React.MouseEvent, userId: number) => {
-    e.stopPropagation(); 
-    setShowResults(false);
-    setSearchValue('');
-    navigate(`/users/${userId}`);
-  };
-
   const handleInputFocus = () => {
     if (searchResults.length > 0) {
       setShowResults(true);
@@ -146,10 +139,7 @@ const Search: React.FC<SearchProps> = ({
                     </p>
                     <div className="search-result-meta">
                       <span className="search-result-space">#{post.space.name}</span>
-                      <span 
-                        className="search-result-author clickable"
-                        onClick={(e) => handleAuthorClick(e, parseInt(post.created_by.id))}
-                      >
+                      <span className="search-result-author">
                         por {post.created_by.name} {post.created_by.last_name}
                       </span>
                     </div>
