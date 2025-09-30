@@ -8,13 +8,15 @@ import UserComments from '../components/UserComments/UserComments';
 import { useAppContext } from '../context/AppContext';
 import { getUserById, getUserPosts, getUserComments } from '../api';
 import type { User } from '../types/user';
+import LogoutModal from '../components/LogoutModal/LogoutModal';
 import './UserView.css';
 
 const UserView: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
   const { currentUser, isLoading, fetchData } = useAppContext();
-  
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
   const [totalPosts, setTotalPosts] = useState(0);
@@ -50,7 +52,7 @@ const UserView: React.FC = () => {
           // Obtener total de posts
           const postsResponse = await getUserPosts(parseInt(userId), 1, 1);
           setTotalPosts(postsResponse.total || 0);
-          
+
           // Obtener total de comentarios
           const commentsResponse = await getUserComments(parseInt(userId), 1, 1);
           setTotalComments(commentsResponse.total || 0);
@@ -66,6 +68,11 @@ const UserView: React.FC = () => {
   const handleSpaceClick = (spaceId: number) => {
     navigate(`/space/${spaceId}`);
   };
+
+  const handleLogOut = () => {
+    localStorage.removeItem('auth_token');
+    navigate('/login');
+  }
 
   if (isLoading || isLoadingUser) {
     return (
@@ -100,11 +107,11 @@ const UserView: React.FC = () => {
   return (
     <div className="user-view-page">
       <Topbar currentUser={currentUser} />
-      <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={() => {}} />
-      
+      <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={() => { }} />
+
       <div className="user-view-container">
         <Breadcrumb items={breadcrumbItems} />
-        
+
         <div className="user-profile-section">
           <div className="user-profile-header">
             <div className="user-profile-avatar">
@@ -116,13 +123,23 @@ const UserView: React.FC = () => {
                 </div>
               )}
             </div>
-            
+
             <div className="user-info">
-              <h1 className="user-name">
-                {user.name} {user.last_name}
-              </h1>
+              <div className="user-info-header">
+                <h1 className="user-name">
+                  {user.name} {user.last_name}
+                </h1>
+                {currentUser && currentUser.id === user.id && (
+                  <img
+                    src="/src/assets/settings.png"
+                    alt="Configuración"
+                    className="space-settings-icon"
+                    onClick={() => setIsLogoutModalOpen(true)}
+                  />
+                )}
+              </div>
               <p className="user-email">{user.email}</p>
-              
+
               <div className="user-stats">
                 <div className="stat-item">
                   <span className="stat-number">{totalPosts}</span>
@@ -146,8 +163,8 @@ const UserView: React.FC = () => {
           <div className="carousel-container">
             <div className="carousel-scroll">
               {user.spaces.map((space) => (
-                <div 
-                  key={space.id} 
+                <div
+                  key={space.id}
                   className="space-card"
                   onClick={() => handleSpaceClick(space.id)}
                 >
@@ -176,6 +193,15 @@ const UserView: React.FC = () => {
 
         <UserComments userId={user.id} userName={user.name} />
       </div>
+
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={() => {
+          handleLogOut();
+          setIsLogoutModalOpen(false);
+        }}
+      />
     </div>
   );
 };

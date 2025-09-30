@@ -61,6 +61,35 @@
   flex: 1;
 }
 
+.user-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settings-button {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-button:hover {
+  background-color: #f3f4f6;
+  color: #9f283b;
+}
+
+.settings-button i {
+  font-size: 1.25rem;
+}
+
 .user-name {
   font-size: 2.5rem;
   font-weight: 700;
@@ -112,7 +141,7 @@
   color: #2c3e50;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #9F283B;
+  border-bottom: 2px solid #9f283b;
 }
 
 .carousel-container {
@@ -124,7 +153,7 @@
   max-width: 100%;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: #9F283B #f0f0f0;
+  scrollbar-color: #9f283b #f0f0f0;
 }
 
 .carousel-container::after {
@@ -158,7 +187,7 @@
   padding: 10px 0;
   width: max-content;
   scrollbar-width: thin;
-  scrollbar-color: #9F283B #f0f0f0;
+  scrollbar-color: #9f283b #f0f0f0;
   scroll-behavior: smooth;
 }
 
@@ -172,7 +201,7 @@
 }
 
 .carousel-scroll::-webkit-scrollbar-thumb {
-  background: #9F283B;
+  background: #9f283b;
   border-radius: 4px;
 }
 
@@ -190,7 +219,7 @@
 }
 
 .carousel-container::-webkit-scrollbar-thumb {
-  background: #9F283B;
+  background: #9f283b;
   border-radius: 4px;
 }
 
@@ -257,7 +286,7 @@
 
 .space-card-creator {
   font-size: 12px;
-  color: #9F283B;
+  color: #9f283b;
   font-weight: 500;
 }
 
@@ -267,8 +296,6 @@
   padding: 30px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-
-
 
 .load-more-container {
   text-align: center;
@@ -317,8 +344,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .error-container {
@@ -359,8 +390,6 @@
   background: #2980b9;
   transform: translateY(-1px);
 }
-
-
 
 .comment-card {
   background: #f8f9fa;
@@ -473,35 +502,35 @@
     max-width: 100vw;
     padding: 15px;
   }
-  
+
   .user-profile-header {
     flex-direction: column;
     text-align: center;
     gap: 20px;
   }
-  
+
   .user-profile-avatar {
     width: 100px;
     height: 100px;
   }
-  
+
   .user-name {
     font-size: 2rem;
   }
-  
+
   .user-stats {
     justify-content: center;
   }
-  
+
   .user-spaces-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .pagination-container {
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .pagination-btn {
     min-width: 120px;
   }
