@@ -1,6 +1,6 @@
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Topbar from "../../components/Topbar/Topbar";
-import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
+import Sidebar from "@components/Sidebar/Sidebar";
+import Topbar from "@components/Topbar/Topbar";
+import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";

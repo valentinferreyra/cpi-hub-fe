@@ -20,22 +20,19 @@ function CreatePostModal({ isOpen, onClose, onCreatePost, isLoading = false }: C
 
   const handleCreatePost = () => {
     if (!postTitle.trim() || !postContent.trim() || isLoading) return;
-    
+
     onCreatePost(postTitle, postContent);
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={handleClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
+    <div className="create-post-overlay" onClick={handleClose}>
+      <div className="create-post-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="create-post-header">
           <h2>Crear post</h2>
-          <button className="modal-close-btn" onClick={handleClose}>
-            ×
-          </button>
         </div>
-        <div className="modal-body">
+        <div className="create-post-body">
           <form className="create-post-form">
             <div className="form-group">
               <label htmlFor="post-title" className="form-label">

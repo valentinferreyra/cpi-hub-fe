@@ -1,11 +1,11 @@
-import Sidebar from "../components/Sidebar/Sidebar";
-import Topbar from "../components/Topbar/Topbar";
-import { useAppContext } from "../context/AppContext";
+import Sidebar from "@components/Sidebar/Sidebar";
+import Topbar from "@components/Topbar/Topbar";
+import { useAppContext } from "../../context/AppContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSpacesByCreatedAt, getSpacesByUpdatedAt, createSpace, GetSpacesByName } from "../api";
-import type { Space } from "../types/space";
-import CreateSpaceModal from "../components/CreateSpaceModal/CreateSpaceModal";
+import { getSpacesByCreatedAt, getSpacesByUpdatedAt, createSpace, GetSpacesByName } from "../../api";
+import type { Space } from "../../types/space";
+import CreateSpaceModal from "@components/modals/CreateSpaceModal/CreateSpaceModal";
 import "./Explore.css";
 
 const Explore: React.FC = () => {

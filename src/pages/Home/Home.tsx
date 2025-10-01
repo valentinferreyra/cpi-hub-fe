@@ -1,13 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import Sidebar from "../components/Sidebar/Sidebar";
-import Topbar from "../components/Topbar/Topbar";
-import PostCard from "../components/PostCard/PostCard";
-import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
+import Sidebar from "@components/Sidebar/Sidebar";
+import Topbar from "@components/Topbar/Topbar";
+import PostCard from "@components/PostCard/PostCard";
+import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
 import { useEffect, useState } from "react";
 import "./Home.css";
-import { useAppContext } from "../context/AppContext";
-import { getPostsByUserId } from "../api";
-import type { Post } from "../types/post";
+import { useAppContext } from "../../context/AppContext";
+import { getPostsByUserId } from "../../api";
+import type { Post } from "../../types/post";
 
 function Home() {
   const navigate = useNavigate();
@@ -106,11 +106,21 @@ function Home() {
               const postsToShow = selectedSpace ? selectedSpacePosts : latestPosts;
 
               if (!Array.isArray(postsToShow)) {
-                return <div>No hay posts disponibles</div>;
+                return (
+                  <div className="empty-posts">
+                    <h3>No hay posts disponibles</h3>
+                    <p>Te invitamos a explorar nuestros spaces para encontrar contenido de tu interés y unirte a las conversaciones que más te apasionen.</p>
+                  </div>
+                );
               }
 
               if (postsToShow.length === 0) {
-                return <div>No hay posts disponibles</div>;
+                return (
+                  <div className="empty-posts">
+                    <h3>No hay posts disponibles</h3>
+                    <p>Te invitamos a explorar nuestros spaces para encontrar contenido de tu interés y unirte a las conversaciones que más te apasionen.</p>
+                  </div>
+                );
               }
 
               return postsToShow.map((post) => (

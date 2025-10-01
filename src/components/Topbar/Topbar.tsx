@@ -49,11 +49,13 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
             <Notifications />
             {currentUser && (
               <button className="user-avatar-button" onClick={handleUserClick}>
-                <img
-                  src={currentUser.image}
-                  alt={`${currentUser.name} ${currentUser.last_name}`}
-                  className="user-avatar"
-                />
+                {currentUser.image ? (
+                  <img src={currentUser.image} alt={`${currentUser.name} ${currentUser.last_name}`} className="user-avatar" />
+                ) : (
+                  <div className="user-avatar-placeholder">
+                    {currentUser.name.charAt(0)}{currentUser.last_name.charAt(0)}
+                  </div>
+                )}
               </button>
             )}
           </div>
