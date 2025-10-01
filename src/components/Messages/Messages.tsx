@@ -7,14 +7,9 @@ interface MessagesProps {
 }
 
 const Messages: React.FC<MessagesProps> = ({ className = "" }) => {
-  const handleMessagesClick = () => {
-    console.log('Messages clicked');
-  };
-
   return (
     <button 
       className={`messages-button ${className}`}
-      onClick={handleMessagesClick}
     >
       <img src={messagesIcon} alt="Messages" className="messages-icon" />
     </button>

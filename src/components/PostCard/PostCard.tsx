@@ -11,28 +11,41 @@ interface PostCardProps {
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const navigate = useNavigate();
   const maxLength = 160;
-  const shouldTruncate = post.content.length > maxLength;
-  
+  const hasContent = post.content && post.content.trim();
+  const shouldTruncate = hasContent && post.content.length > maxLength;
+
   const handlePostClick = () => {
     navigate(`/post/${post.id}`);
+  };
+
+  const handleSpaceClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/space/${post.space.id}`);
+  };
+
+  const handleAuthorClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/users/${post.created_by.id}`);
   };
 
   return (
     <div className="post-card" onClick={handlePostClick}>
       <div className="post-header">
         <div className="post-author">
-          <img 
-            src={post.created_by.image} 
+          <img
+            src={post.created_by.image}
             alt={`${post.created_by.name} ${post.created_by.last_name}`}
             className="author-avatar"
           />
           <div className="author-info">
-            <span className="author-name">{post.created_by.name} {post.created_by.last_name}</span>
-            <span 
-              className="post-space"
-              onClick={() => console.log('Space ID:', post.space.id)}
+            <span
+              className="author-name clickable"
+              onClick={handleAuthorClick}
             >
-              en {post.space.name}
+              {post.created_by.name} {post.created_by.last_name}
+            </span>
+            <span className="post-space">
+              en <span className="clickable" onClick={handleSpaceClick}>{post.space.name}</span>
             </span>
           </div>
         </div>
@@ -40,15 +53,17 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           {formatPostDate(post.created_at)}
         </span>
       </div>
-      
+
       <div className="post-content">
         <h3 className="post-title">{post.title}</h3>
-        <p className="post-text">
-          {post.content.slice(0, maxLength)}
-          {shouldTruncate && '...'}
-        </p>
+        {post.content && post.content.trim() && (
+          <p className="post-text">
+            {post.content.slice(0, maxLength)}
+            {shouldTruncate && '...'}
+          </p>
+        )}
       </div>
-      
+
       <div className="post-footer">
         <span className="comments-count">
           {post.comments.length} comentarios

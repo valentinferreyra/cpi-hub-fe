@@ -46,6 +46,17 @@
   font-size: 14px;
 }
 
+.author-name.clickable {
+  cursor: pointer;
+  color: #9f283b;
+  transition: color 0.2s ease;
+}
+
+.author-name.clickable:hover {
+  color: #8b1e2f;
+  text-decoration: underline;
+}
+
 .post-space {
   font-size: 12px;
   color: #666;
@@ -58,6 +69,17 @@
   opacity: 0.9;
 }
 
+.post-space .clickable {
+  color: #9f283b;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.post-space .clickable:hover {
+  color: #8b1e2f;
+  text-decoration: underline;
+}
+
 .post-date {
   font-size: 12px;
   color: #999;
@@ -66,6 +88,14 @@
 
 .post-content {
   margin-bottom: 16px;
+}
+
+.post-content:has(.post-text) {
+  margin-bottom: 16px;
+}
+
+.post-content:not(:has(.post-text)) {
+  margin-bottom: 8px;
 }
 
 .post-card .post-title {
@@ -80,10 +110,8 @@
   font-size: 14px;
   color: #555;
   line-height: 1.6;
-  margin: 0 0 12px 0;
+  margin: 0;
 }
-
-
 
 .post-footer {
   border-top: 1px solid #f0f0f0;
