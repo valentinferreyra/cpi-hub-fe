@@ -27,7 +27,7 @@ function Home() {
       if (currentUser) {
         try {
           setIsLoadingMore(true);
-          const response = await getPostsByUserId(1, currentPage);
+          const response = await getPostsByUserId(currentUser.id, currentPage);
           const posts = response.data || [];
 
           if (currentPage === 1) {
