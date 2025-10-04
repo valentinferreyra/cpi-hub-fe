@@ -48,6 +48,14 @@ function Register() {
         }
       }
 
+      // Mark that we should show the welcome modal on the next page (single session)
+      try {
+        sessionStorage.setItem('showWelcome', '1');
+      } catch (e) {
+        // ignore sessionStorage errors (e.g., privacy mode)
+        console.warn('sessionStorage set failed:', e);
+      }
+
       navigate('/explorar');
     } catch (err) {
       if (err instanceof Error) {

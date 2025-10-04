@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { getSpacesByCreatedAt, getSpacesByUpdatedAt, createSpace, GetSpacesByName } from "../../api";
 import type { Space } from "../../types/space";
 import CreateSpaceModal from "@components/modals/CreateSpaceModal/CreateSpaceModal";
+import WelcomeModal from "@components/modals/WelcomeModal/WelcomeModal";
 import "./Explore.css";
 
 const Explore: React.FC = () => {
@@ -16,6 +17,7 @@ const Explore: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isCreateSpaceModalOpen, setIsCreateSpaceModalOpen] = useState(false);
   const [isCreatingSpace, setIsCreatingSpace] = useState(false);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [spacesWithSameName, setSpacesWithSameName] = useState<Space[]>([]);
   const [pendingSpace, setPendingSpace] = useState<{ name: string; description: string } | null>(null);
@@ -110,6 +112,16 @@ const Explore: React.FC = () => {
     };
 
     fetchSpaces();
+
+    try {
+      const shouldShow = sessionStorage.getItem('showWelcome');
+      if (true) {
+        setShowWelcomeModal(true);
+        sessionStorage.removeItem('showWelcome');
+      }
+    } catch (err) {
+      console.warn('sessionStorage access failed:', err);
+    }
   }, []);
 
   const handleSpaceClick = (space: Space) => {
@@ -224,6 +236,11 @@ const Explore: React.FC = () => {
               onClose={closeCreateSpaceModal}
               onCreateSpace={handleCreateSpace}
               isLoading={isCreatingSpace}
+            />
+
+            <WelcomeModal
+              isOpen={showWelcomeModal}
+              onClose={() => setShowWelcomeModal(false)}
             />
 
             {showConfirmModal && (
