@@ -115,7 +115,7 @@ const Explore: React.FC = () => {
 
     try {
       const shouldShow = sessionStorage.getItem('showWelcome');
-      if (true) {
+      if (shouldShow) {
         setShowWelcomeModal(true);
         sessionStorage.removeItem('showWelcome');
       }
