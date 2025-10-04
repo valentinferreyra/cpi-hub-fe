@@ -84,6 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
           Explorar
         </div>
         <div className="sidebar-separator"></div>
+        <div className='sidebar-spaces-title'>Tus Spaces ✨</div>
         {spaces.map((space) => {
           const isActive = selectedSpace && space.id === selectedSpace.id && currentUser?.spaces?.some(s => s.id === space.id);
           return (
