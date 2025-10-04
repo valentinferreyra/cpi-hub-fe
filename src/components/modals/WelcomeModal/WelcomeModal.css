@@ -1,0 +1,126 @@
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  opacity: 0;
+  animation: overlayFadeIn 240ms ease forwards;
+  backdrop-filter: blur(1px);
+}
+
+.welcome-modal {
+  width: 92%;
+  max-width: 640px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  transform-origin: center bottom;
+  opacity: 0;
+  transform: translateY(6px) scale(0.995);
+  animation: welcomeIn 260ms cubic-bezier(0.23, 0.9, 0.28, 1) forwards;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes welcomeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.welcome-header {
+  padding: 22px 28px;
+  background: linear-gradient(135deg, #9f283b 0%, #b8324a 100%);
+  color: white;
+}
+
+.welcome-header {
+  transform: translateY(-3px);
+  opacity: 1;
+  /* subtle header entrance — shorter and smaller */
+  animation: headerIn 220ms ease 80ms forwards;
+}
+
+.welcome-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.welcome-body {
+  padding: 20px 24px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.welcome-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 24px 24px;
+  background: #fafafa;
+}
+
+.welcome-btn-primary {
+  background: #9f283b;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.welcome-btn-primary {
+  box-shadow: 0 6px 18px rgba(159, 40, 59, 0.12);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+.welcome-btn-secondary {
+  background: transparent;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.welcome-btn-secondary {
+  transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+@keyframes headerIn {
+  from {
+    transform: translateY(-3px);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.welcome-btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.03);
+}
+
+.welcome-btn-secondary:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 0, 0, 0.03);
+}
