@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import Sidebar from "@components/Sidebar/Sidebar";
 import Topbar from "@components/Topbar/Topbar";
 import PostCard from "@components/PostCard/PostCard";
@@ -109,7 +109,7 @@ function Home() {
                 return (
                   <div className="empty-posts">
                     <h3>No hay posts disponibles</h3>
-                    <p>Te invitamos a explorar nuestros spaces para encontrar contenido de tu interés y unirte a las conversaciones que más te apasionen.</p>
+                    <p>Te invitamos a explorar nuestros <Link to="/explorar">spaces</Link> para encontrar contenido de tu interés y unirte a las conversaciones que más te apasionen.</p>
                   </div>
                 );
               }
@@ -118,7 +118,7 @@ function Home() {
                 return (
                   <div className="empty-posts">
                     <h3>No hay posts disponibles</h3>
-                    <p>Te invitamos a explorar nuestros spaces para encontrar contenido de tu interés y unirte a las conversaciones que más te apasionen.</p>
+                    <p>Te invitamos a explorar nuestros <Link to="/explorar">spaces</Link> para encontrar contenido de tu interés y unirte a las conversaciones que más te apasionen.</p>
                   </div>
                 );
               }

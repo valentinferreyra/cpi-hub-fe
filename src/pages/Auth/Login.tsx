@@ -4,6 +4,8 @@ import { login } from '../../api/users';
 import cpihubLogo from '../../assets/cpihub-logo.png';
 import unqLogo from '../../assets/unq-logo.png';
 import './Auth.css';
+import { useAppContext } from '../../context/AppContext';
+
 
 function Login() {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { fetchData, setCurrentUser } = useAppContext();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,9 +27,23 @@ function Login() {
       setIsLoading(true);
       setError('');
 
-      const { token } = await login(email, password);
+      const { token, user } = await login(email, password);
 
       localStorage.setItem('auth_token', token);
+
+      if (user) {
+        try {
+          setCurrentUser(user);
+        } catch (err) {
+          console.warn('setCurrentUser failed:', err);
+        }
+      } else {
+        try {
+          await fetchData();
+        } catch (err) {
+          console.warn('fetchData after register failed:', err);
+        }
+      }
 
       navigate('/');
     } catch (err) {
