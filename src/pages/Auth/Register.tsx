@@ -29,9 +29,11 @@ function Register() {
       setIsLoading(true);
       setError('');
 
-      const { token, user } = await register(name, lastName, email, password, image);
-      console.log('register response token/user:', token, user);
+      const defaultImage = 'https://i.pinimg.com/736x/fb/6c/1f/fb6c1f3561169051c01cfb74d73d93b7.jpg';
+      const userImage = image.trim() || defaultImage;
 
+      const { token, user } = await register(name, lastName, email, password, userImage);
+      
       localStorage.setItem('auth_token', token);
 
       if (user) {
@@ -47,12 +49,10 @@ function Register() {
           console.warn('fetchData after register failed:', err);
         }
       }
-
-      // Mark that we should show the welcome modal on the next page (single session)
+      
       try {
         sessionStorage.setItem('showWelcome', '1');
       } catch (e) {
-        // ignore sessionStorage errors (e.g., privacy mode)
         console.warn('sessionStorage set failed:', e);
       }
 
