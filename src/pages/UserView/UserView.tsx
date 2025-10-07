@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '@components/Sidebar/Sidebar';
 import Topbar from '@components/Topbar/Topbar';
@@ -8,16 +8,12 @@ import UserComments from '@components/UserComments/UserComments';
 import { useAppContext } from '../../context/AppContext';
 import { getUserById, getUserPosts, getUserComments } from '../../api';
 import type { User } from '../../types/user';
-import LogoutModal from '@components/LogoutModal/LogoutModal';
 import './UserView.css';
 
 const UserView: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
   const { currentUser, isLoading, fetchData } = useAppContext();
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const settingsRef = useRef<HTMLDivElement>(null);
 
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
@@ -28,18 +24,6 @@ const UserView: React.FC = () => {
     fetchData();
   }, [fetchData]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
-        setShowSettings(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -84,10 +68,6 @@ const UserView: React.FC = () => {
     navigate(`/space/${spaceId}`);
   };
 
-  const handleLogOut = () => {
-    localStorage.removeItem('auth_token');
-    navigate('/login');
-  }
 
   if (isLoading || isLoadingUser) {
     return (
@@ -144,29 +124,7 @@ const UserView: React.FC = () => {
                 <h1 className="user-name">
                   {user.name} {user.last_name}
                 </h1>
-                {currentUser && currentUser.id === user.id && (
-                  <div className="space-settings-container" ref={settingsRef}>
-                    <img
-                      src="/src/assets/settings.png"
-                      alt="Configuración"
-                      className="space-settings-icon"
-                      onClick={() => setShowSettings(!showSettings)}
-                    />
-                    {showSettings && (
-                      <div className="space-settings-dropdown">
-                        <button
-                          className="dropdown-item"
-                          onClick={() => {
-                            setShowSettings(false);
-                            setIsLogoutModalOpen(true);
-                          }}
-                        >
-                          Cerrar sesión
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
+                {/* Configuración y logout movidos al menú del Topbar */}
               </div>
               <p className="user-email">{user.email}</p>
 
@@ -219,19 +177,12 @@ const UserView: React.FC = () => {
           </div>
         </div>
 
-        <UserPosts userId={user.id} userName={user.name} />
+        <UserPosts userId={user.id} />
 
         <UserComments userId={user.id} userName={user.name} />
       </div>
 
-      <LogoutModal
-        isOpen={isLogoutModalOpen}
-        onClose={() => setIsLogoutModalOpen(false)}
-        onConfirm={() => {
-          handleLogOut();
-          setIsLogoutModalOpen(false);
-        }}
-      />
+      {/* LogoutModal removido: ahora controlado desde Topbar */}
     </div>
   );
 };
