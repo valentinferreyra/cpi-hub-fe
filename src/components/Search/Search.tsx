@@ -1,24 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Search.css';
-import { searchPosts, searchUsers } from '../../api';
-import type { Post } from '../../types/post';
+import { searchPosts, searchUsers, searchSpaces } from '../../api';
+import type { Post, SimpleSpace } from '../../types/post';
 import type { User } from '../../types/user';
+import type { Space } from '../../types/space';
 
 interface SearchProps {
   placeholder?: string;
   className?: string;
 }
 
-const Search: React.FC<SearchProps> = ({ 
+const Search: React.FC<SearchProps> = ({
   placeholder = "Buscar en CPIHub...",
-  className = "" 
+  className = ""
 }) => {
   const [searchValue, setSearchValue] = useState('');
   const [searchResults, setSearchResults] = useState<{
     posts: Post[];
     users: User[];
-  }>({ posts: [], users: [] });
+    spaces: Space[];
+  }>({ posts: [], users: [], spaces: [] });
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const navigate = useNavigate();
@@ -34,23 +36,24 @@ const Search: React.FC<SearchProps> = ({
     }
 
     if (value.length < 3) {
-      setSearchResults({ posts: [], users: [] });
+      setSearchResults({ posts: [], users: [], spaces: [] });
       setShowResults(false);
       return;
     }
-  
+
     debounceRef.current = setTimeout(async () => {
       setIsSearching(true);
       try {
-        const [postsResults, usersResults] = await Promise.all([
+        const [postsResults, usersResults, spacesResults] = await Promise.all([
           searchPosts(value),
-          searchUsers(value)
+          searchUsers(value),
+          searchSpaces(value)
         ]);
-        setSearchResults({ posts: postsResults, users: usersResults });
+        setSearchResults({ posts: postsResults, users: usersResults, spaces: spacesResults });
         setShowResults(true);
       } catch (error) {
         console.error('Error searching:', error);
-        setSearchResults({ posts: [], users: [] });
+        setSearchResults({ posts: [], users: [], spaces: [] });
       } finally {
         setIsSearching(false);
       }
@@ -70,7 +73,7 @@ const Search: React.FC<SearchProps> = ({
   };
 
   const handleAuthorClick = (e: React.MouseEvent, userId: number) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     setShowResults(false);
     setSearchValue('');
     navigate(`/users/${userId}`);
@@ -81,6 +84,18 @@ const Search: React.FC<SearchProps> = ({
     setSearchValue('');
     navigate(`/users/${user.id}`);
   };
+
+  const handleSpaceClick = (space: Space) => {
+    setShowResults(false);
+    setSearchValue('');
+    navigate(`/space/${space.id}`);
+  }
+
+  const handleSimpleSpaceClick = (space: SimpleSpace) => {
+    setShowResults(false);
+    setSearchValue('');
+    navigate(`/space/${space.id}`);
+  }
 
   const handleInputFocus = () => {
     if (searchResults.posts.length > 0 || searchResults.users.length > 0) {
@@ -127,7 +142,7 @@ const Search: React.FC<SearchProps> = ({
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
       />
-      
+
       {showResults && (
         <div className="search-results">
           {isSearching ? (
@@ -139,10 +154,10 @@ const Search: React.FC<SearchProps> = ({
             <>
               <div className="search-results-header">
                 <span>
-                  {searchResults.posts.length + searchResults.users.length} resultado{(searchResults.posts.length + searchResults.users.length) !== 1 ? 's' : ''} encontrado{(searchResults.posts.length + searchResults.users.length) !== 1 ? 's' : ''}
+                  {searchResults.posts.length + searchResults.users.length + searchResults.spaces.length} resultado{(searchResults.posts.length + searchResults.users.length + searchResults.spaces.length) !== 1 ? 's' : ''} encontrado{(searchResults.posts.length + searchResults.users.length + searchResults.spaces.length) !== 1 ? 's' : ''}
                 </span>
               </div>
-              
+
               {searchResults.users.length > 0 && (
                 <>
                   <div className="search-section-header">
@@ -178,6 +193,31 @@ const Search: React.FC<SearchProps> = ({
                 </>
               )}
 
+              {searchResults.spaces.length > 0 && (
+                <>
+                  <div className="search-section-header">
+                    <span>Spaces ({searchResults.spaces.length})</span>
+                  </div>
+                  {searchResults.spaces.map((space) => (
+                    <div
+                      key={space.id}
+                      className="search-result-item"
+                      onClick={() => handleSpaceClick(space)}
+                    >
+                      <div className="search-result-content">
+                        <h4 className="search-result-title">{space.name}</h4>
+                        <p className="search-result-preview">
+                          {space.description.length > 100
+                            ? `${space.description.substring(0, 100)}...`
+                            : space.description
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+
               {searchResults.posts.length > 0 && (
                 <>
                   <div className="search-section-header">
@@ -192,14 +232,16 @@ const Search: React.FC<SearchProps> = ({
                       <div className="search-result-content">
                         <h4 className="search-result-title">{post.title}</h4>
                         <p className="search-result-preview">
-                          {post.content.length > 100 
-                            ? `${post.content.substring(0, 100)}...` 
+                          {post.content.length > 100
+                            ? `${post.content.substring(0, 100)}...`
                             : post.content
                           }
                         </p>
                         <div className="search-result-meta">
-                          <span className="search-result-space">#{post.space.name}</span>
-                          <span 
+                          <span className="search-result-space clickable"
+                            onClick={(e) => { e.stopPropagation(); handleSimpleSpaceClick(post.space); }}
+                          >#{post.space.name}</span>
+                          <span
                             className="search-result-author clickable"
                             onClick={(e) => handleAuthorClick(e, parseInt(post.created_by.id))}
                           >

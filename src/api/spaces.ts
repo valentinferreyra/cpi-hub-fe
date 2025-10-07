@@ -37,6 +37,16 @@ export const createSpace = async (
   }
 };
 
+export const searchSpaces = async (query: string): Promise<Space[]> => {
+  try {
+    const response = await api.get(`/spaces?q=${encodeURIComponent(query)}`);
+    return response.data.data || response.data;
+  } catch (error) {
+    console.error("Error searching spaces:", error);
+    return [];
+  }
+};
+
 export const getSpacesByCreatedAt = async (
   page: number = 1,
   pageSize: number = 20

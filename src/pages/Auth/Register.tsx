@@ -4,6 +4,7 @@ import { register } from '../../api/users';
 import cpihubLogo from '../../assets/cpihub-logo.png';
 import unqLogo from '../../assets/unq-logo.png';
 import './Auth.css';
+import { useAppContext } from '../../context/AppContext';
 
 function Register() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ function Register() {
   const [image, setImage] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { fetchData, setCurrentUser } = useAppContext();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,12 +29,34 @@ function Register() {
       setIsLoading(true);
       setError('');
 
-      const { token } = await register(name, lastName, email, password, image);
-      console.log(token);
+      const defaultImage = 'https://i.pinimg.com/736x/fb/6c/1f/fb6c1f3561169051c01cfb74d73d93b7.jpg';
+      const userImage = image.trim() || defaultImage;
 
+      const { token, user } = await register(name, lastName, email, password, userImage);
+      
       localStorage.setItem('auth_token', token);
 
-      navigate('/');
+      if (user) {
+        try {
+          setCurrentUser(user);
+        } catch (err) {
+          console.warn('setCurrentUser failed:', err);
+        }
+      } else {
+        try {
+          await fetchData();
+        } catch (err) {
+          console.warn('fetchData after register failed:', err);
+        }
+      }
+      
+      try {
+        sessionStorage.setItem('showWelcome', '1');
+      } catch (e) {
+        console.warn('sessionStorage set failed:', e);
+      }
+
+      navigate('/explorar');
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message || 'Error al registrarse');
