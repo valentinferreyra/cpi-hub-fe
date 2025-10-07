@@ -1,6 +1,6 @@
 .sidebar {
   background: linear-gradient(135deg, #9f283b 0%, #b8324a 50%, #8b1e2f 100%);
-  width: 250px;
+  width: 265px;
   height: calc(100vh - 70px);
   top: 70px;
   position: fixed;
@@ -26,7 +26,7 @@
 }
 
 .sidebar-item {
-  color: white;
+  color: rgb(243, 231, 231);
   text-align: left;
   padding: 5px 0;
   cursor: pointer;
@@ -42,7 +42,7 @@
 }
 
 .sidebar-item:hover {
-  font-weight: bold;
+  color: #ffffff
 }
 
 .explore-item {
