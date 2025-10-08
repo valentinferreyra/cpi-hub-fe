@@ -56,11 +56,24 @@
 }
 
 .comment-space {
-  background: #3498db;
+  background: #9f283b;
   color: white;
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
   font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.comment-space.clickable {
+  cursor: pointer;
+  background: #9f283b;
+  transform: scale(1);
+}
+
+.comment-space.clickable:hover {
+  background: #8b1e2f;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.2);
 }
 
 .comment-date {
@@ -87,8 +100,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .no-content {
@@ -151,7 +168,7 @@
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .pagination-btn {
     min-width: 120px;
   }
