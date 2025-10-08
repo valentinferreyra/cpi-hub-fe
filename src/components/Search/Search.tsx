@@ -27,6 +27,11 @@ const Search: React.FC<SearchProps> = ({
   const searchRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<number | null>(null);
 
+  const hasAnyResults =
+    searchResults.posts.length > 0 ||
+    searchResults.users.length > 0 ||
+    searchResults.spaces.length > 0;
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchValue(value);
@@ -61,7 +66,7 @@ const Search: React.FC<SearchProps> = ({
   };
 
   const handleInputClick = () => {
-    if (searchResults.posts.length > 0 || searchResults.users.length > 0) {
+    if (hasAnyResults) {
       setShowResults(true);
     }
   };
@@ -98,7 +103,7 @@ const Search: React.FC<SearchProps> = ({
   }
 
   const handleInputFocus = () => {
-    if (searchResults.posts.length > 0 || searchResults.users.length > 0) {
+    if (hasAnyResults) {
       setShowResults(true);
     }
   };
@@ -150,7 +155,7 @@ const Search: React.FC<SearchProps> = ({
               <div className="loading-spinner"></div>
               <span>Buscando...</span>
             </div>
-          ) : (searchResults.posts.length > 0 || searchResults.users.length > 0) ? (
+          ) : hasAnyResults ? (
             <>
               <div className="search-results-header">
                 <span>
