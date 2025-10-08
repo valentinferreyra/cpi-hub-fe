@@ -148,16 +148,34 @@
   border: none;
   cursor: pointer;
   padding: 6px;
-  border-radius: 20%;
-  transition: background-color 0.2s ease;
+  /* hacer el botón perfectamente circular para que el foco también lo sea */
+  border-radius: 50%;
+  transition: background-color 0.2s ease, box-shadow 0.12s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: 7px;
+  outline: none; /* evitar el outline por defecto del navegador */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .user-avatar-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Eliminar el borde interno en Firefox y proporcionar un foco accesible y estético */
+.user-avatar-button::-moz-focus-inner {
+  border: 0;
+}
+
+.user-avatar-button:focus {
+  outline: none;
+}
+
+.user-avatar-button:focus-visible {
+  /* foco accesible: sombra sutil con el color bordo de la app */
+  box-shadow: 0 0 0 4px rgba(155, 40, 59, 0.12);
+  background-color: rgba(159, 40, 59, 0.04);
 }
 
 .user-avatar {
@@ -194,15 +212,17 @@
   top: 60px;
   right: 0;
   min-width: 220px;
-  background: rgba(25, 25, 35, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  /* Fondo blanco para el desplegable */
+  background: #ffffff;
+  backdrop-filter: blur(6px);
+  /* borde sutil para separar del topbar */
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 14px;
   padding: 10px 0 8px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.4),
-    0 4px 12px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  /* sombra ligera para profundidad sobre el topbar */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
   animation: dropdownFadeIn 0.18s ease-out;
   z-index: 1500;
 }
@@ -220,14 +240,15 @@
 
 .user-menu-header {
   padding: 6px 16px 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   margin-bottom: 6px;
 }
 
 .user-menu-name {
   display: block;
   font-weight: 600;
-  color: #fff;
+  /* texto en tono bordo coherente con la paleta del app */
+  color: #8b1e2f;
   font-size: 0.95rem;
   line-height: 1.2;
 }
@@ -235,7 +256,8 @@
 .user-menu-email {
   display: block;
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.6);
+  /* email en gris oscuro para legibilidad sobre fondo blanco */
+  color: #6b6b6b;
   margin-top: 2px;
   letter-spacing: 0.3px;
 }
@@ -243,7 +265,8 @@
 .user-menu-item {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.85);
+  /* texto principal en un tono bordo más oscuro para contraste */
+  color: black;
   text-align: left;
   padding: 10px 16px;
   font-size: 0.82rem;
@@ -255,14 +278,9 @@
   position: relative;
   font-weight: 500;
 }
-
 .user-menu-item:hover {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.09) 0%,
-    rgba(255, 255, 255, 0.04) 100%
-  );
-  color: #fff;
+  /* hover ligero con tinte bordo sobre fondo blanco */
+  background: rgba(159, 40, 59, 0.06);
 }
 
 .user-menu-item:active {
@@ -270,26 +288,22 @@
 }
 
 .user-menu-item.danger {
-  color: #ff9090;
+  color: #b8324a; /* rojo/bordo para la acción de cerrar sesión */
   font-weight: 600;
 }
 
 .user-menu-item.danger:hover {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 80, 80, 0.25) 0%,
-    rgba(255, 80, 80, 0.15) 100%
-  );
-  color: #ffdede;
+  background: rgba(184, 50, 74, 0.08);
+  color: #8b1e2f;
 }
 
 .user-menu-separator {
   height: 1px;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.05),
-    rgba(255, 255, 255, 0.15),
-    rgba(255, 255, 255, 0.05)
+    rgba(0, 0, 0, 0.04),
+    rgba(0, 0, 0, 0.06),
+    rgba(0, 0, 0, 0.04)
   );
   margin: 4px 0;
   border: none;
