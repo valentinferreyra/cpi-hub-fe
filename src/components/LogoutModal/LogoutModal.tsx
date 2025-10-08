@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import './LogoutModal.css';
 
 interface LogoutModalProps {
@@ -9,8 +10,7 @@ interface LogoutModalProps {
 
 const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
-
-  return (
+  return ReactDOM.createPortal(
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Cerrar Sesión</h2>
@@ -24,7 +24,8 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose, onConfirm })
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
