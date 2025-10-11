@@ -88,13 +88,20 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
         {spaces.map((space) => {
           const isActive = selectedSpace && space.id === selectedSpace.id && currentUser?.spaces?.some(s => s.id === space.id);
           return (
-            <div
-              key={space.id}
-              className={`sidebar-item${isActive ? ' active-space' : ''}`}
-              onClick={() => handleSpaceClick(space)}
-              style={isActive ? { fontWeight: 'bold', color: '#ffff' } : {}}
-            >
-              {space.name}
+            <div key={space.id} style={{ marginBottom: '4px' }}>
+              <div
+                className={`sidebar-item${isActive ? ' active-space' : ''}`}
+                onClick={() => handleSpaceClick(space)}
+                style={isActive ? { fontWeight: 'bold', color: '#ffff' } : {}}
+              >
+                {space.name}
+              </div>
+              <div
+                className="sidebar-chat-link"
+                onClick={() => navigate(`/space/${space.id}/chat`)}
+              >
+                💬 Chat del space
+              </div>
             </div>
           );
         })}

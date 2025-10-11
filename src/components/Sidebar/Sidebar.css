@@ -42,7 +42,7 @@
 }
 
 .sidebar-item:hover {
-  color: #ffffff
+  color: #ffffff;
 }
 
 .explore-item {
@@ -90,4 +90,20 @@
 .sidebar-loading {
   color: white;
   text-align: center;
+}
+
+.sidebar-chat-link {
+  padding: 6px 10px;
+  margin-left: 10px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sidebar-chat-link:hover {
+  color: rgba(255, 255, 255, 0.9);
 }
