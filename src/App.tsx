@@ -10,6 +10,7 @@ import Explore from './pages/Explore/Explore'
 import UserView from './pages/UserView/UserView'
 import { AppProvider } from './context/AppContext'
 import ProtectedRoutes from './utils/ProtectedRoutes'
+import SpaceChat from './pages/Chat/SpaceChat'
 
 export const App = () => {
   return (
@@ -24,6 +25,7 @@ export const App = () => {
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Home />} />
             <Route path="/space/:spaceId" element={<Space />} />
+            <Route path="/space/:spaceId/chat" element={<SpaceChat />} />
             <Route path="/post/:post_id" element={<Post />} />
             <Route path="/explorar" element={<Explore />} />
             <Route path="/users/:userId" element={<UserView />} />
