@@ -2,7 +2,7 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import Topbar from "@/components/Topbar/Topbar";
 import { useAppContext } from "@/context/AppContext";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 import "./SpaceChat.css";
 import axios from "axios";
 import { getSpaceById } from "@/api/spaces";
@@ -32,6 +32,11 @@ export const SpaceChat = () => {
   const [inputMessage, setInputMessage] = useState<string>("");
   const socketRef = useRef<WebSocket | null>(null);
   const processedJoins = useRef(new Set<string>());
+  const navigate = useNavigate();
+
+  const handleUserClick = (userId: number) => {
+    navigate(`/users/${userId}`);
+  }
 
   // Cargar datos del usuario y del espacio
   useEffect(() => {
@@ -222,7 +227,7 @@ export const SpaceChat = () => {
                 if (msg.type === 'chat' && msg.data?.content) {
                   return (
                     <div key={index} className="space-chat-message">
-                      <span className="space-chat-message-user">{msg.data.username}:</span>
+                      <span className="space-chat-message-user" onClick={() => handleUserClick(msg.data.user_id)}>{msg.data.username}:</span>
                       <span className="space-chat-message-content">{msg.data.content}</span>
                     </div>
                   );

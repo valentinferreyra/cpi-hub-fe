@@ -110,6 +110,16 @@
 .space-chat-message-user {
   font-weight: 600;
   color: #9f283b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.space-chat-message-user:hover {
+  background-color: rgba(159, 40, 59, 0.1);
+  text-decoration: underline;
 }
 
 .space-chat-message-content {
