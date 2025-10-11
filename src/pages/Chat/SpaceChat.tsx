@@ -59,6 +59,10 @@ export const SpaceChat = () => {
   }, [fetchData, spaceId, setSelectedSpace]);
 
   useEffect(() => {
+    // Limpiar mensajes cuando cambiamos de space
+    setMessages([]);
+    processedJoins.current.clear();
+
     if (!currentUser || !spaceId) return;
 
     const fullName = encodeURIComponent(`${currentUser.name} ${currentUser.last_name}`);
@@ -130,7 +134,7 @@ export const SpaceChat = () => {
 
     try {
       // Convertimos spaceId a número
-      const numericSpaceId = parseInt(spaceId || '0', 10);
+      const numericSpaceId = typeof spaceId === 'string' ? parseInt(spaceId, 10) : spaceId;
       if (isNaN(numericSpaceId)) {
         throw new Error('ID de espacio inválido');
       }
