@@ -33,7 +33,7 @@ function Register() {
       const userImage = image.trim() || defaultImage;
 
       const { token, user } = await register(name, lastName, email, password, userImage);
-      
+
       localStorage.setItem('auth_token', token);
 
       if (user) {
@@ -49,7 +49,7 @@ function Register() {
           console.warn('fetchData after register failed:', err);
         }
       }
-      
+
       try {
         sessionStorage.setItem('showWelcome', '1');
       } catch (e) {
@@ -75,7 +75,7 @@ function Register() {
         <img src={cpihubLogo} alt="Logo CPIHub" />
       </div>
       <div className="auth-box">
-        <h2 className='auth-title'>Registrarse</h2>
+        {/* <h2 className='auth-title'>Registrarse</h2> */}
         <form className="auth-form" onSubmit={handleRegister}>
           {error && (
             <div className="error-message">

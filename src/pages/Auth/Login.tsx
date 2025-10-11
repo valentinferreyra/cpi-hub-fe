@@ -65,7 +65,7 @@ function Login() {
       </div>
       <div className="auth-box">
         <h2 className='auth-title'>Iniciar Sesión</h2>
-        <form className="auth-form" onSubmit={handleLogin}>
+        <form className="auth-form login-form" onSubmit={handleLogin}>
           {error && (
             <div className="error-message">
               {error}
