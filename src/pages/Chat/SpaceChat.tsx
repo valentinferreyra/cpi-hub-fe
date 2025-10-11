@@ -5,10 +5,12 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import "./SpaceChat.css";
 import axios from "axios";
+import { getSpaceById } from "@/api/spaces";
 
 export const SpaceChat = () => {
-  const { spaceId } = useParams<{ spaceId: string }>();
-  const { currentUser, fetchData, selectSpace, selectedSpace } = useAppContext();
+  const { spaceId } = useParams<{ spaceId: number }>();
+  const { currentUser, fetchData, selectSpace, selectedSpace, setSelectedSpace } = useAppContext();
+  const [isLoading, setIsLoading] = useState(true);
   interface ChatMessageData {
     id: string;
     content: string;
@@ -24,6 +26,7 @@ export const SpaceChat = () => {
     timestamp: string;
     user_id: number;
     space_id: number;
+    username: string;
   }
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState<string>("");
@@ -33,15 +36,35 @@ export const SpaceChat = () => {
   // Cargar datos del usuario y del espacio
   useEffect(() => {
     const loadData = async () => {
-      await fetchData();
+      try {
+        setIsLoading(true);
+        await fetchData();
+
+        if (spaceId) {
+          const numericSpaceId = parseInt(spaceId);
+          if (!isNaN(numericSpaceId)) {
+            const spaceData = await getSpaceById(numericSpaceId);
+            if (spaceData) {
+              setSelectedSpace(spaceData);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error cargando datos:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     loadData();
-  }, [fetchData]);
+  }, [fetchData, spaceId, setSelectedSpace]);
 
   useEffect(() => {
     if (!currentUser || !spaceId) return;
 
-    socketRef.current = new WebSocket(`ws://localhost:8080/v1/ws/spaces/${spaceId}?user_id=${currentUser.id}`);
+    const fullName = encodeURIComponent(`${currentUser.name} ${currentUser.last_name}`);
+    const wsUrl = `ws://localhost:8080/v1/ws/spaces/${spaceId}?user_id=${currentUser.id}&username=${fullName}`;
+    console.log('Conectando a WebSocket:', wsUrl);
+    socketRef.current = new WebSocket(wsUrl);
 
     socketRef.current.onopen = () => {
       console.log('Conectado al WebSocket');
@@ -148,8 +171,22 @@ export const SpaceChat = () => {
         alert("Error al enviar el mensaje");
       }
     }
-  }; if (!currentUser) {
-    return <div>Cargando usuario...</div>;
+  };
+
+  if (!currentUser || isLoading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontSize: '20px',
+        fontWeight: '500',
+        color: '#333'
+      }}>
+        Cargando...
+      </div>
+    );
   }
 
   return (
@@ -158,7 +195,9 @@ export const SpaceChat = () => {
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
       <div className="space-chat-page">
         <div className="space-chat-container">
-          <h1 className="space-chat-title">Chat en Espacio {selectedSpace?.name || spaceId}</h1>
+          <h1 className="space-chat-title">
+            Chat en {selectedSpace?.name || 'Cargando espacio...'}
+          </h1>
           <div className="space-chat-messages">
             {messages.length === 0 ? (
               <div className="space-chat-empty">No hay mensajes aún</div>
@@ -170,7 +209,7 @@ export const SpaceChat = () => {
                 if (msg.type === 'join') {
                   return (
                     <div key={index} className="space-chat-system-message">
-                      👋 ¡Bienvenid@ {msg.data.username} al chat!
+                      👋 ¡{msg.username} se unió al chat!
                     </div>
                   );
                 }
