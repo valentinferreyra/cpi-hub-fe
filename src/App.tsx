@@ -1,7 +1,7 @@
 import { Route, BrowserRouter, Routes } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home/Home'
-import Space from './pages/Space'
+import Space from './pages/Space/Space'
 import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import Post from './pages/Post/Post'

@@ -6,11 +6,11 @@ import CreatePostModal from "@components/modals/CreatePostModal/CreatePostModal"
 import SpaceUsersModal from "@components/modals/SpaceUsersModal/SpaceUsersModal";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./Home/Home.css";
-import { useAppContext } from "../context/AppContext";
-import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser, getSpaceUsers } from "../api";
-import type { Post } from "../types/post";
-import type { SpaceUser } from "../types/user";
+import "../Home/Home.css";
+import { useAppContext } from "../../context/AppContext";
+import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser, getSpaceUsers } from "../../api";
+import type { Post } from "../../types/post";
+import type { SpaceUser } from "../../types/user";
 
 function Space() {
   const { spaceId } = useParams<{ spaceId: string }>();
@@ -184,7 +184,7 @@ function Space() {
   };
 
   const breadcrumbItems = selectedSpace ? [
-    { label: <span className="space-title">{selectedSpace.name}</span>, isActive: true },
+    { label: selectedSpace.name, isActive: true },
     { label: "Inicio", isActive: false }
   ] : [];
 

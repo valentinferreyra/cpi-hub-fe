@@ -11,3 +11,24 @@ export const getSpaceChatComments = async (
   );
   return response.data;
 };
+
+export interface SendMessageData {
+  space_id: number;
+  user_id: number;
+  username: string;
+  message: string;
+  image?: string;
+}
+
+export const sendChatMessage = async (messageData: SendMessageData): Promise<any> => {
+  const response = await api.post(
+    `/ws/spaces/${messageData.space_id}/chat`,
+    messageData,
+    {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  return response.data;
+};

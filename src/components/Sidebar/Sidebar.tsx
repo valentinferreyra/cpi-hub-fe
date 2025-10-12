@@ -93,6 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
                 className={`sidebar-item${isActive ? ' active-space' : ''}`}
                 onClick={() => handleSpaceClick(space)}
                 style={isActive ? { fontWeight: 'bold', color: '#ffff' } : {}}
+                title={space.name}
               >
                 {space.name}
               </div>
