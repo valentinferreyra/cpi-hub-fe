@@ -7,6 +7,7 @@ import "./SpaceChat.css";
 import axios from "axios";
 import { getSpaceById } from "@/api/spaces";
 import { getSpaceChatComments } from "@/api/chat";
+import { formatChatTime } from "@/utils/dateUtils";
 
 
 interface HistoricalMessage {
@@ -15,6 +16,7 @@ interface HistoricalMessage {
   userId: number;
   userName: string;
   createdAt: string;
+  image: string;
 }
 
 export const SpaceChat = () => {
@@ -23,7 +25,7 @@ export const SpaceChat = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const [page, setPage] = useState(1);
+  const [, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [historicalMessages, setHistoricalMessages] = useState<HistoricalMessage[]>([]);
@@ -34,6 +36,7 @@ export const SpaceChat = () => {
     username: string;
     space_id: number;
     timestamp: string;
+    image?: string;
   }
 
   interface ChatMessage {
@@ -78,12 +81,12 @@ export const SpaceChat = () => {
         content: comment.content,
         userId: comment.user_id,
         userName: comment.username,
-        createdAt: comment.created_at
+        createdAt: comment.created_at,
+        image: comment.image
       }));
 
       setHistoricalMessages(prev => {
         if (pageNum === 1) {
-          // Solo hacemos scroll al fondo en la carga inicial
           setTimeout(() => {
             if (messagesContainerRef.current) {
               scrollToBottom();
@@ -91,7 +94,6 @@ export const SpaceChat = () => {
           }, 100);
           return transformedMessages;
         }
-        // Para cargas de más mensajes antiguos, mantenemos la posición del scroll
         const scrollPosition = messagesContainerRef.current?.scrollTop || 0;
         setTimeout(() => {
           if (messagesContainerRef.current) {
@@ -100,8 +102,7 @@ export const SpaceChat = () => {
         }, 50);
         return [...prev, ...transformedMessages];
       });
-
-      setHasMore(result.data.length === 10);
+      setHasMore(result.data.length === 25);
     } catch (error) {
       console.error('Error cargando mensajes históricos:', error);
     } finally {
@@ -123,9 +124,7 @@ export const SpaceChat = () => {
             if (spaceData) {
               setSelectedSpace(spaceData);
             }
-            // Cargar mensajes históricos iniciales
             await loadHistoricalMessages(1);
-            // Asegurarse de que el scroll esté en la parte inferior después de cargar los mensajes
             setTimeout(() => {
               if (messagesContainerRef.current) {
                 scrollToBottom();
@@ -179,7 +178,6 @@ export const SpaceChat = () => {
           message = rawData as ChatMessage;
         }
 
-        // Para mensajes de join, mantener el sistema de deduplicación
         if (message.type === 'join') {
           const joinKey = `${message.user_id}-${message.space_id}`;
           if (processedJoins.current.has(joinKey)) {
@@ -220,8 +218,9 @@ export const SpaceChat = () => {
       const messageData = {
         space_id: numericSpaceId,
         user_id: currentUser.id,
-        username: currentUser.name,
-        message: inputMessage.trim()
+        username: `${currentUser.name} ${currentUser.last_name}`,
+        message: inputMessage.trim(),
+        image: currentUser.image
       };
 
       console.log("Enviando mensaje:", messageData);
@@ -240,15 +239,12 @@ export const SpaceChat = () => {
       if (axios.isAxiosError(error)) {
         console.error("Error enviando mensaje:", error);
         if (error.response) {
-          // El servidor respondió con un status code fuera del rango 2xx
           console.error("Respuesta del servidor:", error.response.data);
           alert(`Error del servidor: ${error.response.data?.message || 'Error desconocido'}`);
         } else if (error.request) {
-          // La request fue hecha pero no se recibió respuesta
           alert("No se recibió respuesta del servidor");
         }
       } else {
-        // Algo pasó al armar la request
         console.error("Error no relacionado con Axios:", error);
         alert("Error al enviar el mensaje");
       }
@@ -296,8 +292,7 @@ export const SpaceChat = () => {
               <div className="space-chat-empty">No hay mensajes aún</div>
             ) : (
               <div className="messages-container">
-                {/* Botón de cargar más */}
-                {hasMore && (
+                {hasMore && historicalMessages.length > 0 && (
                   <button
                     className="load-more-btn"
                     onClick={() => {
@@ -313,17 +308,27 @@ export const SpaceChat = () => {
                   </button>
                 )}
 
-                {/* Mensajes históricos */}
-                {[...historicalMessages].reverse().map((msg, index) => (
-                  <div key={`hist-${index}`} className="space-chat-message">
-                    <span className="space-chat-message-user" onClick={() => handleUserClick(msg.userId)}>
-                      {msg.userName}:
-                    </span>
-                    <span className="space-chat-message-content">{msg.content}</span>
+                {historicalMessages.map((msg) => (
+                  <div key={`hist-${msg.id}`} className="space-chat-message">
+                    <div className="message-avatar">
+                      <img 
+                        src={msg.image} 
+                        alt={`Avatar de ${msg.userName}`}
+                        className="user-avatar"
+                      />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <span className="space-chat-message-user" onClick={() => handleUserClick(msg.userId)}>
+                          {msg.userName}
+                        </span>
+                        <span className="message-time">{formatChatTime(msg.createdAt)}</span>
+                      </div>
+                      <div className="space-chat-message-content">{msg.content}</div>
+                    </div>
                   </div>
                 ))}
 
-                {/* Los mensajes en tiempo real */}
                 {messages.map((msg, index) => {
                   if (msg.type === 'join') {
                     return (
@@ -336,10 +341,22 @@ export const SpaceChat = () => {
                   if (msg.type === 'chat' && msg.data?.content) {
                     return (
                       <div key={`live-${index}`} className="space-chat-message">
-                        <span className="space-chat-message-user" onClick={() => handleUserClick(msg.data.user_id)}>
-                          {msg.data.username}:
-                        </span>
-                        <span className="space-chat-message-content">{msg.data.content}</span>
+                        <div className="message-avatar">
+                          <img 
+                            src={msg.data.image || currentUser.image || '/default-avatar.png'} 
+                            alt={`Avatar de ${msg.data.username}`}
+                            className="user-avatar"
+                          />
+                        </div>
+                        <div className="message-content">
+                          <div className="message-header">
+                            <span className="space-chat-message-user" onClick={() => handleUserClick(msg.data.user_id)}>
+                              {msg.data.username}
+                            </span>
+                            <span className="message-time">{formatChatTime(msg.timestamp)}</span>
+                          </div>
+                          <div className="space-chat-message-content">{msg.data.content}</div>
+                        </div>
                       </div>
                     );
                   }
