@@ -135,11 +135,20 @@ function UserInfoModal({ user, isLoading = false, onClose }: UserInfoModalProps)
                 <div className="user-info-spaces">
                   <h3 className="user-info-section-title">Spaces donde participa</h3>
                   <div className="user-info-space-chips">
-                    {user.spaces.slice(0, 6).map((s) => (
+                    {user.spaces.slice(0, 5).map((s) => (
                       <span key={s.id} className="user-info-space-chip" title={s.name} onClick={() => handleSpaceClick(s.id)}>
                         {s.name}
                       </span>
                     ))}
+                    {user.spaces.length > 3 && (
+                      <button
+                        className="user-info-space-chip user-info-space-chip-more"
+                        onClick={handleGoToProfile}
+                        title="Ver todos los spaces"
+                      >
+                        Ver más spaces...
+                      </button>
+                    )}
                   </div>
                 </div>
               )}

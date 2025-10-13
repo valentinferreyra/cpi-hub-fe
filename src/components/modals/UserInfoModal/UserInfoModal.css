@@ -216,6 +216,21 @@
   transform: translateY(0);
   box-shadow: 0 1px 4px rgba(159, 40, 59, 0.2);
 }
+.user-info-space-chip-more {
+  background: #f3f4f6;
+  color: #9f283b;
+  border: 1px solid #9f283b;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms, color 160ms, border-color 160ms,
+    box-shadow 160ms;
+}
+.user-info-space-chip-more:hover {
+  background: #ffe6ec;
+  color: #7a1f2e;
+  border-color: #7a1f2e;
+  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.12);
+}
 
 .user-info-footer {
   display: flex;
