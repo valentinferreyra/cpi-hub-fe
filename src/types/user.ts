@@ -16,4 +16,3 @@ export interface SpaceUser {
   email: string;
   image: string;
 }
-

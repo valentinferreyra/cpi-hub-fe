@@ -9,6 +9,8 @@ import { getSpaceById } from "@/api/spaces";
 import { MessageList, MessageInput, JoinNotifications } from "./";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import type { JoinMessage } from "@/hooks/useWebSocket";
+import { getUserById } from "@/api";
+import UserInfoModal from "@/components/modals/UserInfoModal/UserInfoModal";
 
 export const SpaceChat = () => {
   const { spaceId } = useParams<{ spaceId: string }>();
@@ -16,14 +18,29 @@ export const SpaceChat = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [joinMessages, setJoinMessages] = useState<JoinMessage[]>([]);
   const navigate = useNavigate();
+  const [showUserInfoModal, setShowUserInfoModal] = useState(false);
+  const [isLoadingUserInfo, setIsLoadingUserInfo] = useState(false);
+  const [viewedUser, setViewedUser] = useState<any>(null);
 
-  const handleUserClick = (userId: number) => {
-    navigate(`/users/${userId}`);
+  const handleUserClick = async (userId: number) => {
+    // Abrimos el modal inmediatamente para mostrar el loading
+    setShowUserInfoModal(true);
+    setIsLoadingUserInfo(true);
+    setViewedUser(null);
+    try {
+      const user = await getUserById(userId);
+      setViewedUser(user);
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+      // dejamos el modal abierto para mostrar el estado de error
+    } finally {
+      setIsLoadingUserInfo(false);
+    }
   };
 
   const handleSpaceClick = () => {
     if (spaceId) {
-      navigate(`/spaces/${spaceId}`);
+      navigate(`/space/${spaceId}`);
     }
   };
 
@@ -41,10 +58,10 @@ export const SpaceChat = () => {
     setJoinMessages(prev => prev.filter(msg => msg.id !== messageId));
   };
 
-  const { messages } = useWebSocket({ 
-    spaceId, 
-    currentUser, 
-    onJoinMessage: showJoinMessage 
+  const { messages } = useWebSocket({
+    spaceId,
+    currentUser,
+    onJoinMessage: showJoinMessage
   });
 
   useEffect(() => {
@@ -91,10 +108,23 @@ export const SpaceChat = () => {
     <>
       <Topbar currentUser={currentUser} />
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
+
+      {showUserInfoModal && (
+        <UserInfoModal
+          user={viewedUser}
+          isLoading={isLoadingUserInfo}
+          onClose={() => {
+            setShowUserInfoModal(false);
+            setViewedUser(null);
+            setIsLoadingUserInfo(false);
+          }}
+        />
+      )}
+
       <div className="space-chat-page">
         <div className="space-chat-container">
           <div className="space-chat-header">
-            <Breadcrumb 
+            <Breadcrumb
               items={[
                 {
                   label: selectedSpace?.name || 'Cargando espacio...',
@@ -107,7 +137,7 @@ export const SpaceChat = () => {
               ]}
             />
           </div>
-          
+
           <div className="space-chat-messages-container">
             <MessageList
               spaceId={spaceId}
@@ -115,17 +145,17 @@ export const SpaceChat = () => {
               currentUser={currentUser}
               onUserClick={handleUserClick}
             />
-            
+
             <JoinNotifications
               joinMessages={joinMessages}
               onRemoveJoinMessage={removeJoinMessage}
             />
           </div>
-          
+
           <MessageInput
             currentUser={currentUser}
             spaceId={spaceId}
-            onMessageSent={() => {}}
+            onMessageSent={() => { }}
           />
         </div>
       </div>

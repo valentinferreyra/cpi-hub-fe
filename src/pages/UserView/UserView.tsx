@@ -6,7 +6,7 @@ import Breadcrumb from '@components/Breadcrumb/Breadcrumb';
 import UserPosts from '@components/UserPosts/UserPosts';
 import UserComments from '@components/UserComments/UserComments';
 import { useAppContext } from '../../context/AppContext';
-import { getUserById, getUserPosts, getUserComments } from '../../api';
+import { getUserById, getUserStats } from '../../api';
 import type { User } from '../../types/user';
 import './UserView.css';
 
@@ -48,13 +48,9 @@ const UserView: React.FC = () => {
     const fetchUserStats = async () => {
       if (userId) {
         try {
-          // Obtener total de posts
-          const postsResponse = await getUserPosts(parseInt(userId), 1, 1);
-          setTotalPosts(postsResponse.total || 0);
-
-          // Obtener total de comentarios
-          const commentsResponse = await getUserComments(parseInt(userId), 1, 1);
-          setTotalComments(commentsResponse.total || 0);
+          const stats = await getUserStats(parseInt(userId));
+          setTotalPosts(stats.totalPosts);
+          setTotalComments(stats.totalComments);
         } catch (error) {
           console.error('Error fetching user stats:', error);
         }
@@ -120,7 +116,7 @@ const UserView: React.FC = () => {
             </div>
 
             <div className="user-info">
-              <div className="user-info-header">
+              <div className="user-header">
                 <h1 className="user-name">
                   {user.name} {user.last_name}
                 </h1>

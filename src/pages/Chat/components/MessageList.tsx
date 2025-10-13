@@ -87,7 +87,7 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
 
   useEffect(() => {
     if (spaceId) {
-      setIsInitialLoad(true); 
+      setIsInitialLoad(true);
       loadHistoricalMessages(1);
     }
   }, [spaceId, loadHistoricalMessages]);
@@ -133,16 +133,17 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
           {historicalMessages.map((msg) => (
             <div key={`hist-${msg.id}`} className="space-chat-message">
               <div className="message-avatar">
-                <img 
-                  src={msg.image} 
+                <img
+                  src={msg.image}
                   alt={`Avatar de ${msg.userName}`}
+                  onClick={() => onUserClick(msg.userId)}
                   className="user-avatar"
                 />
               </div>
               <div className="message-content">
                 <div className="message-header">
-                  <span 
-                    className="space-chat-message-user" 
+                  <span
+                    className="space-chat-message-user"
                     onClick={() => onUserClick(msg.userId)}
                   >
                     {msg.userName}
@@ -159,16 +160,16 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
               return (
                 <div key={`live-${index}`} className="space-chat-message">
                   <div className="message-avatar">
-                    <img 
-                      src={msg.data.image || currentUser.image || '/default-avatar.png'} 
+                    <img
+                      src={msg.data.image || currentUser.image || '/default-avatar.png'}
                       alt={`Avatar de ${msg.data.username}`}
                       className="user-avatar"
                     />
                   </div>
                   <div className="message-content">
                     <div className="message-header">
-                      <span 
-                        className="space-chat-message-user" 
+                      <span
+                        className="space-chat-message-user"
                         onClick={() => onUserClick(msg.data.user_id)}
                       >
                         {msg.data.username}

@@ -1,5 +1,6 @@
 import api from "./client";
 import type { User } from "../types/user";
+import { getUserPosts, getUserComments } from "./index";
 
 interface LoginResponse {
   user: User;
@@ -129,4 +130,26 @@ export const addSpaceToUser = async (
 ): Promise<void> => {
   const response = await api.put(`/users/${userId}/spaces/${spaceId}/add`);
   return response.data;
+};
+
+interface UserStats {
+  totalPosts: number;
+  totalComments: number;
+}
+
+export const getUserStats = async (userId: number): Promise<UserStats> => {
+  try {
+    // Obtener total de posts
+    const postsResponse = await getUserPosts(userId, 1, 1);
+    const totalPosts = postsResponse.total || 0;
+
+    // Obtener total de comentarios
+    const commentsResponse = await getUserComments(userId, 1, 1);
+    const totalComments = commentsResponse.total || 0;
+
+    return { totalPosts, totalComments };
+  } catch (error) {
+    console.error("Error getting user stats:", error);
+    return { totalPosts: 0, totalComments: 0 };
+  }
 };
