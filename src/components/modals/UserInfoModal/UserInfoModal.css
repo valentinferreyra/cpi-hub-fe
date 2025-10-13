@@ -50,8 +50,10 @@
   right: 10px;
   background: transparent;
   border: none;
-  font-size: 22px;
-  color: white;
+  font-size: 18px;
+  font-family: monospace;
+  font-weight: normal;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
   width: 32px;
   height: 32px;
@@ -59,13 +61,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease,
-    transform 80ms ease;
+  line-height: 0;
+  text-align: center;
+  transition: background 160ms ease, color 160ms ease, transform 80ms ease;
 }
 
 .user-info-close-btn:hover {
-  background: rgba(159, 40, 59, 0.08);
-  color: #9f283b;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 1);
 }
 
 .user-info-close-btn:active {
@@ -74,7 +77,6 @@
 
 .user-info-close-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(159, 40, 59, 0.25);
 }
 
 .user-info-header {
