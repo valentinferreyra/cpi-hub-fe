@@ -4,6 +4,11 @@
   padding: 20px;
   background: #ffffff;
   position: relative;
+  scroll-behavior: smooth;
+}
+
+.space-chat-messages.loading-more {
+  scroll-behavior: auto;
 }
 
 .messages-container {
@@ -19,6 +24,40 @@
   color: #666;
   font-size: 16px;
   font-style: italic;
+}
+
+.new-messages-indicator {
+  background: linear-gradient(135deg, #9f283b 0%, #b8324a 100%);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 auto 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(159, 40, 59, 0.3);
+  animation: slideDown 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+  max-width: 300px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 .load-more-btn {
@@ -109,9 +148,8 @@
 }
 
 .scroll-to-bottom {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+  position: fixed;
+  right: 40px;
   background: #9f283b;
   color: white;
   border: none;
@@ -124,6 +162,7 @@
   visibility: hidden;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(159, 40, 59, 0.2);
+  z-index: 100;
 }
 
 .scroll-to-bottom.visible {

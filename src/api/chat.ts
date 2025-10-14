@@ -7,7 +7,7 @@ export const getSpaceChatComments = async (
   pageSize: number = 25
 ): Promise<ChatCommentsResponse> => {
   const response = await api.get(
-    `/messages?space_id=${spaceId}&page=${page}&page_size=${pageSize}`
+    `/messages?space_id=${spaceId}&page=${page}&page_size=${pageSize}&order_by=timestamp&sort_direction=desc`
   );
   return response.data;
 };
@@ -20,14 +20,16 @@ export interface SendMessageData {
   image?: string;
 }
 
-export const sendChatMessage = async (messageData: SendMessageData): Promise<any> => {
+export const sendChatMessage = async (
+  messageData: SendMessageData
+): Promise<any> => {
   const response = await api.post(
     `/ws/spaces/${messageData.space_id}/chat`,
     messageData,
     {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     }
   );
   return response.data;

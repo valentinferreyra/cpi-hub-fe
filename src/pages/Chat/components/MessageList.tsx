@@ -26,7 +26,10 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
   const [hasMore, setHasMore] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const isLoadingRef = useRef(false);
+  const firstVisibleMessageRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
     if (messagesContainerRef.current) {
@@ -43,14 +46,17 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
   }, []);
 
   const loadHistoricalMessages = useCallback(async (pageNum: number) => {
-    if (!spaceId) return;
+    if (!spaceId || isLoadingRef.current) return;
 
     try {
+      isLoadingRef.current = true;
       setIsLoadingMore(true);
+
       const numericSpaceId = typeof spaceId === 'string' ? parseInt(spaceId) : spaceId;
       const result = await getSpaceChatComments(numericSpaceId, pageNum);
 
-      const transformedMessages = result.data.map(comment => ({
+
+      const transformedMessages = result.data.reverse().map(comment => ({
         id: comment.id,
         content: comment.content,
         userId: comment.user_id,
@@ -61,6 +67,8 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
 
       setHistoricalMessages(prev => {
         if (pageNum === 1) {
+          // Primera carga - estos son los mensajes MÁS RECIENTES
+          setCurrentPage(1);
           setTimeout(() => {
             if (messagesContainerRef.current) {
               scrollToBottom();
@@ -68,19 +76,51 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
             setIsInitialLoad(false);
           }, 100);
           return transformedMessages;
-        }
-        const scrollPosition = messagesContainerRef.current?.scrollTop || 0;
-        setTimeout(() => {
-          if (messagesContainerRef.current) {
-            messagesContainerRef.current.scrollTop = scrollPosition;
+        } else {
+          // Páginas siguientes - son mensajes MÁS ANTIGUOS
+          // Los ponemos AL PRINCIPIO del array
+          const container = messagesContainerRef.current;
+          let scrollHeightBefore = 0;
+          let scrollTopBefore = 0;
+
+          if (container) {
+            // Guardar posición ANTES de cualquier cambio
+            scrollHeightBefore = container.scrollHeight;
+            scrollTopBefore = container.scrollTop;
+
+            // Desactivar scroll suave temporalmente
+            container.style.scrollBehavior = 'auto';
           }
-        }, 50);
-        return [...prev, ...transformedMessages];
+
+          // Agregar mensajes al principio
+          const newMessages = [...transformedMessages, ...prev];
+
+          // Ajustar scroll INMEDIATAMENTE después del render
+          requestAnimationFrame(() => {
+            if (container) {
+              const scrollHeightAfter = container.scrollHeight;
+              const heightDiff = scrollHeightAfter - scrollHeightBefore;
+
+              // Ajustar scroll de forma instantánea
+              container.scrollTop = scrollTopBefore + heightDiff;
+
+              // Restaurar scroll suave después de un momento
+              setTimeout(() => {
+                container.style.scrollBehavior = "smooth";
+              }, 100);
+            }
+          });
+
+          setCurrentPage(pageNum);
+          return newMessages;
+        }
       });
+
       setHasMore(result.data.length === 25);
     } catch (error) {
       console.error('Error cargando mensajes históricos:', error);
     } finally {
+      isLoadingRef.current = false;
       setIsLoadingMore(false);
     }
   }, [spaceId, scrollToBottom]);
@@ -88,6 +128,10 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
   useEffect(() => {
     if (spaceId) {
       setIsInitialLoad(true);
+      setHistoricalMessages([]);
+      setCurrentPage(1);
+      setHasMore(true);
+      isLoadingRef.current = false;
       loadHistoricalMessages(1);
     }
   }, [spaceId, loadHistoricalMessages]);
@@ -106,14 +150,15 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
   };
 
   const handleLoadMore = () => {
-    const nextPage = Math.floor(historicalMessages.length / 25) + 1;
-    loadHistoricalMessages(nextPage);
+    if (!isLoadingRef.current && hasMore) {
+      loadHistoricalMessages(currentPage + 1);
+    }
   };
 
   return (
     <div
       ref={messagesContainerRef}
-      className="space-chat-messages"
+      className={`space-chat-messages ${isLoadingMore ? 'loading-more' : ''}`}
       onScroll={handleScroll}
     >
       {historicalMessages.length === 0 && messages.length === 0 ? (
@@ -130,8 +175,12 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
             </button>
           )}
 
-          {historicalMessages.map((msg) => (
-            <div key={`hist-${msg.id}`} className="space-chat-message">
+          {historicalMessages.map((msg, index) => (
+            <div
+              key={`hist-${msg.id}`}
+              className="space-chat-message"
+              ref={index === 0 ? firstVisibleMessageRef : null}
+            >
               <div className="message-avatar">
                 <img
                   src={msg.image}
