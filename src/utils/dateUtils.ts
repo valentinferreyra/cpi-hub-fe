@@ -28,24 +28,32 @@ export const parseApiDate = (dateString: string): Date => {
 
 export const formatPostDate = (dateString: string): string => {
   const date = parseApiDate(dateString);
-  return date.toLocaleDateString('es-ES', {
+  return date.toLocaleDateString('es-AR', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
+    timeZone: 'America/Argentina/Buenos_Aires'
   });
 };
     
 export const formatPostDetailDate = (dateString: string): string => {
   const date = parseApiDate(dateString);
-  return date.toLocaleDateString('es-ES');
+  return date.toLocaleDateString('es-AR', {
+    timeZone: 'America/Argentina/Buenos_Aires'
+  });
 };
 
 export const formatPostDetailTime = (dateString: string): string => {
   const date = parseApiDate(dateString);
-  return date.toLocaleTimeString('es-ES', {
+  return date.toLocaleTimeString('es-AR', {
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
+    timeZone: 'America/Argentina/Buenos_Aires'
   });
+};
+
+export const formatChatTime = (dateString: string): string => {
+  return formatPostDetailTime(dateString);
 };

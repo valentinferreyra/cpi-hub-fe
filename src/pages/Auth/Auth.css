@@ -4,15 +4,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
+  padding: 20px;
+  /* background: linear-gradient(
     135deg,
     #9f283b 0%,
     #9f283b 30%,
     #b8324a 70%,
     #8b1e2f 100%
-  );
-  padding: 20px;
-  gap: 24px;
+  ); */
+  /* gap: 24px; */
+  background: url("https://acceso.uvq.edu.ar/simplesaml/module.php/themeunq/img/background-unq.jpg")
+    no-repeat center center fixed;
+  background-size: cover;
 }
 
 .auth-title {
@@ -25,11 +28,13 @@
 
 .auth-box {
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 0 0 12px 12px;
   padding: 32px 24px;
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  min-height: 530px;
+  max-height: 530px;
 }
 
 .auth-logos {
@@ -37,6 +42,11 @@
   justify-content: center;
   align-items: center;
   gap: 32px;
+  background: url("https://acceso.uvq.edu.ar/simplesaml/module.php/themeunq/img/basedelogin.png");
+  padding: 16px;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px 12px 0 0;
 }
 
 .auth-logos img {
@@ -49,6 +59,20 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+/* Estilos específicos para el formulario de login */
+.auth-form.login-form {
+  gap: 36px;
+}
+
+.login-form .auth-form-group {
+  gap: 12px;
+}
+
+.login-form .first-time {
+  margin-top: auto;
+  padding-top: 24px;
 }
 
 .auth-form-group {
