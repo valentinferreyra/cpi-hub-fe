@@ -4,8 +4,8 @@
   right: 15px;
   left: 270px;
   bottom: 20px;
-  background-color: #f8f9fa;
-  padding: 15px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #9f283b #f0f0f0;
@@ -33,30 +33,76 @@
 
 .posts-section {
   background: white;
-  border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.posts-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 12px;
+  border-radius: 16px;
+  padding: 0;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(159, 40, 59, 0.08);
+  overflow: hidden;
   position: relative;
 }
 
+.posts-header {
+  background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 100%);
+  padding: 24px 32px;
+  margin-bottom: 0;
+  border-bottom: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.posts-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.posts-header .breadcrumb,
+.posts-header .posts-title {
+  position: relative;
+  z-index: 1;
+}
+
 .posts-title {
-  color: #9f283b;
+  color: white;
   margin: 0;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
   text-align: center;
   flex: 1;
   display: flex;
   justify-content: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Breadcrumb styles for Home header */
+.posts-header .breadcrumb * {
+  color: white !important;
+}
+
+.posts-header .breadcrumb a {
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.posts-header .breadcrumb a:hover {
+  opacity: 1;
+  color: white !important;
+}
+
+.posts-header .breadcrumb span {
+  opacity: 1;
+}
+
+.posts-header .breadcrumb .breadcrumb-separator {
+  opacity: 0.6;
 }
 
 .space-title {
@@ -135,40 +181,40 @@
 }
 
 .load-more-btn {
-  background: rgba(159, 40, 59, 0.1);
-  border: 2px solid #9f283b;
-  color: #9f283b;
+  background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 100%);
+  border: none;
+  color: white;
   font-size: 16px;
   font-weight: 600;
   border-radius: 12px;
-  padding: 10px 20px;
+  padding: 14px 28px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(159, 40, 59, 0.3);
+  margin: 32px auto 0;
 }
 
 .load-more-btn:hover {
-  background: rgba(159, 40, 59, 0.15);
-  border-color: #7a1f2e;
-  color: #7a1f2e;
+  background: linear-gradient(135deg, #7a1f2e 0%, #6b1a26 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(159, 40, 59, 0.4);
 }
 
 .load-more-btn:focus {
   outline: none;
-  background: rgba(159, 40, 59, 0.15);
-  border-color: #9f283b;
-  color: #9f283b;
+  background: linear-gradient(135deg, #7a1f2e 0%, #6b1a26 100%);
+  transform: translateY(-1px);
 }
 
 .load-more-btn:active {
-  background: rgba(159, 40, 59, 0.2);
-  border-color: #6b1a26;
-  color: #6b1a26;
+  background: linear-gradient(135deg, #6b1a26 0%, #5a1620 100%);
+  transform: translateY(0);
 }
 
 .create-post-btn:hover {
@@ -247,7 +293,9 @@
 .posts-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 24px;
+  padding: 32px;
+  background: white;
 }
 
 .posts-list .empty-posts {
@@ -256,11 +304,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
-  border: 1px dashed #e0e0e0;
-  margin: 20px 0;
+  min-height: 400px;
+  background: #fafbfc;
+  border-radius: 16px;
+  border: 2px dashed #e0e0e0;
+  margin: 0;
+  padding: 40px;
+  text-align: center;
 }
 
 .posts-placeholder {
