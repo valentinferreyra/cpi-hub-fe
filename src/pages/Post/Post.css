@@ -263,8 +263,8 @@
 }
 
 .post-comments {
-  padding: 32px;
-  background: #fafbfc;
+  padding: 0 32px 32px 32px;
+  background: #ffff;
 }
 
 .post-comments h3 {
