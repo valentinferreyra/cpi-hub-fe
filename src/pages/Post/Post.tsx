@@ -147,7 +147,7 @@ export const Post = () => {
                     </span>, el {formatPostDetailDate(post.created_at)} a las {formatPostDetailTime(post.created_at)}
                   </div>
                   <div className="post-stats">
-                    <span className="post-comments-count">{post.comments.length} comentarios</span>
+                    <span className="post-comments-count">💬 {post.comments.length} comentarios</span>
                   </div>
                 </div>
               </div>
