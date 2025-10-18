@@ -9,6 +9,7 @@ interface SpaceUsersModalProps {
   users: SpaceUser[];
   spaceName: string;
   isLoading?: boolean;
+  onUserClick?: (userId: number) => void;
 }
 
 const SpaceUsersModal: React.FC<SpaceUsersModalProps> = ({
@@ -16,7 +17,8 @@ const SpaceUsersModal: React.FC<SpaceUsersModalProps> = ({
   onClose,
   users,
   spaceName,
-  isLoading = false
+  isLoading = false,
+  onUserClick
 }) => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -56,7 +58,7 @@ const SpaceUsersModal: React.FC<SpaceUsersModalProps> = ({
                 <div
                   key={user.id}
                   className="space-users-item"
-                  onClick={() => navigate(`/users/${user.id}`)}
+                  onClick={() => onUserClick ? onUserClick(user.id) : navigate(`/users/${user.id}`)}
                 >
                   <img
                     src={user.image}

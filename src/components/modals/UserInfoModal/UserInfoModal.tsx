@@ -84,9 +84,6 @@ function UserInfoModal({ user, isLoading = false, onClose }: UserInfoModalProps)
   return (
     <div className="user-info-overlay" onClick={onClose}>
       <div className="user-info-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={`Información de ${fullName || "usuario"}`}>
-        <button className="user-info-close-btn" aria-label="Cerrar" onClick={onClose}>
-          ×
-        </button>
 
         <div className="user-info-header">
           <div className="user-info-avatar-wrap">

@@ -8,6 +8,8 @@ import "./Home.css";
 import { useAppContext } from "../../context/AppContext";
 import { getPostsByUserId } from "../../api";
 import type { Post } from "../../types/post";
+import { useUserInfoModal } from "@/hooks/useUserInfoModal";
+import UserInfoModal from "@/components/modals/UserInfoModal/UserInfoModal";
 
 function Home() {
   const navigate = useNavigate();
@@ -17,6 +19,13 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const {
+    showUserInfoModal,
+    isLoadingUserInfo,
+    viewedUser,
+    handleUserClick,
+    closeModal,
+  } = useUserInfoModal();
 
   useEffect(() => {
     fetchData();
@@ -92,6 +101,15 @@ function Home() {
     <>
       <Topbar currentUser={currentUser} />
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
+
+      {showUserInfoModal && (
+        <UserInfoModal
+          user={viewedUser}
+          isLoading={isLoadingUserInfo}
+          onClose={closeModal}
+        />
+      )}
+
       <div className="posts-container">
         <div className="posts-section">
           <div className="posts-header">
@@ -124,7 +142,7 @@ function Home() {
               }
 
               return postsToShow.map((post) => (
-                <PostCard key={post.id} post={post} />
+                <PostCard key={post.id} post={post} onUserClick={() => handleUserClick(post.created_by.id)} />
               ));
             })()}
           </div>

@@ -6,9 +6,10 @@ import './PostCard.css';
 
 interface PostCardProps {
   post: Post;
+  onUserClick?: (userId: number) => void;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, onUserClick }) => {
   const navigate = useNavigate();
   const maxLength = 160;
   const hasContent = post.content && post.content.trim();
@@ -25,7 +26,9 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
   const handleAuthorClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigate(`/users/${post.created_by.id}`);
+    if (onUserClick) {
+      onUserClick(post.created_by.id);
+    }
   };
 
   return (

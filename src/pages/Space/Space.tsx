@@ -1,6 +1,8 @@
 import Sidebar from "@components/Sidebar/Sidebar";
 import Topbar from "@components/Topbar/Topbar";
 import PostCard from "@components/PostCard/PostCard";
+import { useUserInfoModal } from "@/hooks/useUserInfoModal";
+import UserInfoModal from "@components/modals/UserInfoModal/UserInfoModal";
 import CreatePostModal from "@components/modals/CreatePostModal/CreatePostModal";
 import SpaceUsersModal from "@components/modals/SpaceUsersModal/SpaceUsersModal";
 import { useEffect, useState, useRef } from "react";
@@ -12,6 +14,13 @@ import type { Post } from "../../types/post";
 import type { SpaceUser } from "../../types/user";
 
 function Space() {
+  const {
+    showUserInfoModal,
+    isLoadingUserInfo,
+    viewedUser,
+    handleUserClick,
+    closeModal,
+  } = useUserInfoModal();
   const { spaceId } = useParams<{ spaceId: string }>();
   const navigate = useNavigate();
   const { currentUser, selectedSpace, selectedSpacePosts, isLoading, fetchData, selectSpace, setSelectedSpace, setSelectedSpacePosts } = useAppContext();
@@ -272,7 +281,7 @@ function Space() {
                       {(selectedSpace.created_by?.name || 'U')[0].toUpperCase()}
                     </div>
                     <span>
-                      Creado por {selectedSpace.created_by?.name || 'N/A'} {selectedSpace.created_by?.last_name || ''}
+                      Creado por <span className="creator-name" onClick={() => handleUserClick(selectedSpace.created_by.id)}>{selectedSpace.created_by?.name || 'N/A'} {selectedSpace.created_by?.last_name || ''}</span>
                     </span>
                   </div>
                 </div>
@@ -296,8 +305,15 @@ function Space() {
               </div>
               <div className={`posts-list ${isTransitioning ? 'transitioning' : ''}`}>
                 {selectedSpacePosts.map((post) => (
-                  <PostCard key={post.id} post={post} />
+                  <PostCard key={post.id} post={post} onUserClick={handleUserClick} />
                 ))}
+                {showUserInfoModal && (
+                  <UserInfoModal
+                    user={viewedUser}
+                    isLoading={isLoadingUserInfo}
+                    onClose={closeModal}
+                  />
+                )}
               </div>
             </div>
           )}
@@ -345,6 +361,7 @@ function Space() {
         users={spaceUsers}
         spaceName={selectedSpace?.name || ''}
         isLoading={isLoadingUsers}
+        onUserClick={handleUserClick}
       />
     </>
   )

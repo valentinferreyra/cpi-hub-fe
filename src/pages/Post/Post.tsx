@@ -8,6 +8,8 @@ import { getPostById, addCommentToPost } from "../../api";
 import type { Post as PostType } from "../../types/post";
 import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
 import "./Post.css";
+import { useUserInfoModal } from "@/hooks/useUserInfoModal";
+import UserInfoModal from "@/components/modals/UserInfoModal/UserInfoModal";
 
 export const Post = () => {
   const { post_id } = useParams();
@@ -18,6 +20,13 @@ export const Post = () => {
   const [newComment, setNewComment] = useState('');
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const {
+    showUserInfoModal,
+    isLoadingUserInfo,
+    viewedUser,
+    handleUserClick,
+    closeModal,
+  } = useUserInfoModal();
 
 
   const handleGoToSpace = () => {
@@ -132,7 +141,7 @@ export const Post = () => {
                   <div className="post-author-date">
                     Por<span
                       className="post-author clickable"
-                      onClick={() => navigate(`/users/${post.created_by.id}`)}
+                      onClick={() => handleUserClick(post.created_by.id)}
                     >
                       {post.created_by.name} {post.created_by.last_name}
                     </span>, el {formatPostDetailDate(post.created_at)} a las {formatPostDetailTime(post.created_at)}
@@ -161,7 +170,7 @@ export const Post = () => {
                       />
                       <span
                         className="comment-author clickable"
-                        onClick={() => navigate(`/users/${comment.created_by.id}`)}
+                        onClick={() => handleUserClick(comment.created_by.id)}
                       >
                         {comment.created_by.name} {comment.created_by.last_name}
                       </span>
@@ -179,7 +188,7 @@ export const Post = () => {
                   Comentario agregado correctamente
                 </div>
               )}
-              
+
               <div className="comment-form-integrated">
                 <div className="comment-input-container">
                   <textarea
@@ -203,6 +212,13 @@ export const Post = () => {
           </div>
         </div>
       </div>
+      {showUserInfoModal && (
+        <UserInfoModal
+          user={viewedUser}
+          isLoading={isLoadingUserInfo}
+          onClose={closeModal}
+        />
+      )}
     </>
 
   );

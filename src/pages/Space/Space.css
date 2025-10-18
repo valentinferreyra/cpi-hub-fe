@@ -15,48 +15,57 @@
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 8px 32px rgba(159, 40, 59, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(159, 40, 59, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   transform: translateZ(0);
   will-change: transform;
 }
 
 .space-header-hero::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+  background: radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 60%,
+      rgba(255, 255, 255, 0.06) 0%,
+      transparent 50%
+    ),
     url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/><circle cx="30" cy="80" r="0.3" fill="white" opacity="0.08"/><circle cx="70" cy="20" r="0.3" fill="white" opacity="0.08"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
   pointer-events: none;
   animation: subtleFloat 8s ease-in-out infinite;
 }
 
 .space-header-hero::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: 
-    conic-gradient(from 0deg at 50% 50%, 
-      transparent 0deg, 
-      rgba(255, 255, 255, 0.03) 60deg, 
-      transparent 120deg,
-      rgba(255, 255, 255, 0.02) 180deg,
-      transparent 240deg,
-      rgba(255, 255, 255, 0.03) 300deg,
-      transparent 360deg
-    );
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    rgba(255, 255, 255, 0.03) 60deg,
+    transparent 120deg,
+    rgba(255, 255, 255, 0.02) 180deg,
+    transparent 240deg,
+    rgba(255, 255, 255, 0.03) 300deg,
+    transparent 360deg
+  );
   animation: rotate 20s linear infinite;
   pointer-events: none;
   opacity: 0.6;
@@ -70,7 +79,6 @@
   gap: 20px;
   transition: transform 0.3s ease;
 }
-
 
 .space-title-section {
   display: flex;
@@ -88,9 +96,7 @@
   font-size: 32px;
   font-weight: 700;
   margin: 0 0 16px 0;
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(255, 255, 255, 0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.1);
   line-height: 1.2;
   position: relative;
   animation: titleGlow 3s ease-in-out infinite alternate;
@@ -139,13 +145,18 @@
 }
 
 .create-post-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -157,9 +168,7 @@
   background: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.5);
   transform: translateY(-2px);
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.2),
-    0 0 20px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .join-space-btn {
@@ -171,13 +180,18 @@
 }
 
 .join-space-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -189,8 +203,7 @@
   background: #0e9f6e;
   border-color: #0e9f6e;
   transform: translateY(-2px);
-  box-shadow: 
-    0 4px 12px rgba(16, 185, 129, 0.3),
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3),
     0 0 20px rgba(16, 185, 129, 0.2);
 }
 
@@ -353,38 +366,38 @@
     padding: 24px;
     margin-bottom: 20px;
   }
-  
+
   .space-title {
     font-size: 24px;
   }
-  
+
   .space-title-section {
     flex-direction: column;
     gap: 16px;
   }
-  
+
   .space-actions {
     width: 100%;
     justify-content: flex-start;
   }
-  
+
   .space-meta-section {
     flex-direction: column;
     gap: 16px;
     align-items: flex-start;
   }
-  
+
   .space-stats {
     flex-wrap: wrap;
     gap: 12px;
   }
-  
+
   .space-posts-header {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
   }
-  
+
   .create-post-btn {
     width: 100%;
     justify-content: center;
@@ -408,7 +421,8 @@
 }
 
 @keyframes subtleFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
@@ -427,20 +441,17 @@
 
 @keyframes titleGlow {
   0% {
-    text-shadow: 
-      0 2px 4px rgba(0, 0, 0, 0.3),
-      0 0 20px rgba(255, 255, 255, 0.1);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.1);
   }
   100% {
-    text-shadow: 
-      0 2px 4px rgba(0, 0, 0, 0.3),
-      0 0 30px rgba(255, 255, 255, 0.2),
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 255, 255, 0.2),
       0 0 40px rgba(255, 255, 255, 0.1);
   }
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.6;
   }
   50% {
@@ -540,4 +551,17 @@
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+.creator-name {
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.creator-name:hover {
+  background: #800000;
+  color: #fff;
 }
