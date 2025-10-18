@@ -57,10 +57,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, onUserClick }) => {
         </span>
       </div>
 
-      <div className="post-content">
-        <h3 className="post-title">{post.title}</h3>
+      <div className="post-card-content">
+        <h3 className="post-card-title">{post.title}</h3>
         {post.content && post.content.trim() && (
-          <p className="post-text">
+          <p className="post-card-text">
             {post.content.slice(0, maxLength)}
             {shouldTruncate && '...'}
           </p>
@@ -69,7 +69,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onUserClick }) => {
 
       <div className="post-footer">
         <span className="comments-count">
-          {post.comments.length} comentarios
+          💬{post.comments.length} comentarios
         </span>
       </div>
     </div>

@@ -1,7 +1,7 @@
 .post-card {
   background: white;
   border-radius: 12px;
-  padding: 20px;
+  padding: 32px;
   margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease;
@@ -86,29 +86,43 @@
   white-space: nowrap;
 }
 
-.post-content {
-  margin-bottom: 16px;
+.post-card-content {
+  margin: 0;
+  padding: 16px 0 48px 0;
+  line-height: 1.8;
+  font-size: 17px;
+  color: #2c2c2c;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.post-content:has(.post-text) {
-  margin-bottom: 16px;
+.post-card-content p {
+  margin: 0;
+  text-align: justify;
+  hyphens: auto;
 }
 
-.post-content:not(:has(.post-text)) {
-  margin-bottom: 8px;
-}
-
-.post-card .post-title {
-  font-size: 16px;
+.post-card .post-card-title {
+  font-size: 1.35rem;
   font-weight: 600;
-  color: #333;
-  margin: 0 0 12px 0;
-  line-height: 1.4;
+  color: #b23a48;
+  margin: 0 0 14px 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  background: none;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  transition: color 0.2s;
+}
+.post-card:hover .post-card-title {
+  color: #9f283b;
 }
 
-.post-text {
-  font-size: 14px;
-  color: #555;
+.post-card-text {
+  font-size: 16px;
+  color: #444;
   line-height: 1.6;
   margin: 0;
 }
