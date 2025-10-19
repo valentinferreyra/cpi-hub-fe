@@ -41,7 +41,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [selectedSpacePosts, setSelectedSpacePosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-  const [isUsersListCollapsed, setIsUsersListCollapsed] = useState(false);
+  const [isUsersListCollapsed, setIsUsersListCollapsed] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
@@ -105,6 +105,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const toggleUsersListCollapse = () => {
     setIsUsersListCollapsed(prev => !prev);
   };
+
+  // Execute fetchData on first load
+  useEffect(() => {
+    fetchData();
+  }, []); 
 
   useEffect(() => {
     const width = isUsersListCollapsed ? '60px' : '280px';
