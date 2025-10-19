@@ -1,6 +1,7 @@
 import Sidebar from "@components/Sidebar/Sidebar";
 import Topbar from "@components/Topbar/Topbar";
 import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
+import UsersList from "@components/UsersList/UsersList";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
@@ -113,6 +114,9 @@ export const Post = () => {
     <>
       <Topbar currentUser={currentUser} />
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
+      {post && (
+        <UsersList spaceId={parseInt(post.space.id)} />
+      )}
 
       <div className="post-page">
         <div className="post-container">

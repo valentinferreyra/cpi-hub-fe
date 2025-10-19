@@ -2,14 +2,13 @@ import Sidebar from "@components/Sidebar/Sidebar";
 import Topbar from "@components/Topbar/Topbar";
 import PostCard from "@components/PostCard/PostCard";
 import CreatePostModal from "@components/modals/CreatePostModal/CreatePostModal";
-import SpaceUsersModal from "@components/modals/SpaceUsersModal/SpaceUsersModal";
+import UsersList from "@components/UsersList/UsersList";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Space.css";
 import { useAppContext } from "../../context/AppContext";
-import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser, getSpaceUsers } from "../../api";
+import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser } from "../../api";
 import type { Post } from "../../types/post";
-import type { SpaceUser } from "../../types/user";
 
 function Space() {
   const { spaceId } = useParams<{ spaceId: string }>();
@@ -23,9 +22,6 @@ function Space() {
   const [showSpaceSettings, setShowSpaceSettings] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [isLeavingSpace, setIsLeavingSpace] = useState(false);
-  const [showUsersModal, setShowUsersModal] = useState(false);
-  const [spaceUsers, setSpaceUsers] = useState<SpaceUser[]>([]);
-  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const settingsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -162,25 +158,6 @@ function Space() {
     setShowLeaveModal(false);
   };
 
-  const handleShowUsers = async () => {
-    if (!selectedSpace) return;
-
-    try {
-      setIsLoadingUsers(true);
-      const users = await getSpaceUsers(selectedSpace.id);
-      setSpaceUsers(users);
-      setShowUsersModal(true);
-    } catch (error) {
-      console.error('Error al cargar usuarios del space:', error);
-    } finally {
-      setIsLoadingUsers(false);
-    }
-  };
-
-  const handleCloseUsersModal = () => {
-    setShowUsersModal(false);
-    setSpaceUsers([]);
-  };
 
 
   if (isLoading) {
@@ -203,6 +180,9 @@ function Space() {
     <>
       <Topbar currentUser={currentUser} />
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
+      {selectedSpace && (
+        <UsersList spaceId={selectedSpace.id} />
+      )}
 
       {showSuccessMessage && (
         <div className="success-notification">
@@ -255,10 +235,7 @@ function Space() {
                 </div>
                 <div className="space-meta-section">
                   <div className="space-stats">
-                    <div
-                      className="space-stat clickable"
-                      onClick={handleShowUsers}
-                    >
+                    <div className="space-stat">
                       <span className="space-stat-icon">👥</span>
                       <span>{selectedSpace.users} usuarios</span>
                     </div>
@@ -338,14 +315,6 @@ function Space() {
           </div>
         </div>
       )}
-
-      <SpaceUsersModal
-        isOpen={showUsersModal}
-        onClose={handleCloseUsersModal}
-        users={spaceUsers}
-        spaceName={selectedSpace?.name || ''}
-        isLoading={isLoadingUsers}
-      />
     </>
   )
 }
