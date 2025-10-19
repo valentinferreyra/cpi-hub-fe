@@ -130,19 +130,16 @@ export const Post = () => {
                 <h1 className="post-title">{post.title}</h1>
                 <div className="post-author-date-container">
                   <div className="post-author-date">
-                    Por                     <span
+                    Por<span
                       className="post-author clickable"
                       onClick={() => navigate(`/users/${post.created_by.id}`)}
                     >
                       {post.created_by.name} {post.created_by.last_name}
                     </span>, el {formatPostDetailDate(post.created_at)} a las {formatPostDetailTime(post.created_at)}
                   </div>
-                  <span
-                    className="post-space-badge-inline clickable"
-                    onClick={() => navigate(`/space/${post.space.id}`)}
-                  >
-                    {post.space.name}
-                  </span>
+                  <div className="post-stats">
+                    <span className="post-comments-count">{post.comments.length} comentarios</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -152,7 +149,7 @@ export const Post = () => {
             </div>
 
             <div className="post-comments">
-              <h3>Comentarios ({post.comments.length})</h3>
+              <h3>Comentarios</h3>
               {post.comments.map((comment) => (
                 <div key={comment.id} className="comment">
                   <div className="comment-header">
@@ -177,14 +174,14 @@ export const Post = () => {
                 </div>
               ))}
 
-              <div className="add-comment-section">
-                <h4>Agregar comentario</h4>
-                {showSuccessMessage && (
-                  <div className="success-message">
-                    ✅ Comentario agregado correctamente
-                  </div>
-                )}
-                <div className="comment-form">
+              {showSuccessMessage && (
+                <div className="success-message">
+                  Comentario agregado correctamente
+                </div>
+              )}
+              
+              <div className="comment-form-integrated">
+                <div className="comment-input-container">
                   <textarea
                     className="comment-input"
                     placeholder="Escribe tu comentario..."
@@ -194,11 +191,11 @@ export const Post = () => {
                     disabled={isSubmittingComment}
                   />
                   <button
-                    className={`add-comment-btn ${newComment.trim() && !isSubmittingComment ? 'active' : 'disabled'}`}
+                    className={`comment-submit-btn ${newComment.trim() && !isSubmittingComment ? 'active' : 'disabled'}`}
                     disabled={!newComment.trim() || isSubmittingComment}
                     onClick={handleAddComment}
                   >
-                    {isSubmittingComment ? 'Agregando...' : 'Agregar comentario'}
+                    {isSubmittingComment ? '...' : '>'}
                   </button>
                 </div>
               </div>

@@ -1,12 +1,11 @@
 import Sidebar from "@components/Sidebar/Sidebar";
 import Topbar from "@components/Topbar/Topbar";
 import PostCard from "@components/PostCard/PostCard";
-import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
 import CreatePostModal from "@components/modals/CreatePostModal/CreatePostModal";
 import SpaceUsersModal from "@components/modals/SpaceUsersModal/SpaceUsersModal";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "../Home/Home.css";
+import "./Space.css";
 import { useAppContext } from "../../context/AppContext";
 import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser, getSpaceUsers } from "../../api";
 import type { Post } from "../../types/post";
@@ -183,10 +182,6 @@ function Space() {
     setSpaceUsers([]);
   };
 
-  const breadcrumbItems = selectedSpace ? [
-    { label: selectedSpace.name, isActive: true },
-    { label: "Inicio", isActive: false }
-  ] : [];
 
   if (isLoading) {
     return (
@@ -219,75 +214,93 @@ function Space() {
       )}
 
       <div className="posts-container">
-        <div className="posts-section">
-          <div className="posts-header">
-            {selectedSpace ? (
-              <div className="space-header-container">
-                <Breadcrumb items={breadcrumbItems} />
-                {isUserInSpace() && (
-                  <div className="space-settings-container" ref={settingsRef}>
-                    <img
-                      src="/src/assets/settings.png"
-                      alt="Configuración"
-                      className="space-settings-icon"
-                      onClick={handleSettingsClick}
-                    />
-                    {showSpaceSettings && (
-                      <div className="space-settings-dropdown">
-                        <button
-                          className="dropdown-item"
-                          onClick={handleLeaveSpace}
-                        >
-                          Dejar space
+        <div className="posts-section space-section">
+          {selectedSpace ? (
+            <div className="space-header-hero">
+              <div className="space-header-content">
+                <div className="space-title-section">
+                  <div className="space-title-main">
+                    <h1 className="space-title">{selectedSpace.name}</h1>
+                    <p className="space-description">{selectedSpace.description}</p>
+                  </div>
+                  <div className="space-actions">
+                    {!isUserInSpace() && (
+                      <button className="space-action-btn join-space-btn" onClick={handleJoinSpace}>
+                        <span>+</span>
+                        Unirse al space
+                      </button>
+                    )}
+                    {isUserInSpace() && (
+                      <div className="space-settings-container" ref={settingsRef}>
+                        <button className="space-settings-btn" onClick={handleSettingsClick}>
+                          <img
+                            src="/src/assets/settings.png"
+                            alt="Configuración"
+                            className="space-settings-icon"
+                          />
                         </button>
+                        {showSpaceSettings && (
+                          <div className="space-settings-dropdown">
+                            <button
+                              className="dropdown-item danger"
+                              onClick={handleLeaveSpace}
+                            >
+                              Abandonar space
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
-                )}
+                </div>
+                <div className="space-meta-section">
+                  <div className="space-stats">
+                    <div
+                      className="space-stat clickable"
+                      onClick={handleShowUsers}
+                    >
+                      <span className="space-stat-icon">👥</span>
+                      <span>{selectedSpace.users} usuarios</span>
+                    </div>
+                    <div className="space-stat">
+                      <span className="space-stat-icon">✏️</span>
+                      <span>{selectedSpace.posts} posts</span>
+                    </div>
+                  </div>
+                  <div className="space-creator-info">
+                    <div className="space-creator-avatar">
+                      {(selectedSpace.created_by?.name || 'U')[0].toUpperCase()}
+                    </div>
+                    <span>
+                      Creado por {selectedSpace.created_by?.name || 'N/A'} {selectedSpace.created_by?.last_name || ''}
+                    </span>
+                  </div>
+                </div>
               </div>
-            ) : (
+            </div>
+          ) : (
+            <div className="posts-header">
               <h2 className="posts-title">Space no encontrado</h2>
-            )}
-          </div>
-          {selectedSpace && (
-            <div className="space-info">
-              <div className="space-description-container">
-                <p className="space-description">{selectedSpace.description}</p>
-                {isUserInSpace() ? (
-                  <button className="create-post-btn" onClick={openCreatePostModal}>
-                    Crear post
-                  </button>
-                ) : (
-                  <button className="join-space-btn" onClick={handleJoinSpace}>
-                    Unirse al space
-                  </button>
-                )}
-              </div>
-              <div className="space-meta">
-                <span
-                  className="space-users clickable"
-                  onClick={handleShowUsers}
-                >
-                  Usuarios: {selectedSpace.users}
-                </span>
-                <span className="space-posts">Publicaciones: {selectedSpace.posts}</span>
-              </div>
-              <p className="space-creator">
-                Creado por: {selectedSpace.created_by?.name || 'N/A'} {selectedSpace.created_by?.last_name || ''}
-              </p>
-              <div className="space-separator"></div>
             </div>
           )}
-          <div className={`posts-list ${isTransitioning ? 'transitioning' : ''}`}>
-            {selectedSpace ? selectedSpacePosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            )) : (
-              <div className="posts-placeholder">
-                <h2>Space no encontrado</h2>
-                <p>El space que buscas no existe o no tienes acceso a él.</p>
+          {selectedSpace && (
+            <div className="space-posts-container">
+              <div className="space-posts-header">
+                <h2 className="space-posts-title">Publicaciones</h2>
+                {isUserInSpace() && (
+                  <button className="create-post-btn" onClick={openCreatePostModal}>
+                    <span>+</span>
+                    Crear post
+                  </button>
+                )}
               </div>
-            )}
-          </div>
+              <div className={`posts-list ${isTransitioning ? 'transitioning' : ''}`}>
+                {selectedSpacePosts.map((post) => (
+                  <PostCard key={post.id} post={post} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
