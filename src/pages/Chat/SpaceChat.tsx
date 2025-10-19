@@ -66,10 +66,9 @@ export const SpaceChat = () => {
   });
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadSpaceData = async () => {
       try {
         setIsLoading(true);
-        await fetchData();
 
         if (spaceId) {
           const numericSpaceId = typeof spaceId === 'string' ? parseInt(spaceId) : spaceId;
@@ -86,8 +85,8 @@ export const SpaceChat = () => {
         setIsLoading(false);
       }
     };
-    loadData();
-  }, [fetchData, spaceId, setSelectedSpace]);
+    loadSpaceData();
+  }, [spaceId, setSelectedSpace]);
 
   if (!currentUser || isLoading) {
     return (

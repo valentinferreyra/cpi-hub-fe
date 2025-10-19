@@ -1,16 +1,22 @@
 .users-list {
-  background: linear-gradient(135deg, #9f283b 0%, #b8324a 50%, #8b1e2f 100%);
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
   width: 280px;
   height: calc(100vh - 70px);
   top: 70px;
   position: fixed;
   right: 0;
   padding: 20px;
-  box-shadow: inset 2px 0 10px rgba(0, 0, 0, 0.1),
-    -4px 0 20px rgba(0, 0, 0, 0.15);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 2px 0 10px rgba(0, 0, 0, 0.05),
+    -4px 0 20px rgba(0, 0, 0, 0.08);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   overflow-y: auto;
+  transition: width 0.3s ease;
+}
+
+.users-list.collapsed {
+  width: 60px;
+  padding: 20px 10px;
 }
 
 .users-list-container {
@@ -22,11 +28,58 @@
 .users-list-header {
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  min-height: 40px;
+}
+
+.collapse-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  height: 40px;
+  width: 40px;
+}
+
+.collapse-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.collapse-toggle:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.collapse-toggle:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.collapse-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.users-list.collapsed .collapse-icon {
+  transform: rotate(180deg);
 }
 
 .users-list-title {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   font-size: 14px;
   font-weight: 600;
   margin: 0 0 4px 0;
@@ -44,7 +97,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.6);
   font-size: 14px;
   gap: 10px;
   padding: 20px 0;
@@ -53,8 +106,8 @@
 .loading-spinner {
   width: 24px;
   height: 24px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid #ffffff;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top: 2px solid #333333;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -78,7 +131,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 0.5);
   font-size: 14px;
   padding: 20px 0;
   text-align: center;
@@ -97,13 +150,19 @@
   padding: 4px 6px;
   background-color: transparent;
   border-radius: 4px;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.1s ease;
   cursor: pointer;
   margin-bottom: 1px;
 }
 
 .user-item:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.user-item:active,
+.user-item.selected {
+  background-color: rgba(0, 0, 0, 0.1);
+  transform: scale(0.98);
 }
 
 .user-avatar {
@@ -142,7 +201,7 @@
 }
 
 .user-name {
-  color: #ffffff !important;
+  color: #333333 !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   white-space: nowrap;
@@ -157,22 +216,22 @@
 }
 
 .users-list::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 3px;
 }
 
 .users-list::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
 }
 
 .users-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* Forzar estilos específicos */
 .users-list .user-item * {
-  color: #ffffff !important;
+  color: #333333 !important;
 }
 
 .users-list .user-avatar,
@@ -183,7 +242,7 @@
 }
 
 .users-list .user-name {
-  color: #ffffff !important;
+  color: #333333 !important;
   font-size: 14px !important;
   font-weight: 400 !important;
 }

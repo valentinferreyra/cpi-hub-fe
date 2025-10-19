@@ -20,9 +20,6 @@ const UserView: React.FC = () => {
   const [totalPosts, setTotalPosts] = useState(0);
   const [totalComments, setTotalComments] = useState(0);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
 
   useEffect(() => {

@@ -11,9 +11,11 @@ interface AppContextType {
   selectedSpacePosts: Post[];
   isLoading: boolean;
   isFirstLoad: boolean;
+  isUsersListCollapsed: boolean;
   fetchData: () => Promise<void>;
   selectSpace: (space: Space) => void;
   goToHome: () => void;
+  toggleUsersListCollapse: () => void;
   setCurrentUser: (user: User | null) => void;
   setSelectedSpace: (space: Space | null) => void;
   setSelectedSpacePosts: (posts: Post[] | ((prevPosts: Post[]) => Post[])) => void;
@@ -39,9 +41,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [selectedSpacePosts, setSelectedSpacePosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [isUsersListCollapsed, setIsUsersListCollapsed] = useState(false);
   const location = useLocation();
 
-  // Clear selectedSpace when navigating away from space routes
   useEffect(() => {
     const isSpaceRoute = location.pathname.startsWith('/space/');
     if (!isSpaceRoute && selectedSpace) {
@@ -56,7 +58,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setIsLoading(true);
       }
 
-      // Solo intentar obtener el usuario si hay un token
       const token = localStorage.getItem('auth_token');
       if (token) {
         try {
@@ -64,7 +65,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
           setCurrentUser(user);
         } catch (error) {
           console.error('Error getting current user:', error);
-          // Si hay error de autenticación, limpiar el token y el estado
           localStorage.removeItem('auth_token');
           setCurrentUser(null);
         }
@@ -84,16 +84,13 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const selectSpace = async (space: Space) => {
     try {
-      // Fetch complete space details with author information
       const completeSpace = await getSpaceById(space.id);
       const posts = await getPostsBySpaceId(space.id);
 
-      // Use the complete space data if available, otherwise fall back to the space from user's spaces
       setSelectedSpace(completeSpace || space);
       setSelectedSpacePosts(posts);
     } catch (error) {
       console.error('Error fetching space details:', error);
-      // Fallback to the original space data if API call fails
       const posts = await getPostsBySpaceId(space.id);
       setSelectedSpace(space);
       setSelectedSpacePosts(posts);
@@ -105,15 +102,26 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setSelectedSpacePosts([]);
   };
 
+  const toggleUsersListCollapse = () => {
+    setIsUsersListCollapsed(prev => !prev);
+  };
+
+  useEffect(() => {
+    const width = isUsersListCollapsed ? '60px' : '280px';
+    document.documentElement.style.setProperty('--users-list-width', width);
+  }, [isUsersListCollapsed]);
+
   const value = {
     currentUser,
     selectedSpace,
     selectedSpacePosts,
     isLoading,
     isFirstLoad,
+    isUsersListCollapsed,
     fetchData,
     selectSpace,
     goToHome,
+    toggleUsersListCollapse,
     setCurrentUser,
     setSelectedSpace,
     setSelectedSpacePosts,

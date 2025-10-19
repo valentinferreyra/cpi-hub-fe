@@ -433,20 +433,21 @@
 .space-posts-container-main {
   position: absolute;
   top: 80px;
-  right: 295px;
+  right: var(--users-list-width, 280px);
   left: 270px;
-  bottom: 20px;
+  bottom: 0;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 20px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #9f283b #f0f0f0;
+  transition: right 0.3s ease;
 }
 
 /* Responsive adjustments for UsersList */
 @media (max-width: 1200px) {
   .space-posts-container-main {
-    right: 265px;
+    right: 250px;
   }
 }
 

@@ -4,17 +4,18 @@
   height: calc(100vh - 70px);
   background: #fff;
   margin-left: 265px;
-  margin-right: 280px;
+  margin-right: var(--users-list-width, 280px);
   margin-top: 70px; 
   box-sizing: border-box;
   overflow: hidden;
   padding: 0;
+  transition: margin-right 0.3s ease;
 }
 
 /* Responsive adjustments for UsersList */
 @media (min-width: 1201px) {
   .scroll-to-bottom {
-    right: calc(280px + 50px);
+    right: calc(var(--users-list-width, 280px) + 50px);
   }
 }
 

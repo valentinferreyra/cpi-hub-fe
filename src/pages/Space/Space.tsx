@@ -25,10 +25,6 @@ function Space() {
   const settingsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
         setShowSpaceSettings(false);

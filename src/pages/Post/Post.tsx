@@ -55,10 +55,9 @@ export const Post = () => {
 
 
   useEffect(() => {
-    const fetchAllData = async () => {
+    const fetchPostData = async () => {
       try {
         setIsLoading(true);
-        await fetchData();
         if (post_id) {
           const postData = await getPostById(post_id);
           setPost(postData);
@@ -70,8 +69,8 @@ export const Post = () => {
       }
     };
 
-    fetchAllData();
-  }, [post_id, fetchData]);
+    fetchPostData();
+  }, [post_id]);
 
   if (isLoading) {
     return (
