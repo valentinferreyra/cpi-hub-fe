@@ -193,7 +193,7 @@ function Space() {
         </div>
       )}
 
-      <div className="posts-container">
+      <div className="space-posts-container-main">
         <div className="posts-section space-section">
           {selectedSpace ? (
             <div className="space-header-hero">

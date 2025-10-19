@@ -1,7 +1,7 @@
 .posts-container {
   position: absolute;
   top: 80px;
-  right: 295px;
+  right: 15px;
   left: 270px;
   bottom: 20px;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -29,19 +29,6 @@
 
 .posts-container::-webkit-scrollbar-thumb:hover {
   background: #7a1f2e;
-}
-
-/* Responsive adjustments for UsersList */
-@media (max-width: 1200px) {
-  .posts-container {
-    right: 265px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .posts-container {
-    right: 15px;
-  }
 }
 
 .posts-section {

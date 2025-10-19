@@ -461,6 +461,33 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+/* Posts container layout for Space view */
+.space-posts-container-main {
+  position: absolute;
+  top: 80px;
+  right: 295px;
+  left: 270px;
+  bottom: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #9f283b #f0f0f0;
+}
+
+/* Responsive adjustments for UsersList */
+@media (max-width: 1200px) {
+  .space-posts-container-main {
+    right: 265px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .space-posts-container-main {
+    right: 15px;
+  }
+}
+
 .space-posts-header {
   display: flex;
   justify-content: space-between;
