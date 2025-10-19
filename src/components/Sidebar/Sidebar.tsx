@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import type { Space } from '../../types/space';
 import { useAppContext } from '../../context/AppContext';
+import spaceChatIcon from '../../assets/space_chat.png';
+import downArrowIcon from '../../assets/down_arrow.png';
+import rightArrowIcon from '../../assets/right_arrow_2.png';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -13,6 +16,7 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { selectedSpace, currentUser } = useAppContext();
+  const [isSpacesExpanded, setIsSpacesExpanded] = useState(true);
 
   const handleSpaceClick = (space: Space) => {
     onSpaceClick(space);
@@ -25,6 +29,10 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
 
   const handleTrendsClick = () => {
     navigate('/tendencias');
+  };
+
+  const toggleSpacesExpansion = () => {
+    setIsSpacesExpanded(!isSpacesExpanded);
   };
 
   if (!spaces || spaces.length === 0) {
@@ -85,8 +93,15 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
           Explorar
         </div>
         <div className="sidebar-separator"></div>
-        <div className='sidebar-spaces-title'>Mis Spaces</div>
-        {spaces.map((space) => {
+        <div className="sidebar-spaces-header" onClick={toggleSpacesExpansion}>
+          <span className="sidebar-spaces-title">Mis Spaces</span>
+          <img 
+            src={isSpacesExpanded ? downArrowIcon : rightArrowIcon} 
+            alt={isSpacesExpanded ? 'Contraer' : 'Expandir'} 
+            className="sidebar-spaces-toggle-icon"
+          />
+        </div>
+        {isSpacesExpanded && spaces.map((space) => {
           const isSpaceActive = location.pathname === `/space/${space.id}`;
           const isChatActive = location.pathname === `/space/${space.id}/chat`;
           const isActive = selectedSpace && space.id === selectedSpace.id && currentUser?.spaces?.some(s => s.id === space.id);
@@ -104,7 +119,8 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
                 className={`sidebar-chat-link${isChatActive ? ' active-chat' : ''}`}
                 onClick={() => navigate(`/space/${space.id}/chat`)}
               >
-                💬 Chat del space
+                <img src={spaceChatIcon} alt="Chat" className="sidebar-chat-icon" />
+                Chat
               </div>
             </div>
           );
