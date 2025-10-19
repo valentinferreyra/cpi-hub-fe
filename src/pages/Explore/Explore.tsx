@@ -225,7 +225,7 @@ const Explore: React.FC = () => {
         <div className="posts-section">
           <div className="posts-header">
             <h2 className="posts-title">Explorar</h2>
-            <button className="create-post-btn" style={{ marginLeft: 16 }} onClick={openCreateSpaceModal}>
+            <button className="create-post-btn margin-left-16" onClick={openCreateSpaceModal}>
               Crear space
             </button>
           </div>
@@ -267,7 +267,7 @@ const Explore: React.FC = () => {
                         </li>
                       ))}
                     </ul>
-                    <p style={{ marginTop: 4 }}>¿Querés crearlo de todas formas?</p>
+                    <p className="margin-top-4">¿Querés crearlo de todas formas?</p>
                   </div>
                   <div className="form-actions">
                     <button className="btn-cancel" onClick={handleCancelCreate}>Cancelar</button>

@@ -58,15 +58,7 @@ function Home() {
 
   if (isLoading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '20px',
-        fontWeight: '500',
-        color: '#333'
-      }}>
+      <div className="loading-container">
         Ingresando...
       </div>
     );
@@ -129,7 +121,7 @@ function Home() {
             })()}
           </div>
           {!selectedSpace && hasMore && latestPosts.length > 0 && (
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <div className="loading-center-margin">
               <button
                 className="load-more-btn"
                 onClick={handleLoadMore}

@@ -74,15 +74,7 @@ export const Post = () => {
 
   if (isLoading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '20px',
-        fontWeight: '500',
-        color: '#333'
-      }}>
+      <div className="loading-container">
         Ingresando...
       </div>
     );
@@ -90,15 +82,7 @@ export const Post = () => {
 
   if (!post) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '20px',
-        fontWeight: '500',
-        color: '#333'
-      }}>
+      <div className="loading-container">
         Post no encontrado
       </div>
     );
