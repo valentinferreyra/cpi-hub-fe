@@ -10,6 +10,7 @@ import type { Space } from "../../types/space";
 import { 
   SpacesSection
 } from './components';
+import { CreateSpaceBanner } from '../../components/CreateSpaceBanner';
 import { useCreateSpace, useUpdatedSpacesPagination, useCreatedSpacesPagination } from '../../hooks';
 import { CreateSpaceConfirmationModal } from '../../components/modals/CreateSpaceModal';
 import "./Explore.css";
@@ -127,14 +128,9 @@ const Explore: React.FC = () => {
         <div className="posts-section">
           <div className="posts-header">
             <h2 className="posts-title">Explorar</h2>
-            <button 
-              className="create-post-btn margin-left-16" 
-              onClick={createSpaceHook.openCreateSpaceModal}
-            >
-              Crear space
-            </button>
           </div>
           <div className="explore-content">
+            <CreateSpaceBanner onCreateSpace={createSpaceHook.openCreateSpaceModal} />
             <CreateSpaceModal
               isOpen={createSpaceHook.isCreateSpaceModalOpen}
               onClose={createSpaceHook.closeCreateSpaceModal}

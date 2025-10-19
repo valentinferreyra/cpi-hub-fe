@@ -174,8 +174,6 @@ const UserView: React.FC = () => {
 
         <UserComments userId={user.id} userName={user.name} />
       </div>
-
-      {/* LogoutModal removido: ahora controlado desde Topbar */}
     </div>
   );
 };
