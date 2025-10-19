@@ -129,38 +129,6 @@
   white-space: nowrap;
 }
 
-.create-post-btn {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-}
-
-.create-post-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.create-post-btn:hover::before {
-  left: 100%;
-}
-
-.create-post-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.2),
-    0 0 20px rgba(255, 255, 255, 0.1);
-}
 
 .join-space-btn {
   background: #10b981;
@@ -505,7 +473,7 @@
 }
 
 .create-post-btn {
-  background-color: #9f283b;
+  background-color: #10b981;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -513,7 +481,7 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -521,14 +489,11 @@
 }
 
 .create-post-btn:hover {
-  background-color: #7a1f2e;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(159, 40, 59, 0.3);
+  background-color: #0e9f6e;
 }
 
 .create-post-btn:active {
-  background-color: #6b1a26;
-  transform: translateY(0);
+  background-color: #0c8f62;
 }
 
 /* Success notification enhancement */

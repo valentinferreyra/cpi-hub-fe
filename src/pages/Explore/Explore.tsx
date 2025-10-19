@@ -296,7 +296,7 @@ const Explore: React.FC = () => {
                         <p className="space-card-description">{space.description}</p>
                         <div className="space-card-meta">
                           <span className="space-card-users">Usuarios: {space.users}</span>
-                          <span className="space-card-posts">Publicaciones: {space.posts}</span>
+                          <span className="space-card-posts">Posts: {space.posts}</span>
                         </div>
                         <div className="space-card-footer">
                           <span className="space-card-creator">
@@ -352,7 +352,7 @@ const Explore: React.FC = () => {
                         <p className="space-card-description">{space.description}</p>
                         <div className="space-card-meta">
                           <span className="space-card-users">Usuarios: {space.users}</span>
-                          <span className="space-card-posts">Publicaciones: {space.posts}</span>
+                          <span className="space-card-posts">Posts: {space.posts}</span>
                         </div>
                         <div className="space-card-footer">
                           <span className="space-card-creator">

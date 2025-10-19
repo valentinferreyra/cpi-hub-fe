@@ -263,7 +263,7 @@ function Space() {
           {selectedSpace && (
             <div className="space-posts-container">
               <div className="space-posts-header">
-                <h2 className="space-posts-title">Publicaciones</h2>
+                <h2 className="space-posts-title">Posts</h2>
                 {isUserInSpace() && (
                   <button className="create-post-btn" onClick={openCreatePostModal}>
                     <span>+</span>

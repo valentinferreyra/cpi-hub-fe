@@ -172,13 +172,12 @@
 }
 
 .btn-create {
-  background-color: #9f283b;
+  background-color: #10b981;
   color: white;
 }
 
 .btn-create:hover:not(:disabled) {
-  background-color: #7a1f2e;
-  transform: translateY(-1px);
+  background-color: #0e9f6e;
 }
 
 .btn-create:disabled {
