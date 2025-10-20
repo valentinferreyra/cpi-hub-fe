@@ -2,6 +2,7 @@ import Sidebar from "@components/Sidebar/Sidebar";
 import Topbar from "@components/Topbar/Topbar";
 import PostCard from "@components/PostCard/PostCard";
 import CreatePostModal from "@components/modals/CreatePostModal/CreatePostModal";
+import CreateSpaceModal from "@components/modals/CreateSpaceModal/CreateSpaceModal";
 import UsersList from "@components/UsersList/UsersList";
 import { CreateSpaceBanner } from "@components/CreateSpaceBanner";
 import { SpaceHeader } from "@components/SpaceHeader";
@@ -218,6 +219,13 @@ function Space() {
         onClose={closeCreatePostModal}
         onCreatePost={handleCreatePost}
         isLoading={isCreatingPost}
+      />
+
+      <CreateSpaceModal
+        isOpen={createSpaceHook.isCreateSpaceModalOpen}
+        onClose={createSpaceHook.closeCreateSpaceModal}
+        onCreateSpace={createSpaceHook.handleCreateSpace}
+        isLoading={createSpaceHook.isCreatingSpace}
       />
 
       <LeaveSpaceModal

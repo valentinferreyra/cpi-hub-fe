@@ -26,7 +26,7 @@
 }
 
 .users-list-header {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding-bottom: 15px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
@@ -245,4 +245,111 @@
   color: #333333 !important;
   font-size: 14px !important;
   font-weight: 400 !important;
+}
+
+.users-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 0;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.users-loading-collapsed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.loading-spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top: 2px solid #333333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.users-error-collapsed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  font-size: 16px;
+}
+
+.users-empty-collapsed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.users-avatars-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.user-avatar-preview {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.user-avatar-preview:hover {
+  transform: scale(1.1);
+}
+
+.user-avatar-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.user-avatar-preview-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #9f283b 0%, #b8324a 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 10px;
+  border-radius: 50%;
+}
+
+.user-avatar-more {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.user-avatar-more:hover {
+  transform: scale(1.1);
 }
