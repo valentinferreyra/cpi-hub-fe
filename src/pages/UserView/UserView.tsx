@@ -20,9 +20,6 @@ const UserView: React.FC = () => {
   const [totalPosts, setTotalPosts] = useState(0);
   const [totalComments, setTotalComments] = useState(0);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
 
   useEffect(() => {
@@ -177,8 +174,6 @@ const UserView: React.FC = () => {
 
         <UserComments userId={user.id} userName={user.name} />
       </div>
-
-      {/* LogoutModal removido: ahora controlado desde Topbar */}
     </div>
   );
 };

@@ -1,14 +1,15 @@
 .post-container {
   position: absolute;
   top: 80px;
-  right: 15px;
+  right: var(--users-list-width, 280px);
   left: 270px;
-  bottom: 20px;
+  bottom: 0;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 20px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #9f283b #f0f0f0;
+  transition: right 0.3s ease;
 }
 
 .post-container::-webkit-scrollbar {
@@ -28,6 +29,19 @@
 
 .post-container::-webkit-scrollbar-thumb:hover {
   background: #7a1f2e;
+}
+
+/* Responsive adjustments for UsersList */
+@media (max-width: 1200px) {
+  .post-container {
+    right: 250px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .post-container {
+    right: 15px;
+  }
 }
 
 .post-section {

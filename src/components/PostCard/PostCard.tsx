@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Post } from '../../types/post';
 import { formatPostDate } from '../../utils/dateUtils';
@@ -10,9 +10,18 @@ interface PostCardProps {
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const navigate = useNavigate();
+  const [isLoaded, setIsLoaded] = useState(false);
   const maxLength = 160;
   const hasContent = post.content && post.content.trim();
   const shouldTruncate = hasContent && post.content.length > maxLength;
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 50);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const handlePostClick = () => {
     navigate(`/post/${post.id}`);
@@ -29,7 +38,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   };
 
   return (
-    <div className="post-card" onClick={handlePostClick}>
+    <div className={`post-card ${isLoaded ? 'loaded' : ''}`} onClick={handlePostClick}>
       <div className="post-header">
         <div className="post-author">
           <img

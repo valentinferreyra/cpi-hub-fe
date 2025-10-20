@@ -1,6 +1,7 @@
 import Sidebar from "@components/Sidebar/Sidebar";
 import Topbar from "@components/Topbar/Topbar";
 import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
+import UsersList from "@components/UsersList/UsersList";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
@@ -54,10 +55,9 @@ export const Post = () => {
 
 
   useEffect(() => {
-    const fetchAllData = async () => {
+    const fetchPostData = async () => {
       try {
         setIsLoading(true);
-        await fetchData();
         if (post_id) {
           const postData = await getPostById(post_id);
           setPost(postData);
@@ -69,20 +69,12 @@ export const Post = () => {
       }
     };
 
-    fetchAllData();
-  }, [post_id, fetchData]);
+    fetchPostData();
+  }, [post_id]);
 
   if (isLoading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '20px',
-        fontWeight: '500',
-        color: '#333'
-      }}>
+      <div className="loading-container">
         Ingresando...
       </div>
     );
@@ -90,15 +82,7 @@ export const Post = () => {
 
   if (!post) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '20px',
-        fontWeight: '500',
-        color: '#333'
-      }}>
+      <div className="loading-container">
         Post no encontrado
       </div>
     );
@@ -113,6 +97,9 @@ export const Post = () => {
     <>
       <Topbar currentUser={currentUser} />
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
+      {post && (
+        <UsersList spaceId={parseInt(post.space.id)} />
+      )}
 
       <div className="post-page">
         <div className="post-container">

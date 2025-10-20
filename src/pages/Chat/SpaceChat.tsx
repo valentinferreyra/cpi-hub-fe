@@ -1,6 +1,7 @@
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Topbar from "@/components/Topbar/Topbar";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
+import UsersList from "@/components/UsersList/UsersList";
 import { useAppContext } from "@/context/AppContext";
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -65,10 +66,9 @@ export const SpaceChat = () => {
   });
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadSpaceData = async () => {
       try {
         setIsLoading(true);
-        await fetchData();
 
         if (spaceId) {
           const numericSpaceId = typeof spaceId === 'string' ? parseInt(spaceId) : spaceId;
@@ -85,20 +85,12 @@ export const SpaceChat = () => {
         setIsLoading(false);
       }
     };
-    loadData();
-  }, [fetchData, spaceId, setSelectedSpace]);
+    loadSpaceData();
+  }, [spaceId, setSelectedSpace]);
 
   if (!currentUser || isLoading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '20px',
-        fontWeight: '500',
-        color: '#333'
-      }}>
+      <div className="loading-container">
         Cargando...
       </div>
     );
@@ -108,6 +100,9 @@ export const SpaceChat = () => {
     <>
       <Topbar currentUser={currentUser} />
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
+      {selectedSpace && (
+        <UsersList spaceId={selectedSpace.id} />
+      )}
 
       {showUserInfoModal && (
         <UserInfoModal

@@ -167,7 +167,7 @@
 }
 
 .create-post-btn {
-  background-color: #9f283b;
+  background-color: #10b981;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -218,11 +218,11 @@
 }
 
 .create-post-btn:hover {
-  background-color: #7a1f2e;
+  background-color: #0e9f6e;
 }
 
 .create-post-btn:active {
-  background-color: #6b1a26;
+  background-color: #0c8f62;
 }
 
 .join-space-btn {

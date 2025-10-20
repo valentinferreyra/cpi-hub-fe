@@ -12,15 +12,12 @@ import type { Post } from "../../types/post";
 function Home() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentUser, selectedSpace, selectedSpacePosts, isLoading, fetchData, selectSpace, goToHome } = useAppContext();
+  const { currentUser, selectedSpace, selectedSpacePosts, isLoading, selectSpace, goToHome } = useAppContext();
   const [latestPosts, setLatestPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -58,15 +55,7 @@ function Home() {
 
   if (isLoading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '20px',
-        fontWeight: '500',
-        color: '#333'
-      }}>
+      <div className="loading-container">
         Ingresando...
       </div>
     );
@@ -129,7 +118,7 @@ function Home() {
             })()}
           </div>
           {!selectedSpace && hasMore && latestPosts.length > 0 && (
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <div className="loading-center-margin">
               <button
                 className="load-more-btn"
                 onClick={handleLoadMore}

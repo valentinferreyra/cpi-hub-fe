@@ -1,0 +1,124 @@
+.create-space-banner {
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url("../../assets/unq_background_image.jpg") no-repeat center center;
+  background-size: cover;
+  background-attachment: scroll;
+  border-radius: 16px;
+  margin-bottom: 40px;
+  padding: 25px 30px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.banner-text {
+  flex: 1;
+  color: white;
+}
+
+.banner-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.banner-description {
+  font-size: 16px;
+  margin: 0;
+  opacity: 0.9;
+  line-height: 1.4;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.banner-create-btn {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.banner-create-btn:hover {
+  background-color: #0e9f6e;
+}
+
+.banner-create-btn:active {
+  background-color: #0c8f62;
+}
+
+.banner-create-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.banner-create-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5);
+}
+
+@media (max-width: 768px) {
+  .create-space-banner {
+    padding: 20px 20px;
+    margin-bottom: 30px;
+  }
+  
+  .banner-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .banner-title {
+    font-size: 22px;
+  }
+  
+  .banner-description {
+    font-size: 14px;
+  }
+  
+  .banner-create-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .create-space-banner {
+    padding: 18px 15px;
+    margin-bottom: 25px;
+  }
+  
+  .banner-title {
+    font-size: 20px;
+  }
+  
+  .banner-description {
+    font-size: 13px;
+  }
+  
+  .banner-create-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}

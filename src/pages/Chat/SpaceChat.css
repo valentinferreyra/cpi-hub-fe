@@ -4,10 +4,39 @@
   height: calc(100vh - 70px);
   background: #fff;
   margin-left: 265px;
+  margin-right: var(--users-list-width, 280px);
   margin-top: 70px; 
   box-sizing: border-box;
   overflow: hidden;
   padding: 0;
+  transition: margin-right 0.3s ease;
+}
+
+/* Responsive adjustments for UsersList */
+@media (min-width: 1201px) {
+  .scroll-to-bottom {
+    right: calc(var(--users-list-width, 280px) + 50px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .space-chat-page {
+    margin-right: 250px;
+  }
+  
+  .scroll-to-bottom {
+    right: calc(250px + 50px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .space-chat-page {
+    margin-right: 0;
+  }
+  
+  .scroll-to-bottom {
+    right: 32px;
+  }
 }
 
 .space-chat-container {
@@ -55,7 +84,6 @@
 .scroll-to-bottom {
   position: fixed;
   bottom: 120px;
-  right: 32px;
   background: #9f283b;
   color: white;
   border: none;

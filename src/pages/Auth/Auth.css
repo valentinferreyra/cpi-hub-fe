@@ -13,7 +13,7 @@
     #8b1e2f 100%
   ); */
   /* gap: 24px; */
-  background: url("https://acceso.uvq.edu.ar/simplesaml/module.php/themeunq/img/background-unq.jpg")
+  background: url("../../assets/unq_background_image.jpg")
     no-repeat center center fixed;
   background-size: cover;
 }
@@ -61,7 +61,6 @@
   gap: 20px;
 }
 
-/* Estilos específicos para el formulario de login */
 .auth-form.login-form {
   gap: 36px;
 }
