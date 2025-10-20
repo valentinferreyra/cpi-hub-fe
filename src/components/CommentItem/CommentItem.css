@@ -1,0 +1,225 @@
+.comment {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-left: 4px solid #9f283b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.comment:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.comment-author-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.comment-author-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: #9f283b;
+}
+
+.comment-author.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.comment-author.clickable:hover {
+  color: #7a1f2e;
+  background: rgba(159, 40, 59, 0.1);
+  text-decoration: none;
+}
+
+.comment-date {
+  color: #888;
+  font-size: 13px;
+}
+
+.comment-content {
+  color: #2c2c2c;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 15px;
+}
+
+.comment-input-container {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 16px 64px 16px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
+  min-height: 100px;
+  background-color: #fafbfc;
+  color: #333;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.comment-input:focus {
+  border-color: #9f283b;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(159, 40, 59, 0.1);
+}
+
+.comment-submit-btn {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #ccc;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.comment-submit-btn.active {
+  background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 100%);
+  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.3);
+}
+
+.comment-submit-btn.active:hover {
+  background: linear-gradient(135deg, #7a1f2e 0%, #6b1a26 100%);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(159, 40, 59, 0.4);
+}
+
+.comment-submit-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Estilos para respuestas a comentarios */
+.reply-button {
+  background: transparent;
+  color: #9f283b;
+  border: 1px solid #9f283b;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.reply-button:hover {
+  background: #9f283b;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(159, 40, 59, 0.2);
+  border: 1px solid #7a1f2e;
+}
+
+.reply-button.cancel-mode {
+  background: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.reply-button.cancel-mode:hover {
+  background: #f0f0f0;
+  border-color: #999;
+  color: #333;
+}
+
+.reply-form {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.reply-form .comment-input-container {
+  margin-bottom: 0;
+}
+
+.reply-form .comment-input {
+  min-height: 60px;
+  padding: 12px 64px 12px 12px;
+  background-color: white;
+}
+
+.reply-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+}
+
+.comment-replies {
+  margin-top: 16px;
+  margin-left: 40px;
+  padding-left: 20px;
+  border-left: 2px solid #e0e0e0;
+}
+
+.comment-reply {
+  background: #f8f9fa;
+  border-left-color: #7a1f2e;
+  border-left-width: 3px;
+  margin-bottom: 12px;
+}
+
+.comment-reply:hover {
+  background: #f1f3f5;
+}
+
+.comment-reply .comment-author-avatar {
+  width: 32px;
+  height: 32px;
+}
+
+.comment-reply .comment-content {
+  font-size: 14px;
+}
+
+.comment-reply .comment-author {
+  font-size: 13px;
+}
+
+.comment-reply .comment-date {
+  font-size: 12px;
+}
