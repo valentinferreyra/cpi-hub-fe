@@ -36,17 +36,18 @@ function Register() {
 
       localStorage.setItem('auth_token', token);
 
-      if (user) {
-        try {
-          setCurrentUser(user);
-        } catch (err) {
-          console.warn('setCurrentUser failed:', err);
-        }
-      } else {
-        try {
-          await fetchData();
-        } catch (err) {
-          console.warn('fetchData after register failed:', err);
+      // Always fetch complete user data after register to ensure spaces are loaded
+      try {
+        await fetchData();
+      } catch (err) {
+        console.warn('fetchData after register failed:', err);
+        // Fallback: if fetchData fails, use the user from register response
+        if (user) {
+          try {
+            setCurrentUser(user);
+          } catch (setUserErr) {
+            console.warn('setCurrentUser failed:', setUserErr);
+          }
         }
       }
 
