@@ -36,17 +36,16 @@ function Register() {
 
       localStorage.setItem('auth_token', token);
 
-      if (user) {
-        try {
-          setCurrentUser(user);
-        } catch (err) {
-          console.warn('setCurrentUser failed:', err);
-        }
-      } else {
-        try {
-          await fetchData();
-        } catch (err) {
-          console.warn('fetchData after register failed:', err);
+      try {
+        await fetchData();
+      } catch (err) {
+        console.warn('fetchData after register failed:', err);
+        if (user) {
+          try {
+            setCurrentUser(user);
+          } catch (setUserErr) {
+            console.warn('setCurrentUser failed:', setUserErr);
+          }
         }
       }
 

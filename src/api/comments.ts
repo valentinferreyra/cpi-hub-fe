@@ -4,13 +4,24 @@ import type { Comment } from "../types/comment";
 export const addCommentToPost = async (
   created_by: number,
   postId: string,
-  content: string
+  content: string,
+  parentCommentId?: number
 ): Promise<Comment> => {
   try {
-    const response = await api.post(`/posts/${postId}/comments`, {
+    const payload: {
+      content: string;
+      created_by: number;
+      parent_comment_id?: number;
+    } = {
       content: content,
       created_by: created_by,
-    });
+    };
+
+    if (parentCommentId) {
+      payload.parent_comment_id = parentCommentId;
+    }
+
+    const response = await api.post(`/posts/${postId}/comments`, payload);
     return response.data;
   } catch (error) {
     console.error("Error adding comment to post:", error);
@@ -18,14 +29,20 @@ export const addCommentToPost = async (
   }
 };
 
-export const getUserComments = async (userId: number, page: number = 1, pageSize: number = 5): Promise<{
+export const getUserComments = async (
+  userId: number,
+  page: number = 1,
+  pageSize: number = 5
+): Promise<{
   data: Comment[];
   page: number;
   page_size: number;
   total: number;
 }> => {
   try {
-    const response = await api.get(`/comments?user_id=${userId}&page=${page}&page_size=${pageSize}`);
+    const response = await api.get(
+      `/comments?user_id=${userId}&page=${page}&page_size=${pageSize}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error getting user comments:", error);

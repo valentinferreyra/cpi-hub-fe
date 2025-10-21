@@ -2,6 +2,7 @@ import Sidebar from "@components/Sidebar/Sidebar";
 import Topbar from "@components/Topbar/Topbar";
 import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
 import UsersList from "@components/UsersList/UsersList";
+import CommentItem from "@components/CommentItem/CommentItem";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
@@ -13,7 +14,7 @@ import "./Post.css";
 export const Post = () => {
   const { post_id } = useParams();
   const navigate = useNavigate();
-  const { currentUser, selectSpace, fetchData } = useAppContext();
+  const { currentUser, selectSpace } = useAppContext();
   const [post, setPost] = useState<PostType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
@@ -50,6 +51,28 @@ export const Post = () => {
       console.error('Error al agregar comentario:', error);
     } finally {
       setIsSubmittingComment(false);
+    }
+  };
+
+  const handleReplySubmit = async (parentCommentId: number, content: string) => {
+    if (!post) return;
+
+    try {
+      await addCommentToPost(currentUser!.id, post.id, content, parentCommentId);
+
+      setShowSuccessMessage(true);
+
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000);
+
+      const updatedPost = await getPostById(post.id);
+      if (updatedPost) {
+        setPost(updatedPost);
+      }
+    } catch (error) {
+      console.error('Error al agregar respuesta:', error);
+      throw error;
     }
   };
 
@@ -97,6 +120,11 @@ export const Post = () => {
     <>
       <Topbar currentUser={currentUser} />
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
+      {showSuccessMessage && (
+        <div className="success-message toast-success">
+          Comentario agregado correctamente
+        </div>
+      )}
       {post && (
         <UsersList spaceId={parseInt(post.space.id)} />
       )}
@@ -137,36 +165,18 @@ export const Post = () => {
 
             <div className="post-comments">
               <h3>Comentarios</h3>
-              {post.comments.map((comment) => (
-                <div key={comment.id} className="comment">
-                  <div className="comment-header">
-                    <div className="comment-author-info">
-                      <img
-                        src={comment.created_by.image}
-                        alt={`${comment.created_by.name} ${comment.created_by.last_name}`}
-                        className="comment-author-avatar"
-                      />
-                      <span
-                        className="comment-author clickable"
-                        onClick={() => navigate(`/users/${comment.created_by.id}`)}
-                      >
-                        {comment.created_by.name} {comment.created_by.last_name}
-                      </span>
-                    </div>
-                    <span className="comment-date">
-                      {formatPostDetailDate(comment.created_at)} a las {formatPostDetailTime(comment.created_at)}
-                    </span>
-                  </div>
-                  <p className="comment-content">{comment.content}</p>
-                </div>
-              ))}
+              {post.comments
+                .filter(comment => !comment.parent_comment_id)
+                .map((comment) => (
+                  <CommentItem
+                    key={comment.id}
+                    comment={comment}
+                    postId={post.id}
+                    currentUserId={currentUser!.id}
+                    onReplySubmit={handleReplySubmit}
+                  />
+                ))}
 
-              {showSuccessMessage && (
-                <div className="success-message">
-                  Comentario agregado correctamente
-                </div>
-              )}
-              
               <div className="comment-form-integrated">
                 <div className="comment-input-container">
                   <textarea

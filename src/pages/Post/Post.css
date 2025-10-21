@@ -48,9 +48,7 @@
   background: white;
   border-radius: 16px;
   padding: 0;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(159, 40, 59, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(159, 40, 59, 0.08);
   overflow: hidden;
   position: relative;
   animation: none !important;
@@ -69,15 +67,22 @@
 }
 
 .posts-header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%
+    );
   pointer-events: none;
 }
 
@@ -278,85 +283,52 @@
 }
 
 .post-comments h3 {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 800;
   color: #1a1a1a;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   padding: 0;
   border: none;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  position: relative;
+  letter-spacing: -0.5px;
 }
 
-.post-comments h3::before {
-  content: '';
+.post-comments h3::after {
+  content: "";
+  flex: 1;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(159, 40, 59, 0.2) 0%,
+    transparent 100%
+  );
+  border-radius: 3px;
 }
 
-.comment {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-left: 4px solid #9f283b;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease;
+.comment-form-integrated {
+  margin-top: 32px;
+  padding: 24px;
+  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
+  border-radius: 20px;
+  border: 2px solid rgba(159, 40, 59, 0.1);
+  box-shadow: 0 4px 20px rgba(159, 40, 59, 0.08),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  position: relative;
+  overflow: hidden;
 }
 
-.comment:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  transform: translateY(-1px);
-}
-
-.comment-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-.comment-author-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.comment-author-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.comment-author {
-  font-weight: 600;
-  color: #9f283b;
-}
-
-.comment-author.clickable {
-  cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.comment-author.clickable:hover {
-  color: #7a1f2e;
-  background: rgba(159, 40, 59, 0.1);
-  text-decoration: none;
-}
-
-.comment-date {
-  color: #888;
-  font-size: 13px;
-}
-
-.comment-content {
-  color: #2c2c2c;
-  line-height: 1.6;
-  margin: 0;
-  font-size: 15px;
+.comment-form-integrated::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #9f283b 0%, #7a1f2e 50%, #9f283b 100%);
+  background-size: 200% 100%;
 }
 
 .comment-input-container {
@@ -367,119 +339,152 @@
 
 .comment-input {
   width: 100%;
-  padding: 16px 64px 16px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
+  padding: 18px 70px 18px 20px;
+  border: 2px solid #e8eaed;
+  border-radius: 16px;
   font-family: inherit;
   font-size: 15px;
   resize: vertical;
   min-height: 100px;
-  background-color: #fafbfc;
+  background: linear-gradient(145deg, #fafbfc 0%, #ffffff 100%);
   color: #333;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   outline: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+}
+
+.comment-input::placeholder {
+  color: #999;
+  opacity: 0.7;
 }
 
 .comment-input:focus {
   border-color: #9f283b;
   background-color: white;
-  box-shadow: 0 0 0 3px rgba(159, 40, 59, 0.1);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(159, 40, 59, 0.08),
+    0 4px 12px rgba(159, 40, 59, 0.1), inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
 }
 
 .comment-submit-btn {
   position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 48px;
-  height: 48px;
+  right: 10px;
+  bottom: 10px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   border: none;
-  background: #ccc;
+  background: linear-gradient(145deg, #e0e0e0 0%, #c8c8c8 100%);
   color: white;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  cursor: not-allowed;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  position: absolute;
+  overflow: hidden;
+}
+
+.comment-submit-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .comment-submit-btn.active {
   background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 100%);
-  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.3);
+  box-shadow: 0 4px 16px rgba(159, 40, 59, 0.35),
+    0 2px 8px rgba(159, 40, 59, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
 }
 
 .comment-submit-btn.active:hover {
   background: linear-gradient(135deg, #7a1f2e 0%, #6b1a26 100%);
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(159, 40, 59, 0.4);
+  transform: scale(1.06) rotate(3deg);
+  box-shadow: 0 6px 24px rgba(159, 40, 59, 0.45),
+    0 3px 12px rgba(159, 40, 59, 0.35), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+}
+
+.comment-submit-btn.active:hover::before {
+  opacity: 1;
+}
+
+.comment-submit-btn.active:active {
+  transform: scale(0.95);
+  transition: all 0.1s ease;
 }
 
 .comment-submit-btn:disabled {
   cursor: not-allowed;
-  opacity: 0.6;
-}
-
-
-.add-comment-btn {
-  align-self: flex-start;
-  background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 100%);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.3);
-}
-
-.add-comment-btn:hover:not(.disabled) {
-  background: linear-gradient(135deg, #7a1f2e 0%, #6b1a26 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(159, 40, 59, 0.4);
-}
-
-.add-comment-btn.disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  opacity: 0.6;
-  transform: none;
-  box-shadow: none;
-}
-
-.add-comment-btn.disabled:hover {
-  background: #ccc;
-  transform: none;
-  box-shadow: none;
+  opacity: 0.5;
 }
 
 .success-message {
   background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
   color: #155724;
-  padding: 16px 20px;
-  border-radius: 12px;
-  border: 1px solid #c3e6cb;
+  padding: 18px 24px;
+  border-radius: 16px;
+  border: 2px solid #b7dfc5;
   margin-bottom: 16px;
   font-size: 15px;
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 12px;
-  animation: fadeIn 0.3s ease-in;
-  box-shadow: 0 2px 8px rgba(21, 87, 36, 0.1);
+  gap: 14px;
+  animation: fadeInSlide 0.3s ease-out;
+  box-shadow: 0 4px 16px rgba(21, 87, 36, 0.15);
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes fadeIn {
+.success-message::before {
+  content: "✓";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #28a745 0%, #20833a 100%);
+  color: white;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.success-message.toast-success {
+  position: fixed;
+  top: 32px;
+  right: 32px;
+  z-index: 9999;
+  min-width: 320px;
+  box-shadow: 0 8px 32px rgba(21, 87, 36, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1);
+  animation: fadeInSlide 0.3s ease-out;
+}
+
+@keyframes fadeInSlide {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateX(50px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0) scale(1);
   }
 }
