@@ -77,7 +77,7 @@ export const CommentItem = ({
           className={`reply-button ${replyingToCommentId === comment.id ? 'cancel-mode' : ''}`}
           onClick={replyingToCommentId === comment.id ? handleCancelReply : handleReplyClick}
         >
-          {replyingToCommentId === comment.id ? 'Cancelar' : 'Responder'}
+          <span>{replyingToCommentId === comment.id ? 'Cancelar' : 'Responder'}</span>
         </button>
       )}
 
