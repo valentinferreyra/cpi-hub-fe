@@ -48,7 +48,7 @@ export const Post = () => {
         setPost(updatedPost);
       }
     } catch (error) {
-      console.error('Error al agregar comentario:', error);
+      console.error('Error adding comment:', error);
     } finally {
       setIsSubmittingComment(false);
     }
@@ -86,7 +86,7 @@ export const Post = () => {
           setPost(postData);
         }
       } catch (error) {
-        console.error('Error en la carga de datos:', error);
+        console.error('Error in data loading:', error);
       } finally {
         setIsLoading(false);
       }

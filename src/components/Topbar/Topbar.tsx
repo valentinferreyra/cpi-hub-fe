@@ -9,6 +9,7 @@ import unqLogo from '../../assets/unq-logo.png';
 import homeLogo from '../../assets/home.png';
 import type { User } from '../../types/user';
 import LogoutModal from '../LogoutModal/LogoutModal';
+import { useAppContext } from '../../context/AppContext';
 
 interface TopbarProps {
   currentUser: User | null;
@@ -16,6 +17,7 @@ interface TopbarProps {
 
 const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
   const navigate = useNavigate();
+  const { setCurrentUser, userConnectionStatus } = useAppContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -42,6 +44,7 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
 
   const handleConfirmLogout = () => {
     localStorage.removeItem('auth_token');
+    setCurrentUser(null);
     setIsLogoutModalOpen(false);
     navigate('/login');
   };
@@ -95,6 +98,12 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
                     <div className="user-menu-header">
                       <span className="user-menu-name">{currentUser.name} {currentUser.last_name}</span>
                       <span className="user-menu-email">{currentUser.email}</span>
+                    </div>
+                    <div className="user-menu-status">
+                      <span className="status-label">Estado:</span>
+                      <span className={`status-value ${userConnectionStatus === 'connected' ? 'online' : 'offline'}`}>
+                        {userConnectionStatus === 'connected' ? 'En línea' : 'Desconectado'}
+                      </span>
                     </div>
                     <button className="user-menu-item" onClick={handleGoToProfile} role="menuitem">Mi perfil</button>
                     <button className="user-menu-item danger" onClick={handleOpenLogout} role="menuitem">Cerrar sesión</button>

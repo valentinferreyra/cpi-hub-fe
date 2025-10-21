@@ -7,7 +7,7 @@
   background-size: cover;
   background-attachment: scroll;
   border-radius: 16px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   padding: 25px 30px;
   position: relative;
   overflow: hidden;
@@ -78,7 +78,7 @@
 @media (max-width: 768px) {
   .create-space-banner {
     padding: 20px 20px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
   }
   
   .banner-content {
@@ -106,7 +106,7 @@
 @media (max-width: 480px) {
   .create-space-banner {
     padding: 18px 15px;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
   }
   
   .banner-title {

@@ -4,6 +4,7 @@ import type { User } from '../types/user';
 import type { Post } from '../types/post';
 import type { Space } from '../types/space';
 import { getCurrentUser, getPostsBySpaceId, getSpaceById } from '../api';
+import { useUserConnection } from '../hooks/useUserConnection';
 
 interface AppContextType {
   currentUser: User | null;
@@ -12,6 +13,8 @@ interface AppContextType {
   isLoading: boolean;
   isFirstLoad: boolean;
   isUsersListCollapsed: boolean;
+  isUserOnline: (userId: number) => boolean;
+  userConnectionStatus: 'connecting' | 'connected' | 'disconnected';
   fetchData: () => Promise<void>;
   selectSpace: (space: Space) => void;
   goToHome: () => void;
@@ -44,6 +47,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isUsersListCollapsed, setIsUsersListCollapsed] = useState(true);
   const location = useLocation();
 
+  const { isUserOnline, connectionStatus: userConnectionStatus } = useUserConnection({ 
+    currentUser 
+  });
+
   useEffect(() => {
     const isSpaceRoute = location.pathname.startsWith('/space/');
     if (!isSpaceRoute && selectedSpace) {
@@ -72,7 +79,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setCurrentUser(null);
       }
     } catch (error) {
-      console.error('Error en la carga de datos:', error);
+      console.error('Error in data loading:', error);
       setCurrentUser(null);
     } finally {
       if (isFirstLoad) {
@@ -123,6 +130,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     isLoading,
     isFirstLoad,
     isUsersListCollapsed,
+    isUserOnline,
+    userConnectionStatus,
     fetchData,
     selectSpace,
     goToHome,

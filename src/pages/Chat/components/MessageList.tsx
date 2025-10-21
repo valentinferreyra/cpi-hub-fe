@@ -118,7 +118,7 @@ export const MessageList = ({ spaceId, messages, currentUser, onUserClick }: Mes
 
       setHasMore(result.data.length === 25);
     } catch (error) {
-      console.error('Error cargando mensajes históricos:', error);
+      console.error('Error loading historical messages:', error);
     } finally {
       isLoadingRef.current = false;
       setIsLoadingMore(false);
