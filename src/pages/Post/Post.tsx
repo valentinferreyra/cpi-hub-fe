@@ -83,7 +83,6 @@ export const Post = () => {
         setIsLoading(true);
         if (post_id) {
           const postData = await getPostById(post_id);
-          console.log('Datos del post obtenidos:', postData);
           setPost(postData);
         }
       } catch (error) {
