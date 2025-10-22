@@ -3,10 +3,11 @@ import Topbar from "@components/Topbar/Topbar";
 import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
 import UsersList from "@components/UsersList/UsersList";
 import CommentItem from "@components/CommentItem/CommentItem";
+import EditPostModal from "@components/modals/EditPostModal/EditPostModal";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { getPostById, addCommentToPost } from "../../api";
+import { getPostById, addCommentToPost, updatePost } from "../../api";
 import type { Post as PostType } from "../../types/post";
 import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
 import "./Post.css";
@@ -20,6 +21,8 @@ export const Post = () => {
   const [newComment, setNewComment] = useState('');
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
 
   const handleGoToSpace = () => {
@@ -35,6 +38,7 @@ export const Post = () => {
       setIsSubmittingComment(true);
       await addCommentToPost(currentUser!.id, post.id, newComment.trim());
 
+      setSuccessMessage('Comentario agregado correctamente');
       setShowSuccessMessage(true);
 
       setNewComment('');
@@ -53,6 +57,35 @@ export const Post = () => {
       setIsSubmittingComment(false);
     }
   };
+
+  const handleEditPost = async (title: string, content: string) => {
+    if (!post || !currentUser) return;
+
+    try {
+      const updatedPost = await updatePost(parseInt(post.id), currentUser.id, title, content);
+      setPost(updatedPost);
+      setSuccessMessage('Post actualizado correctamente');
+      setShowSuccessMessage(true);
+
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000);
+    } catch (error) {
+      console.error('Error updating post:', error);
+      throw error;
+    }
+  };
+
+  const isPostAuthor = currentUser && post && currentUser.id.toString() === post.created_by.id.toString();
+
+  // Debug log
+  useEffect(() => {
+    if (currentUser && post) {
+      console.log('Current User ID:', currentUser.id, typeof currentUser.id);
+      console.log('Post Author ID:', post.created_by.id, typeof post.created_by.id);
+      console.log('Is Post Author:', isPostAuthor);
+    }
+  }, [currentUser, post, isPostAuthor]);
 
   const handleReplySubmit = async (parentCommentId: number, content: string) => {
     if (!post) return;
@@ -122,7 +155,7 @@ export const Post = () => {
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
       {showSuccessMessage && (
         <div className="success-message toast-success">
-          Comentario agregado correctamente
+          {successMessage}
         </div>
       )}
       {post && (
@@ -142,7 +175,18 @@ export const Post = () => {
                 className="post-author-avatar"
               />
               <div className="post-title-content">
-                <h1 className="post-title">{post.title}</h1>
+                <div className="post-title-header">
+                  <h1 className="post-title">{post.title}</h1>
+                  {isPostAuthor && (
+                    <button
+                      className="edit-post-btn"
+                      onClick={() => setIsEditModalOpen(true)}
+                      title="Editar post"
+                    >
+                      <span>✏️</span>
+                    </button>
+                  )}
+                </div>
                 <div className="post-author-date-container">
                   <div className="post-author-date">
                     Por<span
@@ -200,6 +244,16 @@ export const Post = () => {
           </div>
         </div>
       </div>
+
+      {post && (
+        <EditPostModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={handleEditPost}
+          initialTitle={post.title}
+          initialContent={post.content}
+        />
+      )}
     </>
 
   );

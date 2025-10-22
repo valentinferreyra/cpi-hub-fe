@@ -97,17 +97,43 @@ export const searchPosts = async (query: string): Promise<Post[]> => {
   }
 };
 
-export const getUserPosts = async (userId: number, page: number = 1, pageSize: number = 5): Promise<{
+export const getUserPosts = async (
+  userId: number,
+  page: number = 1,
+  pageSize: number = 5
+): Promise<{
   data: Post[];
   page: number;
   page_size: number;
   total: number;
 }> => {
   try {
-    const response = await api.get(`/posts?user_id=${userId}&page=${page}&page_size=${pageSize}`);
+    const response = await api.get(
+      `/posts?user_id=${userId}&page=${page}&page_size=${pageSize}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error getting user posts:", error);
     return { data: [], page: 1, page_size: 5, total: 0 };
+  }
+};
+
+export const updatePost = async (
+  postId: number,
+  userId: number,
+  title: string,
+  content: string
+): Promise<Post> => {
+  try {
+    const response = await api.put(`/posts/${postId}`, {
+      post_id: postId,
+      user_id: userId,
+      title: title,
+      content: content,
+    });
+    return response.data.data || response.data;
+  } catch (error) {
+    console.error("Error updating post:", error);
+    throw error;
   }
 };
