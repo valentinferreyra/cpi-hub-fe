@@ -14,7 +14,11 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
   const [users, setUsers] = useState<SpaceUser[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { isUsersListCollapsed, toggleUsersListCollapse } = useAppContext();
+  const { 
+    isUsersListCollapsed, 
+    toggleUsersListCollapse, 
+    isUserOnline
+  } = useAppContext();
 
 
 
@@ -49,6 +53,18 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
     return `${user.name} ${user.last_name}`.trim();
   };
 
+  const getSortedUsers = () => {
+    const onlineUsers = users
+      .filter(user => isUserOnline(user.id))
+      .sort((a, b) => getUserDisplayName(a).localeCompare(getUserDisplayName(b)));
+    
+    const offlineUsers = users
+      .filter(user => !isUserOnline(user.id))
+      .sort((a, b) => getUserDisplayName(a).localeCompare(getUserDisplayName(b)));
+    
+    return [...onlineUsers, ...offlineUsers];
+  };
+
   return (
     <div className={`users-list ${isUsersListCollapsed ? 'collapsed' : ''}`}>
       <div className="users-list-container">
@@ -60,12 +76,13 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
               className="collapse-icon"
             />
           </button>
-          {!isUsersListCollapsed && <h3 className="users-list-title">Usuarios</h3>}
+          {!isUsersListCollapsed && (
+            <h3 className="users-list-title">Usuarios</h3>
+          )}
         </div>
         
         <div className="users-list-content">
           {isUsersListCollapsed ? (
-            // Vista previa de avatares cuando está minimizada
             <div className="users-preview">
               {isLoading ? (
                 <div className="users-loading-collapsed">
@@ -81,11 +98,11 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
                 </div>
               ) : (
                 <div className="users-avatars-grid">
-                  {users.slice(0, 12).map((user) => (
+                  {getSortedUsers().slice(0, 12).map((user) => (
                     <div 
                       key={user.id} 
-                      className="user-avatar-preview"
-                      title={getUserDisplayName(user)}
+                      className={`user-avatar-preview ${!isUserOnline(user.id) ? 'offline' : ''}`}
+                      title={`${getUserDisplayName(user)} - ${isUserOnline(user.id) ? 'En línea' : 'Desconectado'}`}
                     >
                       {user.image ? (
                         <img 
@@ -109,7 +126,6 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
               )}
             </div>
           ) : (
-            // Vista completa cuando está expandida
             <>
               {isLoading ? (
                 <div className="users-loading">
@@ -126,8 +142,8 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
                 </div>
               ) : (
                 <div className="users-grid">
-                  {users.map((user) => (
-                    <div key={user.id} className="user-item">
+                  {getSortedUsers().map((user) => (
+                    <div key={user.id} className={`user-item ${!isUserOnline(user.id) ? 'offline' : ''}`}>
                       <div className="user-avatar">
                         {user.image ? (
                           <img 
@@ -141,8 +157,15 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
                           </div>
                         )}
                       </div>
-                      <div className="user-name" title={getUserDisplayName(user)}>
-                        {getUserDisplayName(user)}
+                      <div className="user-info">
+                        <div className="user-name" title={getUserDisplayName(user)}>
+                          {getUserDisplayName(user)}
+                        </div>
+                        {isUserOnline(user.id) && (
+                          <div className="user-status-online">
+                            En línea
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

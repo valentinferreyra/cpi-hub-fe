@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createChatWebSocket } from '../api/websocket'; 
 
 export interface ChatMessageData {
   id: string;
@@ -28,14 +29,12 @@ interface UseWebSocketProps {
   spaceId: string | undefined;
   currentUser: any;
   onJoinMessage: (messageId: string, username: string) => void;
-  baseUrl?: string;
 }
 
 export const useWebSocket = ({ 
   spaceId, 
   currentUser, 
-  onJoinMessage,
-  baseUrl = 'ws://localhost:8080/v1/ws'
+  onJoinMessage
 }: UseWebSocketProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected');
@@ -48,15 +47,12 @@ export const useWebSocket = ({
 
     if (!currentUser || !spaceId) return;
 
-    const fullName = encodeURIComponent(`${currentUser.name} ${currentUser.last_name}`);
-    const wsUrl = `${baseUrl}/spaces/${spaceId}?user_id=${currentUser.id}&username=${fullName}`;
-    console.log('Conectando a WebSocket:', wsUrl);
+    const fullName = `${currentUser.name} ${currentUser.last_name}`;
     
     setConnectionStatus('connecting');
-    socketRef.current = new WebSocket(wsUrl);
+    socketRef.current = createChatWebSocket(Number(spaceId), currentUser.id, fullName);
 
     socketRef.current.onopen = () => {
-      console.log('Conectado al WebSocket');
       setConnectionStatus('connected');
     };
 
@@ -69,7 +65,7 @@ export const useWebSocket = ({
           try {
             message = JSON.parse(rawData) as ChatMessage;
           } catch {
-            console.error("Error parseando el mensaje string:", rawData);
+            console.error("Error parsing string message:", rawData);
             return;
           }
         } else {
@@ -79,7 +75,7 @@ export const useWebSocket = ({
         if (message.type === 'join') {
           const joinKey = `${message.user_id}-${message.space_id}-${message.username}`;
           if (processedJoins.current.has(joinKey)) {
-            console.log("Join ya procesado, ignorando:", joinKey);
+            console.log("Join already processed, ignoring:", joinKey);
             return;
           }
           processedJoins.current.add(joinKey);
@@ -95,24 +91,24 @@ export const useWebSocket = ({
 
         setMessages((prevMessages) => [...prevMessages, message]);
       } catch (error) {
-        console.error("Error parseando mensaje:", error);
+        console.error("Error parsing message:", error);
       }
     };
 
     socketRef.current.onclose = () => {
-      console.log('Desconectado del WebSocket');
+      console.log('Disconnected from WebSocket');
       setConnectionStatus('disconnected');
     };
 
     socketRef.current.onerror = (error) => {
-      console.error('Error en WebSocket:', error);
+      console.error('WebSocket error:', error);
       setConnectionStatus('disconnected');
     };
 
     return () => {
       socketRef.current?.close();
     };
-  }, [spaceId, currentUser?.id, onJoinMessage, baseUrl]);
+  }, [spaceId, currentUser?.id, onJoinMessage]);
 
   const sendMessage = (message: any) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {

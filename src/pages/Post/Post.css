@@ -31,16 +31,18 @@
   background: #7a1f2e;
 }
 
-/* Responsive adjustments for UsersList */
-@media (max-width: 1200px) {
-  .post-container {
-    right: 250px;
-  }
-}
-
 @media (max-width: 1024px) {
   .post-container {
     right: 15px;
+    left: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .post-container {
+    right: 10px;
+    left: 10px;
+    padding: 15px;
   }
 }
 
