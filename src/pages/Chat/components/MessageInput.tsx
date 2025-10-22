@@ -30,14 +30,12 @@ export const MessageInput = ({ currentUser, spaceId, onMessageSent }: MessageInp
         message: inputMessage.trim(),
         image: currentUser.image
       };
-
-      console.log("Enviando mensaje:", messageData);
+      
       await sendChatMessage(messageData);
-      console.log("Mensaje enviado exitosamente");
       setInputMessage("");
       onMessageSent();
     } catch (error) {
-      console.error("Error enviando mensaje:", error);
+      console.error("Error sending message:", error);
       alert("Error al enviar el mensaje. Por favor, inténtalo de nuevo.");
     } finally {
       setIsSending(false);

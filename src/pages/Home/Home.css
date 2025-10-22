@@ -1,9 +1,9 @@
 .posts-container {
   position: absolute;
   top: 80px;
-  right: 15px;
+  right: 5px;
   left: 270px;
-  bottom: 20px;
+  bottom: 3px;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 20px;
   overflow-y: auto;

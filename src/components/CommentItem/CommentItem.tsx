@@ -43,7 +43,7 @@ export const CommentItem = ({
       setReplyContent("");
       setReplyingToCommentId(null);
     } catch (error) {
-      console.error("Error al enviar respuesta:", error);
+      console.error("Error sending reply:", error);
     } finally {
       setIsSubmittingReply(false);
     }
