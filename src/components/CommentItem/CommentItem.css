@@ -112,6 +112,7 @@
   color: #fff;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(159, 40, 59, 0.2);
+  border-color: #7a1f2e;
 }
 
 .comment-content {
