@@ -31,6 +31,21 @@ export const Post = () => {
     }
   };
 
+  const refreshPost = async () => {
+    if (!post) return;
+    const updated = await getPostById(post.id);
+    if (updated) setPost(updated);
+  };
+
+  const handleCommentUpdated = async () => {
+    await refreshPost();
+    setSuccessMessage('Comentario actualizado correctamente');
+    setShowSuccessMessage(true);
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 3000);
+  };
+
   const handleAddComment = async () => {
     if (!post || !newComment.trim() || isSubmittingComment) return;
 
@@ -218,6 +233,7 @@ export const Post = () => {
                     postId={post.id}
                     currentUserId={currentUser!.id}
                     onReplySubmit={handleReplySubmit}
+                    onCommentUpdated={handleCommentUpdated}
                   />
                 ))}
 
