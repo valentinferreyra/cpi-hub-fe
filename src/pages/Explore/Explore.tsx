@@ -163,6 +163,7 @@ const Explore: React.FC = () => {
               onLoadMore={updatedSpacesPagination.loadMore}
               emptyMessage="No hay espacios actualizados recientemente"
               showUpdatedDate={true}
+              userSpaces={currentUser?.spaces || []}
             />
 
             <SpacesSection
@@ -174,6 +175,7 @@ const Explore: React.FC = () => {
               onLoadMore={createdSpacesPagination.loadMore}
               emptyMessage="No hay espacios creados recientemente"
               showUpdatedDate={false}
+              userSpaces={currentUser?.spaces || []}
             />
           </div>
         </div>
