@@ -5,12 +5,14 @@ interface SpaceCardProps {
   space: Space;
   onClick: (space: Space) => void;
   showUpdatedDate?: boolean;
+  isUserJoined?: boolean;
 }
 
 const SpaceCard: React.FC<SpaceCardProps> = ({ 
   space, 
   onClick, 
-  showUpdatedDate = false 
+  showUpdatedDate = false,
+  isUserJoined = false
 }) => {
   const handleClick = () => {
     onClick(space);
@@ -30,6 +32,11 @@ const SpaceCard: React.FC<SpaceCardProps> = ({
     <div className="space-card" onClick={handleClick}>
       <div className="space-card-header">
         <h3 className="space-card-name">{space.name}</h3>
+        {isUserJoined && (
+          <div className="space-card-joined-badge">
+            ✓ Unido
+          </div>
+        )}
       </div>
       <p className="space-card-description">{space.description}</p>
       <div className="space-card-meta">

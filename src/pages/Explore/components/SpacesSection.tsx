@@ -13,6 +13,7 @@ interface SpacesSectionProps {
   onLoadMore: () => void;
   emptyMessage: string;
   showUpdatedDate?: boolean;
+  userSpaces?: Space[];
 }
 
 const SpacesSection: React.FC<SpacesSectionProps> = ({
@@ -23,8 +24,13 @@ const SpacesSection: React.FC<SpacesSectionProps> = ({
   onSpaceClick,
   onLoadMore,
   emptyMessage,
-  showUpdatedDate = false
+  showUpdatedDate = false,
+  userSpaces = []
 }) => {
+  const isUserJoined = (space: Space) => {
+    return userSpaces.some(userSpace => userSpace.id === space.id);
+  };
+
   return (
     <div className="explore-section">
       <h2 className="explore-section-title">{title}</h2>
@@ -37,6 +43,7 @@ const SpacesSection: React.FC<SpacesSectionProps> = ({
                 space={space}
                 onClick={onSpaceClick}
                 showUpdatedDate={showUpdatedDate}
+                isUserJoined={isUserJoined(space)}
               />
             ))
           ) : (

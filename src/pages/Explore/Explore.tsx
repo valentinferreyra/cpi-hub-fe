@@ -16,7 +16,7 @@ import { CreateSpaceConfirmationModal } from '../../components/modals/CreateSpac
 import "./Explore.css";
 
 const Explore: React.FC = () => {
-  const { currentUser, selectSpace } = useAppContext();
+  const { currentUser, selectSpace, fetchData } = useAppContext();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
@@ -26,9 +26,10 @@ const Explore: React.FC = () => {
 
   const createSpaceHook = useCreateSpace(
     currentUser?.id?.toString(),
-    (newSpace: Space) => {
+    async (newSpace: Space) => {
       createdSpacesPagination.setItems(prev => [newSpace, ...prev]);
       updatedSpacesPagination.setItems(prev => [newSpace, ...prev]);
+      await fetchData();
     }
   );
 
@@ -162,6 +163,7 @@ const Explore: React.FC = () => {
               onLoadMore={updatedSpacesPagination.loadMore}
               emptyMessage="No hay espacios actualizados recientemente"
               showUpdatedDate={true}
+              userSpaces={currentUser?.spaces || []}
             />
 
             <SpacesSection
@@ -173,6 +175,7 @@ const Explore: React.FC = () => {
               onLoadMore={createdSpacesPagination.loadMore}
               emptyMessage="No hay espacios creados recientemente"
               showUpdatedDate={false}
+              userSpaces={currentUser?.spaces || []}
             />
           </div>
         </div>

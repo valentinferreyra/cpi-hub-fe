@@ -8,6 +8,14 @@
 .space-section .posts-list {
   margin-top: 0;
 }
+
+.space-section .posts-list:empty,
+.space-section .posts-list:has(.no-posts-message) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
 .space-header-hero {
   background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 50%, #6b1a26 100%);
   border-radius: 16px;
@@ -535,4 +543,28 @@
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+.no-posts-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.no-posts-message h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #495057;
+}
+
+.no-posts-message p {
+  font-size: 16px;
+  margin: 0;
+  color: #6c757d;
+  line-height: 1.5;
 }
