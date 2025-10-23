@@ -52,13 +52,11 @@ export const getUserComments = async (
 
 export const updateComment = async (
   commentId: number,
-  userId: number,
   content: string
 ): Promise<Comment> => {
   try {
     const response = await api.put(`/comments/${commentId}`, {
       comment_id: commentId,
-      user_id: userId,
       content,
     });
     return response.data?.data || response.data;

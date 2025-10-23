@@ -120,18 +120,16 @@ export const getUserPosts = async (
 
 export const updatePost = async (
   postId: number,
-  userId: number,
   title: string,
   content: string
-): Promise<Post> => {
+): Promise<void> => {
   try {
     const response = await api.put(`/posts/${postId}`, {
       post_id: postId,
-      user_id: userId,
       title: title,
       content: content,
     });
-    return response.data.data || response.data;
+    void response;
   } catch (error) {
     console.error("Error updating post:", error);
     throw error;

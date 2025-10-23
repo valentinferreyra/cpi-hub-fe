@@ -161,9 +161,9 @@ interface UpdateUserData {
   image?: string;
 }
 
-export const updateUser = async (userData: UpdateUserData): Promise<User> => {
+export const updateUser = async (userData: UpdateUserData): Promise<void> => {
   try {
-    const payload: Record<string, number | string> = { id: userData.id };
+    const payload: Record<string, string> = {};
 
     if (userData.name !== undefined) {
       payload.name = userData.name;
@@ -175,35 +175,7 @@ export const updateUser = async (userData: UpdateUserData): Promise<User> => {
       payload.image = userData.image;
     }
 
-    const response = await api.put("/users", payload);
-
-    // Transform backend response (PascalCase) to frontend format (snake_case)
-    if (response.data) {
-      const backendUser = response.data;
-
-      // Check if response has backend format (PascalCase)
-      if (backendUser.ID || backendUser.Name) {
-        return {
-          id: backendUser.ID,
-          name: backendUser.Name,
-          last_name: backendUser.LastName,
-          email: backendUser.Email,
-          image: backendUser.Image || "",
-          spaces: [],
-        };
-      }
-
-      // If already in correct format
-      if (backendUser.id) {
-        return backendUser;
-      }
-    }
-
-    console.warn(
-      "Unexpected update user API response structure:",
-      response.data
-    );
-    throw new Error("Invalid user data structure");
+    await api.put(`/users/${userData.id}`, payload);
   } catch (error) {
     console.error("Error updating user:", error);
     throw error;

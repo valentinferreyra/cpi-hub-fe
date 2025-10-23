@@ -77,8 +77,9 @@ export const Post = () => {
     if (!post || !currentUser) return;
 
     try {
-      const updatedPost = await updatePost(parseInt(post.id), currentUser.id, title, content);
-      setPost(updatedPost);
+      await updatePost(parseInt(post.id), title, content);
+      const refreshed = await getPostById(post.id);
+      if (refreshed) setPost(refreshed);
       setSuccessMessage('Post actualizado correctamente');
       setShowSuccessMessage(true);
 
@@ -92,15 +93,6 @@ export const Post = () => {
   };
 
   const isPostAuthor = currentUser && post && currentUser.id.toString() === post.created_by.id.toString();
-
-  // Debug log
-  useEffect(() => {
-    if (currentUser && post) {
-      console.log('Current User ID:', currentUser.id, typeof currentUser.id);
-      console.log('Post Author ID:', post.created_by.id, typeof post.created_by.id);
-      console.log('Is Post Author:', isPostAuthor);
-    }
-  }, [currentUser, post, isPostAuthor]);
 
   const handleReplySubmit = async (parentCommentId: number, content: string) => {
     if (!post) return;

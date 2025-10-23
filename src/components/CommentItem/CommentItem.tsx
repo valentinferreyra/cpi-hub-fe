@@ -69,7 +69,7 @@ export const CommentItem = ({
     if (!editContent.trim() || isSubmittingEdit) return;
     try {
       setIsSubmittingEdit(true);
-      await updateComment(comment.id, currentUserId, editContent.trim());
+      await updateComment(comment.id, editContent.trim());
       setIsEditing(false);
       if (onCommentUpdated) await onCommentUpdated();
     } catch (error) {
