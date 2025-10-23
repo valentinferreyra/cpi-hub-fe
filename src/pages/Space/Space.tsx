@@ -29,7 +29,7 @@ function Space() {
   const spaceSettingsModal = useModal();
   const leaveModal = useModal();
   const settingsRef = useClickOutside<HTMLDivElement>(() => spaceSettingsModal.closeModal());
-  
+
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [isLeavingSpace, setIsLeavingSpace] = useState(false);
@@ -161,7 +161,7 @@ function Space() {
       <Topbar currentUser={currentUser} />
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
       {selectedSpace && (
-        <UsersList spaceId={selectedSpace.id} />
+        <UsersList key={selectedSpace.id} spaceId={selectedSpace.id} />
       )}
 
       {successNotification.showSuccessMessage && (
@@ -177,6 +177,7 @@ function Space() {
         <div className="posts-section space-section">
           {selectedSpace ? (
             <SpaceHeader
+              key={selectedSpace.id}
               space={selectedSpace}
               currentUser={currentUser}
               isUserInSpace={isUserInSpace() || false}
@@ -209,7 +210,7 @@ function Space() {
               </div>
             </div>
           )}
-          
+
           <CreateSpaceBanner onCreateSpace={createSpaceHook.openCreateSpaceModal} />
         </div>
       </div>

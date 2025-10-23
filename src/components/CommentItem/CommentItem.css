@@ -54,6 +54,10 @@
   transition: transform 0.2s ease;
 }
 
+.comment-author-avatar.clickable {
+  cursor: pointer;
+}
+
 .comment-author-avatar:hover {
   transform: scale(1.05);
 }
