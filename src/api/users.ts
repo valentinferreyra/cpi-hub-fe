@@ -153,3 +153,31 @@ export const getUserStats = async (userId: number): Promise<UserStats> => {
     return { totalPosts: 0, totalComments: 0 };
   }
 };
+
+interface UpdateUserData {
+  id: number;
+  name?: string;
+  last_name?: string;
+  image?: string;
+}
+
+export const updateUser = async (userData: UpdateUserData): Promise<void> => {
+  try {
+    const payload: Record<string, string> = {};
+
+    if (userData.name !== undefined) {
+      payload.name = userData.name;
+    }
+    if (userData.last_name !== undefined) {
+      payload.last_name = userData.last_name;
+    }
+    if (userData.image !== undefined) {
+      payload.image = userData.image;
+    }
+
+    await api.put(`/users/${userData.id}`, payload);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+};

@@ -49,3 +49,19 @@ export const getUserComments = async (
     return { data: [], page: 1, page_size: 5, total: 0 };
   }
 };
+
+export const updateComment = async (
+  commentId: number,
+  content: string
+): Promise<Comment> => {
+  try {
+    const response = await api.put(`/comments/${commentId}`, {
+      comment_id: commentId,
+      content,
+    });
+    return response.data?.data || response.data;
+  } catch (error) {
+    console.error("Error updating comment:", error);
+    throw error;
+  }
+};

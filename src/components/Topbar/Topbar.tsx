@@ -37,6 +37,12 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
     setIsMenuOpen(false);
   };
 
+  const handleGoToSettings = () => {
+    if (!currentUser) return;
+    navigate('/settings');
+    setIsMenuOpen(false);
+  };
+
   const handleOpenLogout = () => {
     setIsLogoutModalOpen(true);
     setIsMenuOpen(false);
@@ -106,6 +112,7 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
                       </span>
                     </div>
                     <button className="user-menu-item" onClick={handleGoToProfile} role="menuitem">Mi perfil</button>
+                    <button className="user-menu-item" onClick={handleGoToSettings} role="menuitem">Ajustes</button>
                     <button className="user-menu-item danger" onClick={handleOpenLogout} role="menuitem">Cerrar sesión</button>
                   </div>
                 )}

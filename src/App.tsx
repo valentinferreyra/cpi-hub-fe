@@ -8,6 +8,7 @@ import Post from './pages/Post/Post'
 import ComingSoon from './pages/ComingSoon/ComingSoon'
 import Explore from './pages/Explore/Explore'
 import UserView from './pages/UserView/UserView'
+import Settings from './pages/Settings/Settings'
 import { AppProvider } from './context/AppContext'
 import ProtectedRoutes from './utils/ProtectedRoutes'
 import SpaceChat from './pages/Chat/SpaceChat'
@@ -29,6 +30,7 @@ export const App = () => {
             <Route path="/post/:post_id" element={<Post />} />
             <Route path="/explorar" element={<Explore />} />
             <Route path="/users/:userId" element={<UserView />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/tendencias" element={<ComingSoon title="Tendencias" description="Mantente al día con los temas más populares y trending." />} />
           </Route>
         </Routes>
