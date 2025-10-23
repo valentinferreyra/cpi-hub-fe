@@ -147,11 +147,9 @@ export const CommentItem = ({
               {showMenu && (
                 <div className="comment-menu-dropdown">
                   <button className="comment-menu-item" onClick={handleEditClick}>
-                    <span className="menu-icon">✏️</span>
                     <span>Editar</span>
                   </button>
                   <button className="comment-menu-item delete" onClick={handleDeleteClick}>
-                    <span className="menu-icon">🗑️</span>
                     <span>Borrar</span>
                   </button>
                 </div>

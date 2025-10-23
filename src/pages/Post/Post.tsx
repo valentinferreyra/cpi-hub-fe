@@ -237,11 +237,9 @@ export const Post = () => {
                       {showPostMenu && (
                         <div className="post-menu-dropdown">
                           <button className="post-menu-item" onClick={handleEditClick}>
-                            <span className="menu-icon">✏️</span>
                             <span>Editar</span>
                           </button>
                           <button className="post-menu-item delete" onClick={handleDeleteClick}>
-                            <span className="menu-icon">🗑️</span>
                             <span>Borrar</span>
                           </button>
                         </div>
@@ -322,7 +320,7 @@ export const Post = () => {
         <div className="delete-confirm-overlay">
           <div className="delete-confirm-modal">
             <h3>¿Estás seguro?</h3>
-            <p>¿Deseas borrar este post? Esta acción no se puede deshacer y se eliminarán todos los comentarios asociados.</p>
+            <p>¿Deseas borrar este post? Esta acción no se puede deshacer.</p>
             <div className="delete-confirm-actions">
               <button
                 className="delete-confirm-btn cancel"
