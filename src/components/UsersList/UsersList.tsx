@@ -17,13 +17,14 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
   const { 
     isUsersListCollapsed, 
     toggleUsersListCollapse, 
-    isUserOnline
+    isUserOnline,
+    currentUser
   } = useAppContext();
 
 
 
   useEffect(() => {
-    const loadUsers = async () => {
+    const loadUsers = async (retryCount = 0) => {
       if (!spaceId) return;
 
       setIsLoading(true);
@@ -31,6 +32,16 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
 
       try {
         const spaceUsers = await getSpaceUsers(spaceId);
+        
+        const currentUserInList = currentUser && spaceUsers.some(user => user.id === currentUser.id);
+        
+        if (currentUser && !currentUserInList && retryCount < 2) {
+          setTimeout(() => {
+            loadUsers(retryCount + 1);
+          }, 1000);
+          return;
+        }
+        
         setUsers(spaceUsers);
       } catch (err) {
         console.error('Error loading space users:', err);
@@ -41,7 +52,7 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
     };
 
     loadUsers();
-  }, [spaceId]);
+  }, [spaceId, currentUser?.id]);
 
   const getUserInitials = (user: SpaceUser) => {
     const firstName = user.name || '';
