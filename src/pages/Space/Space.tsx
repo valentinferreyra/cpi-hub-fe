@@ -203,9 +203,16 @@ function Space() {
                 )}
               </div>
               <div className={`posts-list ${isTransitioning ? 'transitioning' : ''}`}>
-                {selectedSpacePosts.map((post) => (
-                  <PostCard key={post.id} post={post} />
-                ))}
+                {selectedSpacePosts.length > 0 ? (
+                  selectedSpacePosts.map((post) => (
+                    <PostCard key={post.id} post={post} />
+                  ))
+                ) : (
+                  <div className="no-posts-message">
+                    <h3>No hay posts en este space</h3>
+                    <p>¡Sé el primero en crear un post!</p>
+                  </div>
+                )}
               </div>
             </div>
           )}

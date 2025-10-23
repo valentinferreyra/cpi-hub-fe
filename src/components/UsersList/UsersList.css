@@ -11,7 +11,6 @@
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   overflow-y: auto;
-  transition: width 0.3s ease;
 }
 
 .users-list.collapsed {
@@ -336,7 +335,6 @@
   justify-content: flex-start;
   padding: 20px 0;
   gap: 8px;
-  transition: all 0.3s ease;
 }
 
 .users-loading-collapsed {
@@ -378,7 +376,6 @@
   gap: 12px;
   width: 100%;
   align-items: center;
-  transition: all 0.3s ease;
 }
 
 .user-avatar-preview {

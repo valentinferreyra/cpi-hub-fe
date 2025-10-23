@@ -21,7 +21,7 @@ interface UseCreateSpaceReturn {
 
 export const useCreateSpace = (
   currentUserId: string | undefined,
-  onSpaceCreated: (space: Space) => void
+  onSpaceCreated: (space: Space) => void | Promise<void>
 ): UseCreateSpaceReturn => {
   const navigate = useNavigate();
   const [isCreateSpaceModalOpen, setIsCreateSpaceModalOpen] = useState(false);
@@ -38,9 +38,9 @@ export const useCreateSpace = (
     if (!currentUserId) return;
     setIsCreatingSpace(true);
     try {
-      const newSpace = await createSpace(currentUserId, name, description);
+      const newSpace = await createSpace(parseInt(currentUserId), name, description);
       if (newSpace) {
-        onSpaceCreated(newSpace);
+        await onSpaceCreated(newSpace);
         closeCreateSpaceModal();
         setShowConfirmModal(false);
         setSpacesWithSameName([]);

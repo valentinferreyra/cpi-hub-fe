@@ -128,8 +128,13 @@ export const addSpaceToUser = async (
   userId: number,
   spaceId: number
 ): Promise<void> => {
-  const response = await api.put(`/users/${userId}/spaces/${spaceId}/add`);
-  return response.data;
+  try {
+    const response = await api.put(`/users/${userId}/spaces/${spaceId}/add`);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding space to user:", error);
+    throw error;
+  }
 };
 
 interface UserStats {

@@ -61,10 +61,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const fetchData = useCallback(async () => {
     try {
-      if (isFirstLoad) {
-        setIsLoading(true);
-      }
-
       const token = localStorage.getItem('auth_token');
       if (token) {
         try {
@@ -81,13 +77,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Error in data loading:', error);
       setCurrentUser(null);
-    } finally {
-      if (isFirstLoad) {
-        setIsLoading(false);
-        setIsFirstLoad(false);
-      }
     }
-  }, [isFirstLoad]);
+  }, []);
 
   const selectSpace = async (space: Space) => {
     try {
@@ -115,8 +106,21 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   // Execute fetchData on first load
   useEffect(() => {
-    fetchData();
-  }, []); 
+    const loadInitialData = async () => {
+      if (isFirstLoad) {
+        setIsLoading(true);
+      }
+      
+      await fetchData();
+      
+      if (isFirstLoad) {
+        setIsLoading(false);
+        setIsFirstLoad(false);
+      }
+    };
+    
+    loadInitialData();
+  }, [fetchData, isFirstLoad]); 
 
   useEffect(() => {
     const width = isUsersListCollapsed ? '60px' : '280px';
