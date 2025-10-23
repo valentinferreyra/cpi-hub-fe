@@ -8,7 +8,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .comment::before {
@@ -54,6 +54,10 @@
   transition: transform 0.2s ease;
 }
 
+.comment-author-avatar.clickable {
+  cursor: pointer;
+}
+
 .comment-author-avatar:hover {
   transform: scale(1.05);
 }
@@ -95,7 +99,12 @@
   gap: 8px;
 }
 
-.edit-comment-btn {
+.comment-menu-container {
+  position: relative;
+  z-index: 10;
+}
+
+.comment-menu-btn {
   background: transparent;
   border: 2px solid #9f283b;
   color: #9f283b;
@@ -103,16 +112,145 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1;
+  font-weight: bold;
 }
 
-.edit-comment-btn:hover {
+.comment-menu-btn:hover {
   background: #9f283b;
   color: #fff;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(159, 40, 59, 0.2);
   border-color: #7a1f2e;
+}
+
+.comment-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border: 2px solid rgba(159, 40, 59, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  min-width: 150px;
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+.comment-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-align: left;
+  position: relative;
+  z-index: 1001;
+}
+
+.comment-menu-item:hover {
+  background: rgba(159, 40, 59, 0.05);
+}
+
+.comment-menu-item.delete {
+  color: #dc3545;
+}
+
+.comment-menu-item.delete:hover {
+  background: rgba(220, 53, 69, 0.05);
+}
+
+.comment-menu-item .menu-icon {
+  font-size: 16px;
+}
+
+.delete-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.delete-confirm-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.3s ease-out;
+}
+
+.delete-confirm-modal h3 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.delete-confirm-modal p {
+  margin: 0 0 24px 0;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.delete-confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.delete-confirm-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.delete-confirm-btn.cancel {
+  background: #f5f5f5;
+  color: #666;
+  border: 2px solid #ddd;
+}
+
+.delete-confirm-btn.cancel:hover {
+  background: #e9e9e9;
+  border-color: #bbb;
+}
+
+.delete-confirm-btn.confirm {
+  background: #dc3545;
+  color: white;
+  border: 2px solid #dc3545;
+}
+
+.delete-confirm-btn.confirm:hover {
+  background: #c82333;
+  border-color: #c82333;
+}
+
+.delete-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .comment-content {
@@ -121,7 +259,6 @@
   margin: 0;
   font-size: 15px;
   position: relative;
-  z-index: 1;
   letter-spacing: 0.1px;
   text-align: justify;
   padding: 0 4px;

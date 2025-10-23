@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import type { SpaceUser } from '../../types/user';
 import { getSpaceUsers } from '../../api';
 import { useAppContext } from '../../context/AppContext';
+import { useUserInfoModal } from '@/hooks';
+import UserInfoModal from '@/components/modals/UserInfoModal/UserInfoModal';
 import userlistOpen from '../../assets/userlist_open.png';
 import userlistClose from '../../assets/userlist_close.png';
 import './UsersList.css';
@@ -20,6 +22,7 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
     isUserOnline,
     currentUser
   } = useAppContext();
+  const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
 
 
 
@@ -68,125 +71,145 @@ const UsersList: React.FC<UsersListProps> = ({ spaceId }) => {
     const onlineUsers = users
       .filter(user => isUserOnline(user.id))
       .sort((a, b) => getUserDisplayName(a).localeCompare(getUserDisplayName(b)));
-    
+
     const offlineUsers = users
       .filter(user => !isUserOnline(user.id))
       .sort((a, b) => getUserDisplayName(a).localeCompare(getUserDisplayName(b)));
-    
-    return [...onlineUsers, ...offlineUsers];
+
+    const allUsers = [...onlineUsers, ...offlineUsers];
+    return allUsers;
+  };
+
+  const handleUserItemClick = (userId: number) => {
+    handleUserClick(userId);
   };
 
   return (
-    <div className={`users-list ${isUsersListCollapsed ? 'collapsed' : ''}`}>
-      <div className="users-list-container">
-        <div className="users-list-header">
-          <button className="collapse-toggle" onClick={toggleUsersListCollapse}>
-            <img 
-              src={isUsersListCollapsed ? userlistOpen : userlistClose} 
-              alt={isUsersListCollapsed ? 'Abrir lista de usuarios' : 'Cerrar lista de usuarios'} 
-              className="collapse-icon"
-            />
-          </button>
-          {!isUsersListCollapsed && (
-            <h3 className="users-list-title">Usuarios</h3>
-          )}
-        </div>
-        
-        <div className="users-list-content">
-          {isUsersListCollapsed ? (
-            <div className="users-preview">
-              {isLoading ? (
-                <div className="users-loading-collapsed">
-                  <div className="loading-spinner-small"></div>
-                </div>
-              ) : error ? (
-                <div className="users-error-collapsed">
-                  <span>❌</span>
-                </div>
-              ) : users.length === 0 ? (
-                <div className="users-empty-collapsed">
-                  <span>👥</span>
-                </div>
-              ) : (
-                <div className="users-avatars-grid">
-                  {getSortedUsers().slice(0, 12).map((user) => (
-                    <div 
-                      key={user.id} 
-                      className={`user-avatar-preview ${!isUserOnline(user.id) ? 'offline' : ''}`}
-                      title={`${getUserDisplayName(user)} - ${isUserOnline(user.id) ? 'En línea' : 'Desconectado'}`}
-                    >
-                      {user.image ? (
-                        <img 
-                          src={user.image} 
-                          alt={getUserDisplayName(user)}
-                          className="user-avatar-preview-img"
-                        />
-                      ) : (
-                        <div className="user-avatar-preview-placeholder">
-                          {getUserInitials(user)}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                  {users.length > 12 && (
-                    <div className="user-avatar-more" title={`+${users.length - 12} más`}>
-                      +{users.length - 12}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ) : (
-            <>
-              {isLoading ? (
-                <div className="users-loading">
-                  <div className="loading-spinner"></div>
-                  <span>Cargando usuarios...</span>
-                </div>
-              ) : error ? (
-                <div className="users-error">
-                  <span>❌ {error}</span>
-                </div>
-              ) : users.length === 0 ? (
-                <div className="users-empty">
-                  <span>No hay usuarios en este space</span>
-                </div>
-              ) : (
-                <div className="users-grid">
-                  {getSortedUsers().map((user) => (
-                    <div key={user.id} className={`user-item ${!isUserOnline(user.id) ? 'offline' : ''}`}>
-                      <div className="user-avatar">
+    <>
+      {showUserInfoModal && (
+        <UserInfoModal
+          user={viewedUser}
+          isLoading={isLoadingUserInfo}
+          onClose={closeUserInfoModal}
+        />
+      )}
+
+      <div className={`users-list ${isUsersListCollapsed ? 'collapsed' : ''}`}>
+        <div className="users-list-container">
+          <div className="users-list-header">
+            <button className="collapse-toggle" onClick={toggleUsersListCollapse}>
+              <img
+                src={isUsersListCollapsed ? userlistOpen : userlistClose}
+                alt={isUsersListCollapsed ? 'Abrir lista de usuarios' : 'Cerrar lista de usuarios'}
+                className="collapse-icon"
+              />
+            </button>
+            {!isUsersListCollapsed && (
+              <h3 className="users-list-title">Usuarios</h3>
+            )}
+          </div>
+
+          <div className="users-list-content">
+            {isUsersListCollapsed ? (
+              <div className="users-preview">
+                {isLoading ? (
+                  <div className="users-loading-collapsed">
+                    <div className="loading-spinner-small"></div>
+                  </div>
+                ) : error ? (
+                  <div className="users-error-collapsed">
+                    <span>❌</span>
+                  </div>
+                ) : users.length === 0 ? (
+                  <div className="users-empty-collapsed">
+                    <span>👥</span>
+                  </div>
+                ) : (
+                  <div className="users-avatars-grid">
+                    {getSortedUsers().slice(0, 12).map((user) => (
+                      <div
+                        key={user.id}
+                        className={`user-avatar-preview ${!isUserOnline(user.id) ? 'offline' : ''}`}
+                        title={`${getUserDisplayName(user)} - ${isUserOnline(user.id) ? 'En línea' : 'Desconectado'}`}
+                        onClick={() => handleUserItemClick(user.id)}
+                      >
                         {user.image ? (
-                          <img 
-                            src={user.image} 
+                          <img
+                            src={user.image}
                             alt={getUserDisplayName(user)}
-                            className="user-avatar-img"
+                            className="user-avatar-preview-img"
                           />
                         ) : (
-                          <div className="user-avatar-placeholder">
+                          <div className="user-avatar-preview-placeholder">
                             {getUserInitials(user)}
                           </div>
                         )}
                       </div>
-                      <div className="user-info">
-                        <div className="user-name" title={getUserDisplayName(user)}>
-                          {getUserDisplayName(user)}
-                        </div>
-                        {isUserOnline(user.id) && (
-                          <div className="user-status-online">
-                            En línea
-                          </div>
-                        )}
+                    ))}
+                    {users.length > 12 && (
+                      <div className="user-avatar-more" title={`+${users.length - 12} más`}>
+                        +{users.length - 12}
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                {isLoading ? (
+                  <div className="users-loading">
+                    <div className="loading-spinner"></div>
+                    <span>Cargando usuarios...</span>
+                  </div>
+                ) : error ? (
+                  <div className="users-error">
+                    <span>❌ {error}</span>
+                  </div>
+                ) : users.length === 0 ? (
+                  <div className="users-empty">
+                    <span>No hay usuarios en este space</span>
+                  </div>
+                ) : (
+                  <div className="users-grid">
+                    {getSortedUsers().map((user) => (
+                      <div
+                        key={user.id}
+                        className={`user-item ${!isUserOnline(user.id) ? 'offline' : ''}`}
+                        onClick={() => handleUserItemClick(user.id)}
+                      >
+                        <div className="user-avatar">
+                          {user.image ? (
+                            <img
+                              src={user.image}
+                              alt={getUserDisplayName(user)}
+                              className="user-avatar-img"
+                            />
+                          ) : (
+                            <div className="user-avatar-placeholder">
+                              {getUserInitials(user)}
+                            </div>
+                          )}
+                        </div>
+                        <div className="user-info">
+                          <div className="user-name" title={getUserDisplayName(user)}>
+                            {getUserDisplayName(user)}
+                          </div>
+                          {isUserOnline(user.id) && (
+                            <div className="user-status-online">
+                              En línea
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

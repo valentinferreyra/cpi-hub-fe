@@ -135,3 +135,12 @@ export const updatePost = async (
     throw error;
   }
 };
+
+export const deletePost = async (postId: string): Promise<void> => {
+  try {
+    await api.delete(`/posts/${postId}`);
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    throw error;
+  }
+};

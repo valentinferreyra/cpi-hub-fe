@@ -146,7 +146,7 @@ function UserInfoModal({ user, isLoading = false, onClose }: UserInfoModalProps)
                         onClick={handleGoToProfile}
                         title="Ver todos los spaces"
                       >
-                        Ver más spaces...
+                        Ver más ...
                       </button>
                     )}
                   </div>

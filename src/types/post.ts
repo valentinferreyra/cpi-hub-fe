@@ -13,13 +13,13 @@ export interface Post {
 }
 
 export interface SimpleUser {
-    id: string;
-    name: string;
-    last_name: string;
-    image: string;
+  id: number;
+  name: string;
+  last_name: string;
+  image: string;
 }
 
 export interface SimpleSpace {
-    id: string;
-    name: string;
+  id: string;
+  name: string;
 }
