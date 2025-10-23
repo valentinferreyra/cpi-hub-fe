@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Post } from '../../types/post';
 import { formatPostDate } from '../../utils/dateUtils';
+import { useUserInfoModal } from '@/hooks';
+import UserInfoModal from '@/components/modals/UserInfoModal/UserInfoModal';
 import './PostCard.css';
 
 interface PostCardProps {
@@ -11,6 +13,7 @@ interface PostCardProps {
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
+  const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
   const maxLength = 160;
   const hasContent = post.content && post.content.trim();
   const shouldTruncate = hasContent && post.content.length > maxLength;
@@ -19,7 +22,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 50);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -34,51 +37,62 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
   const handleAuthorClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigate(`/users/${post.created_by.id}`);
+    handleUserClick(post.created_by.id);
   };
 
   return (
-    <div className={`post-card ${isLoaded ? 'loaded' : ''}`} onClick={handlePostClick}>
-      <div className="post-header">
-        <div className="post-author">
-          <img
-            src={post.created_by.image}
-            alt={`${post.created_by.name} ${post.created_by.last_name}`}
-            className="author-avatar"
-          />
-          <div className="author-info">
-            <span
-              className="author-name clickable"
+    <>
+      {showUserInfoModal && (
+        <UserInfoModal
+          user={viewedUser}
+          isLoading={isLoadingUserInfo}
+          onClose={closeUserInfoModal}
+        />
+      )}
+
+      <div className={`post-card ${isLoaded ? 'loaded' : ''}`} onClick={handlePostClick}>
+        <div className="post-header">
+          <div className="post-author">
+            <img
+              src={post.created_by.image}
+              alt={`${post.created_by.name} ${post.created_by.last_name}`}
+              className="author-avatar clickable"
               onClick={handleAuthorClick}
-            >
-              {post.created_by.name} {post.created_by.last_name}
-            </span>
-            <span className="post-space">
-              en <span className="clickable" onClick={handleSpaceClick}>{post.space.name}</span>
-            </span>
+            />
+            <div className="author-info">
+              <span
+                className="author-name clickable"
+                onClick={handleAuthorClick}
+              >
+                {post.created_by.name} {post.created_by.last_name}
+              </span>
+              <span className="post-space">
+                en <span className="clickable" onClick={handleSpaceClick}>{post.space.name}</span>
+              </span>
+            </div>
           </div>
+          <span className="post-date">
+            {formatPostDate(post.created_at)}
+          </span>
         </div>
-        <span className="post-date">
-          {formatPostDate(post.created_at)}
-        </span>
-      </div>
 
-      <div className="post-content">
-        <h3 className="post-title">{post.title}</h3>
-        {post.content && post.content.trim() && (
-          <p className="post-text">
-            {post.content.slice(0, maxLength)}
-            {shouldTruncate && '...'}
-          </p>
-        )}
-      </div>
+        <div className="post-content">
+          <h3 className="post-title">{post.title}</h3>
+          {post.content && post.content.trim() && (
+            <p className="post-text">
+              {post.content.slice(0, maxLength)}
+              {shouldTruncate && '...'}
+            </p>
+          )}
+        </div>
 
-      <div className="post-footer">
-        <span className="comments-count">
-          {post.comments.length} comentarios
-        </span>
+        <div className="post-footer">
+          <span className="comments-count">
+            {post.comments.length} comentarios
+          </span>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

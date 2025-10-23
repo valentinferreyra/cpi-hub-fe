@@ -4,13 +4,14 @@ import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
 import UsersList from "@components/UsersList/UsersList";
 import CommentItem from "@components/CommentItem/CommentItem";
 import EditPostModal from "@components/modals/EditPostModal/EditPostModal";
+import UserInfoModal from "@components/modals/UserInfoModal/UserInfoModal";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { getPostById, addCommentToPost, updatePost, deletePost } from "../../api";
 import type { Post as PostType } from "../../types/post";
 import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import { useClickOutside, useUserInfoModal } from "../../hooks";
 import "./Post.css";
 
 export const Post = () => {
@@ -27,6 +28,7 @@ export const Post = () => {
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
 
   const postMenuRef = useClickOutside<HTMLDivElement>(() => {
     setShowPostMenu(false);
@@ -201,6 +203,13 @@ export const Post = () => {
     <>
       <Topbar currentUser={currentUser} />
       <Sidebar spaces={currentUser?.spaces || []} onSpaceClick={selectSpace} />
+      {showUserInfoModal && (
+        <UserInfoModal
+          user={viewedUser}
+          isLoading={isLoadingUserInfo}
+          onClose={closeUserInfoModal}
+        />
+      )}
       {showSuccessMessage && (
         <div className="success-message toast-success">
           {successMessage}
@@ -220,7 +229,10 @@ export const Post = () => {
               <img
                 src={post.created_by.image}
                 alt={`${post.created_by.name} ${post.created_by.last_name}`}
-                className="post-author-avatar"
+                className="post-author-avatar clickable"
+                onClick={() => {
+                  handleUserClick(post.created_by.id);
+                }}
               />
               <div className="post-title-content">
                 <div className="post-title-header">
@@ -251,7 +263,9 @@ export const Post = () => {
                   <div className="post-author-date">
                     Por<span
                       className="post-author clickable"
-                      onClick={() => navigate(`/users/${post.created_by.id}`)}
+                      onClick={() => {
+                        handleUserClick(post.created_by.id);
+                      }}
                     >
                       {post.created_by.name} {post.created_by.last_name}
                     </span>, el {formatPostDetailDate(post.created_at)} a las {formatPostDetailTime(post.created_at)}

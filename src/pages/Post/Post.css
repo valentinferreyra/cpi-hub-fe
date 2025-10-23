@@ -172,6 +172,16 @@
   object-fit: cover;
 }
 
+.post-author-avatar.clickable {
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.post-author-avatar.clickable:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
 .post-title-content {
   display: flex;
   flex-direction: column;
