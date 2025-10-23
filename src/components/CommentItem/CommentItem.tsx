@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Comment } from "../../types/comment";
 import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
-import { updateComment } from "../../api";
+import { updateComment, deleteComment } from "../../api";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import "./CommentItem.css";
 
 interface CommentItemProps {
@@ -29,6 +30,13 @@ export const CommentItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
   const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const menuRef = useClickOutside<HTMLDivElement>(() => {
+    setShowMenu(false);
+  });
 
   const handleReplyClick = () => {
     setReplyingToCommentId(comment.id);
@@ -58,6 +66,7 @@ export const CommentItem = ({
   const handleEditClick = () => {
     setIsEditing(true);
     setEditContent(comment.content);
+    setShowMenu(false);
   };
 
   const handleCancelEdit = () => {
@@ -77,6 +86,32 @@ export const CommentItem = ({
     } finally {
       setIsSubmittingEdit(false);
     }
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+    setShowMenu(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      setIsDeleting(true);
+      await deleteComment(comment.id);
+      if (onCommentUpdated) await onCommentUpdated();
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
+  };
+
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
   };
 
   return (
@@ -101,13 +136,27 @@ export const CommentItem = ({
             {formatPostDetailTime(comment.created_at)}
           </span>
           {comment.created_by.id.toString() === currentUserId.toString() && !isEditing && (
-            <button
-              className="edit-comment-btn"
-              title="Editar comentario"
-              onClick={handleEditClick}
-            >
-              ✏️
-            </button>
+            <div className="comment-menu-container" ref={menuRef}>
+              <button
+                className="comment-menu-btn"
+                title="Opciones"
+                onClick={toggleMenu}
+              >
+                ⋮
+              </button>
+              {showMenu && (
+                <div className="comment-menu-dropdown">
+                  <button className="comment-menu-item" onClick={handleEditClick}>
+                    <span className="menu-icon">✏️</span>
+                    <span>Editar</span>
+                  </button>
+                  <button className="comment-menu-item delete" onClick={handleDeleteClick}>
+                    <span className="menu-icon">🗑️</span>
+                    <span>Borrar</span>
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -194,6 +243,31 @@ export const CommentItem = ({
               isReply={true}
             />
           ))}
+        </div>
+      )}
+
+      {showDeleteConfirm && (
+        <div className="delete-confirm-overlay">
+          <div className="delete-confirm-modal">
+            <h3>¿Estás seguro?</h3>
+            <p>¿Deseas borrar este comentario? Esta acción no se puede deshacer.</p>
+            <div className="delete-confirm-actions">
+              <button
+                className="delete-confirm-btn cancel"
+                onClick={handleCancelDelete}
+                disabled={isDeleting}
+              >
+                Cancelar
+              </button>
+              <button
+                className="delete-confirm-btn confirm"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Borrando..." : "Borrar"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
