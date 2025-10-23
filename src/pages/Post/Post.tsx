@@ -7,9 +7,10 @@ import EditPostModal from "@components/modals/EditPostModal/EditPostModal";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { getPostById, addCommentToPost, updatePost } from "../../api";
+import { getPostById, addCommentToPost, updatePost, deletePost } from "../../api";
 import type { Post as PostType } from "../../types/post";
 import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import "./Post.css";
 
 export const Post = () => {
@@ -23,6 +24,13 @@ export const Post = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [showPostMenu, setShowPostMenu] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const postMenuRef = useClickOutside<HTMLDivElement>(() => {
+    setShowPostMenu(false);
+  });
 
 
   const handleGoToSpace = () => {
@@ -90,6 +98,39 @@ export const Post = () => {
       console.error('Error updating post:', error);
       throw error;
     }
+  };
+
+  const handleEditClick = () => {
+    setIsEditModalOpen(true);
+    setShowPostMenu(false);
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+    setShowPostMenu(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!post) return;
+
+    try {
+      setIsDeleting(true);
+      await deletePost(post.id);
+      navigate(`/space/${post.space.id}`);
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
+  };
+
+  const togglePostMenu = () => {
+    setShowPostMenu(!showPostMenu);
   };
 
   const isPostAuthor = currentUser && post && currentUser.id.toString() === post.created_by.id.toString();
@@ -185,13 +226,25 @@ export const Post = () => {
                 <div className="post-title-header">
                   <h1 className="post-title">{post.title}</h1>
                   {isPostAuthor && (
-                    <button
-                      className="edit-post-btn"
-                      onClick={() => setIsEditModalOpen(true)}
-                      title="Editar post"
-                    >
-                      <span>✏️</span>
-                    </button>
+                    <div className="post-menu-container" ref={postMenuRef}>
+                      <button
+                        className="post-menu-btn"
+                        onClick={togglePostMenu}
+                        title="Opciones"
+                      >
+                        ⋮
+                      </button>
+                      {showPostMenu && (
+                        <div className="post-menu-dropdown">
+                          <button className="post-menu-item" onClick={handleEditClick}>
+                            <span>Editar</span>
+                          </button>
+                          <button className="post-menu-item delete" onClick={handleDeleteClick}>
+                            <span>Borrar</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
                 <div className="post-author-date-container">
@@ -261,6 +314,31 @@ export const Post = () => {
           initialTitle={post.title}
           initialContent={post.content}
         />
+      )}
+
+      {showDeleteConfirm && (
+        <div className="delete-confirm-overlay">
+          <div className="delete-confirm-modal">
+            <h3>¿Estás seguro?</h3>
+            <p>¿Deseas borrar este post? Esta acción no se puede deshacer.</p>
+            <div className="delete-confirm-actions">
+              <button
+                className="delete-confirm-btn cancel"
+                onClick={handleCancelDelete}
+                disabled={isDeleting}
+              >
+                Cancelar
+              </button>
+              <button
+                className="delete-confirm-btn confirm"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Borrando..." : "Borrar"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
 
