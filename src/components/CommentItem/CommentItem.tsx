@@ -4,13 +4,14 @@ import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtil
 import { updateComment, deleteComment } from "../../api";
 import { useClickOutside, useUserInfoModal } from "../../hooks";
 import UserInfoModal from "@/components/modals/UserInfoModal/UserInfoModal";
+import CommentForm from "../CommentForm/CommentForm";
 import "./CommentItem.css";
 
 interface CommentItemProps {
   comment: Comment;
   postId: string;
   currentUserId: number;
-  onReplySubmit: (parentCommentId: number, content: string) => Promise<void>;
+  onReplySubmit: (parentCommentId: number, content: string, image?: string) => Promise<void>;
   isReply?: boolean;
   onCommentUpdated?: () => Promise<void> | void;
 }
@@ -24,11 +25,7 @@ export const CommentItem = ({
   onCommentUpdated,
 }: CommentItemProps) => {
   const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(null);
-  const [replyContent, setReplyContent] = useState("");
-  const [isSubmittingReply, setIsSubmittingReply] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editContent, setEditContent] = useState(comment.content);
-  const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -40,51 +37,32 @@ export const CommentItem = ({
 
   const handleReplyClick = () => {
     setReplyingToCommentId(comment.id);
-    setReplyContent("");
   };
 
   const handleCancelReply = () => {
     setReplyingToCommentId(null);
-    setReplyContent("");
   };
 
-  const handleSubmitReply = async () => {
-    if (!replyContent.trim() || isSubmittingReply) return;
-
+  const handleSubmitReply = async (content: string, image?: string) => {
     try {
-      setIsSubmittingReply(true);
-      await onReplySubmit(comment.id, replyContent.trim());
-      setReplyContent("");
-      setReplyingToCommentId(null);
+      await onReplySubmit(comment.id, content, image);
     } catch (error) {
       console.error("Error sending reply:", error);
-    } finally {
-      setIsSubmittingReply(false);
     }
   };
 
   const handleEditClick = () => {
     setIsEditing(true);
-    setEditContent(comment.content);
     setShowMenu(false);
   };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setEditContent(comment.content);
-  };
-
-  const handleSubmitEdit = async () => {
-    if (!editContent.trim() || isSubmittingEdit) return;
+  const handleSubmitEdit = async (content: string, image?: string) => {
     try {
-      setIsSubmittingEdit(true);
-      await updateComment(comment.id, editContent.trim());
+      await updateComment(comment.id, content, image);
       setIsEditing(false);
       if (onCommentUpdated) await onCommentUpdated();
     } catch (error) {
       console.error("Error updating comment:", error);
-    } finally {
-      setIsSubmittingEdit(false);
     }
   };
 
@@ -173,39 +151,29 @@ export const CommentItem = ({
           </div>
         </div>
         {!isEditing ? (
-          <p className="comment-content">{comment.content}</p>
-        ) : (
-          <div className="edit-form">
-            <div className="comment-input-container">
-              <textarea
-                className="comment-input"
-                placeholder="Edita tu comentario..."
-                rows={2}
-                value={editContent}
-                onChange={(e) => setEditContent(e.target.value)}
-                disabled={isSubmittingEdit}
-              />
-              <div className="edit-actions">
-                <button
-                  className={`comment-submit-btn ${editContent.trim() && !isSubmittingEdit ? "active" : "disabled"}`}
-                  disabled={!editContent.trim() || isSubmittingEdit}
-                  onClick={handleSubmitEdit}
-                  aria-label="Aceptar edición"
-                >
-                  {isSubmittingEdit ? "..." : (
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 13L8 17L20 5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  )}
-                </button>
+          <div className="comment-content">
+            <div>{comment.content}</div>
+            {comment.image && (
+              <div className="comment-image-container">
+                <img
+                  src={comment.image}
+                  alt="Imagen del comentario"
+                  className="comment-image"
+                  onError={(e) => {
+                    console.error('Error loading comment image:', e);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
               </div>
-            </div>
-            <div className="cancel-edit-btn-container">
-              <button className="cancel-edit-btn" onClick={handleCancelEdit} disabled={isSubmittingEdit}>
-                Cancelar
-              </button>
-            </div>
+            )}
           </div>
+        ) : (
+          <CommentForm
+            onSubmit={handleSubmitEdit}
+            placeholder="Edita tu comentario..."
+            initialContent={comment.content}
+            initialImage={comment.image}
+          />
         )}
 
         {!isReply && !isEditing && (
@@ -218,28 +186,10 @@ export const CommentItem = ({
         )}
 
         {replyingToCommentId === comment.id && (
-          <div className="reply-form">
-            <div className="comment-input-container">
-              <textarea
-                className="comment-input"
-                placeholder="Escribe tu respuesta..."
-                rows={2}
-                value={replyContent}
-                onChange={(e) => setReplyContent(e.target.value)}
-                disabled={isSubmittingReply}
-              />
-              <div className="reply-actions">
-                <button
-                  className={`comment-submit-btn ${replyContent.trim() && !isSubmittingReply ? "active" : "disabled"
-                    }`}
-                  disabled={!replyContent.trim() || isSubmittingReply}
-                  onClick={handleSubmitReply}
-                >
-                  {isSubmittingReply ? "..." : ">"}
-                </button>
-              </div>
-            </div>
-          </div>
+          <CommentForm
+            onSubmit={handleSubmitReply}
+            placeholder="Escribe tu respuesta..."
+          />
         )}
 
         {comment.replies && comment.replies.length > 0 && (

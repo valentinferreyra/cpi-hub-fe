@@ -5,13 +5,15 @@ export const addCommentToPost = async (
   created_by: number,
   postId: string,
   content: string,
-  parentCommentId?: number
+  parentCommentId?: number,
+  image?: string
 ): Promise<Comment> => {
   try {
     const payload: {
       content: string;
       created_by: number;
       parent_comment_id?: number;
+      image?: string;
     } = {
       content: content,
       created_by: created_by,
@@ -19,6 +21,10 @@ export const addCommentToPost = async (
 
     if (parentCommentId) {
       payload.parent_comment_id = parentCommentId;
+    }
+
+    if (image) {
+      payload.image = image;
     }
 
     const response = await api.post(`/posts/${postId}/comments`, payload);
@@ -52,13 +58,24 @@ export const getUserComments = async (
 
 export const updateComment = async (
   commentId: number,
-  content: string
+  content: string,
+  image?: string
 ): Promise<Comment> => {
   try {
-    const response = await api.put(`/comments/${commentId}`, {
+    const payload: {
+      comment_id: number;
+      content: string;
+      image?: string;
+    } = {
       comment_id: commentId,
       content,
-    });
+    };
+
+    if (image !== undefined) {
+      payload.image = image;
+    }
+
+    const response = await api.put(`/comments/${commentId}`, payload);
     return response.data?.data || response.data;
   } catch (error) {
     console.error("Error updating comment:", error);

@@ -4,6 +4,7 @@ export interface Comment {
   id: number;
   post_id: number;
   content: string;
+  image?: string;
   created_at: string;
   created_by: SimpleUser;
   space?: {

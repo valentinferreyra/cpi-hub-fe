@@ -8,6 +8,7 @@ import UserComments from '@components/UserComments/UserComments';
 import { useAppContext } from '../../context/AppContext';
 import { getUserById, getUserStats } from '../../api';
 import type { User } from '../../types/user';
+import { formatDateTime } from '../../utils/dateUtils';
 import './UserView.css';
 
 const UserView: React.FC = () => {
@@ -155,13 +156,7 @@ const UserView: React.FC = () => {
                   <p className="space-card-description">{space.description}</p>
                   <div className="space-card-footer">
                     <span className="space-card-creator">
-                      Creado: {new Date(space.created_at).toLocaleString('es-ES', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
+                      Creado: {formatDateTime(space.created_at)}
                     </span>
                   </div>
                 </div>

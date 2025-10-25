@@ -16,7 +16,7 @@
 }
 
 .posts-grid {
-  display: grid;
+  position: relative;
   gap: 20px;
 }
 
@@ -46,8 +46,12 @@
 
 .no-content {
   text-align: center;
-  padding: 60px 20px;
+  padding: 40px 20px;
   color: #7f8c8d;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .no-content p {

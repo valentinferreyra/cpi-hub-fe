@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserComments } from '../../api';
 import type { Comment } from '../../types/comment';
+import { formatDateShort } from '../../utils/dateUtils';
 import './UserComments.css';
 
 interface UserCommentsProps {
@@ -71,23 +72,19 @@ const UserComments: React.FC<UserCommentsProps> = ({ userId, userName }) => {
                 <div className="comment-content">
                   <p className="comment-text">{comment.content}</p>
                   <div className="comment-meta">
-                    <span
-                      className="comment-space clickable"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSpaceClick(comment.space.id);
-                      }}
-                    >
-                      #{comment.space.name}
-                    </span>
+                    {comment.space && (
+                      <span
+                        className="comment-space clickable"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSpaceClick(comment.space!.id);
+                        }}
+                      >
+                        #{comment.space.name}
+                      </span>
+                    )}
                     <span className="comment-date">
-                      {new Date(comment.created_at).toLocaleDateString('es-ES', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
+                      {formatDateShort(comment.created_at)}
                     </span>
                   </div>
                 </div>
