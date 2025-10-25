@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../api/users';
 import cpihubLogo from '../../assets/cpihub-logo.png';
 import unqLogo from '../../assets/unq-logo.png';
+import { convertFileToBase64 } from '../../utils/imageUtils';
 import './Auth.css';
 import { useAppContext } from '../../context/AppContext';
 
@@ -15,13 +16,62 @@ function Register() {
   const [image, setImage] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [uploadType, setUploadType] = useState<'url' | 'file'>('url');
+  const [urlValue, setUrlValue] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { fetchData, setCurrentUser } = useAppContext();
+
+  const handleImageChange = (imageData: string | null) => {
+    setImage(imageData || '');
+  };
+
+  // Función para verificar si el formulario es válido
+  const isFormValid = () => {
+    return name.trim() && lastName.trim() && email.trim() && password.trim() && password.trim().length >= 6;
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const base64 = await convertFileToBase64(file);
+        handleImageChange(base64);
+        setShowImageModal(false);
+      } catch (error) {
+        console.error('Error converting file to base64:', error);
+      }
+    }
+  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!name.trim()) {
+      setError('El nombre es obligatorio');
+      return;
+    }
+    if (!lastName.trim()) {
+      setError('El apellido es obligatorio');
+      return;
+    }
+    if (!email.trim()) {
+      setError('El email es obligatorio');
+      return;
+    }
+    if (!password.trim()) {
+      setError('La contraseña es obligatoria');
+      return;
+    }
 
-    if (!name.trim() || !lastName.trim() || !email.trim() || !password.trim()) {
-      setError('Por favor, completa todos los campos');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setError('Por favor, ingresa un email válido');
+      return;
+    }
+
+    if (password.trim().length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
@@ -74,7 +124,6 @@ function Register() {
         <img src={cpihubLogo} alt="Logo CPIHub" />
       </div>
       <div className="auth-box">
-        {/* <h2 className='auth-title'>Registrarse</h2> */}
         <form className="auth-form" onSubmit={handleRegister}>
           {error && (
             <div className="error-message">
@@ -132,21 +181,116 @@ function Register() {
             />
           </div>
           <div className='auth-form-group'>
-            <label htmlFor='image' className='auth-form-label'>URL de imagen de perfil (opcional)</label>
-            <input
-              type='url'
-              id='image'
-              className='auth-form-input'
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              placeholder='URL de tu imagen de perfil...'
-            />
+            <label className='auth-form-label'>Imagen de perfil (opcional)</label>
+            <div className="auth-image-upload">
+              <button
+                type="button"
+                className="auth-image-btn"
+                onClick={() => setShowImageModal(true)}
+                disabled={isLoading}
+              >
+                <span className="auth-image-btn-text">
+                  {image ? 'Cambiar imagen' : 'Seleccionar imagen o URL'}
+                </span>
+              </button>
+              {image && (
+                <div className="auth-image-preview">
+                  <img src={image} alt="Preview" className="auth-image-preview-img" />
+                  <button
+                    type="button"
+                    className="auth-image-remove"
+                    onClick={() => setImage('')}
+                    disabled={isLoading}
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            {showImageModal && (
+              <div className="auth-image-modal-overlay" onClick={() => setShowImageModal(false)}>
+                <div className="auth-image-modal" onClick={(e) => e.stopPropagation()}>
+                  <div className="auth-image-modal-header">
+                    <h3>Seleccionar imagen de perfil</h3>
+                    <button 
+                      className="auth-image-modal-close"
+                      onClick={() => setShowImageModal(false)}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div className="auth-image-modal-content">
+                    <div className="auth-image-upload-simple">
+                      <div className="auth-image-upload-tabs">
+                        <button
+                          type="button"
+                          className={`auth-image-tab ${uploadType === 'url' ? 'active' : ''}`}
+                          onClick={() => setUploadType('url')}
+                        >
+                          URL
+                        </button>
+                        <button
+                          type="button"
+                          className={`auth-image-tab ${uploadType === 'file' ? 'active' : ''}`}
+                          onClick={() => setUploadType('file')}
+                        >
+                          Archivo
+                        </button>
+                      </div>
+                      
+                      {uploadType === 'url' ? (
+                        <div className="auth-image-url-input">
+                          <input
+                            type="url"
+                            placeholder="Pega la URL de la imagen..."
+                            value={urlValue}
+                            onChange={(e) => setUrlValue(e.target.value)}
+                            className="auth-image-url-field"
+                          />
+                          <button
+                            type="button"
+                            className="auth-image-confirm-btn"
+                            onClick={() => {
+                              if (urlValue.trim()) {
+                                handleImageChange(urlValue.trim());
+                                setShowImageModal(false);
+                              }
+                            }}
+                            disabled={!urlValue.trim()}
+                          >
+                            Usar URL
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="auth-image-file-input">
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="auth-image-file-field"
+                          />
+                          <button
+                            type="button"
+                            className="auth-image-file-btn"
+                            onClick={() => fileInputRef.current?.click()}
+                          >
+                            Seleccionar archivo
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className='first-time'>¿Ya tienes una cuenta? <span className='auth-link' onClick={() => navigate('/login')}>Inicia sesión</span></div>
           <button
             type="submit"
             className="btn-auth"
-            disabled={isLoading}
+            disabled={isLoading || !isFormValid()}
           >
             {isLoading ? 'Creando cuenta...' : 'Crear Cuenta'}
           </button>

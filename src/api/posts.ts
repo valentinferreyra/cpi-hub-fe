@@ -71,15 +71,28 @@ export const createPost = async (
   title: string,
   content: string,
   created_by: number,
-  spaceId: number
+  spaceId: number,
+  image?: string
 ): Promise<Post> => {
   try {
-    const response = await api.post(`/posts`, {
+    const payload: {
+      title: string;
+      content: string;
+      created_by: number;
+      space_id: number;
+      image?: string;
+    } = {
       title: title,
       content: content,
       created_by: created_by,
       space_id: spaceId,
-    });
+    };
+
+    if (image) {
+      payload.image = image;
+    }
+
+    const response = await api.post(`/posts`, payload);
     return response.data.data || response.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -121,14 +134,26 @@ export const getUserPosts = async (
 export const updatePost = async (
   postId: number,
   title: string,
-  content: string
+  content: string,
+  image?: string
 ): Promise<void> => {
   try {
-    const response = await api.put(`/posts/${postId}`, {
+    const payload: {
+      post_id: number;
+      title: string;
+      content: string;
+      image?: string;
+    } = {
       post_id: postId,
       title: title,
       content: content,
-    });
+    };
+
+    if (image !== undefined) {
+      payload.image = image;
+    }
+
+    const response = await api.put(`/posts/${postId}`, payload);
     void response;
   } catch (error) {
     console.error("Error updating post:", error);

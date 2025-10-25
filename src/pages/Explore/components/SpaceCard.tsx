@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Space } from '../../../types/space';
+import { formatDateTime } from '../../../utils/dateUtils';
 
 interface SpaceCardProps {
   space: Space;
@@ -16,16 +17,6 @@ const SpaceCard: React.FC<SpaceCardProps> = ({
 }) => {
   const handleClick = () => {
     onClick(space);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('es-ES', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
   };
 
   return (
@@ -45,7 +36,7 @@ const SpaceCard: React.FC<SpaceCardProps> = ({
       </div>
       <div className="space-card-footer">
         <span className="space-card-creator">
-          {showUpdatedDate ? 'Actualizado' : 'Creado'}: {formatDate(
+          {showUpdatedDate ? 'Actualizado' : 'Creado'}: {formatDateTime(
             showUpdatedDate ? space.updated_at : space.created_at
           )}
         </span>

@@ -12,7 +12,7 @@ import "./Space.css";
 import { useAppContext } from "../../context/AppContext";
 import { getSpaceById, getPostsBySpaceId, createPost, removeSpaceFromUser, addSpaceToUser } from "../../api";
 import type { Post } from "../../types/post";
-import { useCreateSpace, useSuccessNotification, useClickOutside, useModal } from "../../hooks";
+import { useCreateSpace, useSuccessNotification, useClickOutside, useModal, useMasonryLayout } from "../../hooks";
 import { CreateSpaceConfirmationModal } from "../../components/modals/CreateSpaceModal";
 import { LeaveSpaceModal } from "../../components/modals/LeaveSpaceModal";
 
@@ -33,6 +33,9 @@ function Space() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [isLeavingSpace, setIsLeavingSpace] = useState(false);
+
+  // Hook para masonry layout
+  const masonryRef = useMasonryLayout(selectedSpacePosts);
 
   useEffect(() => {
     const loadSpaceFromUrl = async () => {
@@ -78,13 +81,13 @@ function Space() {
     return currentUser?.spaces?.some(space => space.id === selectedSpace?.id);
   }
 
-  const handleCreatePost = async (title: string, content: string) => {
+  const handleCreatePost = async (title: string, content: string, image?: string) => {
     if (!selectedSpace || isCreatingPost || !currentUser?.id) return;
 
     setIsCreatingPost(true);
 
     try {
-      const newPost = await createPost(title, content, currentUser?.id, selectedSpace.id);
+      const newPost = await createPost(title, content, currentUser?.id, selectedSpace.id, image);
 
       setSelectedSpacePosts((prevPosts: Post[]) => [newPost, ...prevPosts]);
 
@@ -207,7 +210,10 @@ function Space() {
                   </button>
                 )}
               </div>
-              <div className={`posts-list ${isTransitioning ? 'transitioning' : ''}`}>
+              <div 
+                ref={masonryRef}
+                className={`posts-list ${isTransitioning ? 'transitioning' : ''}`}
+              >
                 {selectedSpacePosts.length > 0 ? (
                   selectedSpacePosts.map((post) => (
                     <PostCard key={post.id} post={post} />

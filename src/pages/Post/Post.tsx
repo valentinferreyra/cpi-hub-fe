@@ -5,6 +5,7 @@ import UsersList from "@components/UsersList/UsersList";
 import CommentItem from "@components/CommentItem/CommentItem";
 import EditPostModal from "@components/modals/EditPostModal/EditPostModal";
 import UserInfoModal from "@components/modals/UserInfoModal/UserInfoModal";
+import CommentForm from "../../components/CommentForm/CommentForm";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
@@ -20,7 +21,6 @@ export const Post = () => {
   const { currentUser, selectSpace } = useAppContext();
   const [post, setPost] = useState<PostType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [newComment, setNewComment] = useState('');
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -56,17 +56,16 @@ export const Post = () => {
     }, 3000);
   };
 
-  const handleAddComment = async () => {
-    if (!post || !newComment.trim() || isSubmittingComment) return;
+  const handleAddComment = async (content: string, image?: string) => {
+    if (!post || !content.trim() || isSubmittingComment) return;
 
     try {
       setIsSubmittingComment(true);
-      await addCommentToPost(currentUser!.id, post.id, newComment.trim());
+      
+      await addCommentToPost(currentUser!.id, post.id, content.trim(), undefined, image);
 
       setSuccessMessage('Comentario agregado correctamente');
       setShowSuccessMessage(true);
-
-      setNewComment('');
 
       setTimeout(() => {
         setShowSuccessMessage(false);
@@ -75,6 +74,7 @@ export const Post = () => {
       const updatedPost = await getPostById(post.id);
       if (updatedPost) {
         setPost(updatedPost);
+        console.log('Post actualizado, comentarios:', updatedPost.comments);
       }
     } catch (error) {
       console.error('Error adding comment:', error);
@@ -137,11 +137,11 @@ export const Post = () => {
 
   const isPostAuthor = currentUser && post && currentUser.id.toString() === post.created_by.id.toString();
 
-  const handleReplySubmit = async (parentCommentId: number, content: string) => {
+  const handleReplySubmit = async (parentCommentId: number, content: string, image?: string) => {
     if (!post) return;
 
     try {
-      await addCommentToPost(currentUser!.id, post.id, content, parentCommentId);
+      await addCommentToPost(currentUser!.id, post.id, content, parentCommentId, image);
 
       setShowSuccessMessage(true);
 
@@ -152,6 +152,7 @@ export const Post = () => {
       const updatedPost = await getPostById(post.id);
       if (updatedPost) {
         setPost(updatedPost);
+        console.log('Post actualizado después de respuesta, comentarios:', updatedPost.comments);
       }
     } catch (error) {
       console.error('Error al agregar respuesta:', error);
@@ -278,7 +279,20 @@ export const Post = () => {
             </div>
 
             <div className="post-content">
-              <p>{post.content}</p>
+              <div>{post.content}</div>
+              {post.image && (
+                <div className="post-image-container">
+                  <img 
+                    src={post.image} 
+                    alt="Imagen del post"
+                    className="post-image"
+                    onError={(e) => {
+                      console.error('Error loading post image:', e);
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
             </div>
 
             <div className="post-comments">
@@ -296,25 +310,11 @@ export const Post = () => {
                   />
                 ))}
 
-              <div className="comment-form-integrated">
-                <div className="comment-input-container">
-                  <textarea
-                    className="comment-input"
-                    placeholder="Escribe tu comentario..."
-                    rows={3}
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    disabled={isSubmittingComment}
-                  />
-                  <button
-                    className={`comment-submit-btn ${newComment.trim() && !isSubmittingComment ? 'active' : 'disabled'}`}
-                    disabled={!newComment.trim() || isSubmittingComment}
-                    onClick={handleAddComment}
-                  >
-                    {isSubmittingComment ? '...' : '>'}
-                  </button>
-                </div>
-              </div>
+              <CommentForm
+                onSubmit={handleAddComment}
+                placeholder="Escribe tu comentario..."
+                isLoading={isSubmittingComment}
+              />
             </div>
           </div>
         </div>

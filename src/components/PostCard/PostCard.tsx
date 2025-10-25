@@ -79,10 +79,22 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <div className="post-content">
           <h3 className="post-title">{post.title}</h3>
           {post.content && post.content.trim() && (
-            <p className="post-text">
-              {post.content.slice(0, maxLength)}
-              {shouldTruncate && '...'}
-            </p>
+            <div className="post-text">
+              {shouldTruncate ? post.content.slice(0, maxLength) + '...' : post.content}
+            </div>
+          )}
+          {post.image && (
+            <div className="post-image-container">
+              <img 
+                src={post.image} 
+                alt="Imagen del post"
+                className="post-image"
+                onError={(e) => {
+                  console.error('Error loading post image:', e);
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            </div>
           )}
         </div>
 

@@ -215,8 +215,8 @@
 
 .post-menu-btn {
   background: transparent;
-  border: 2px solid #9f283b;
-  color: #9f283b;
+  border: none;
+  color: #6c757d;
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
@@ -226,18 +226,23 @@
   gap: 6px;
   transition: all 0.2s ease;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
   min-width: 44px;
   height: 40px;
   line-height: 1;
+  outline: none;
+}
+
+.post-menu-btn:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .post-menu-btn:hover {
-  background: #9f283b;
-  color: white;
+  background: rgba(159, 40, 59, 0.08);
+  color: #9f283b;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.2);
-  border-color: #7a1f2e;
+  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.1);
 }
 
 .post-menu-btn:active {
@@ -385,7 +390,25 @@
   font-size: 17px;
   color: #2c2c2c;
   background: white;
-  border-bottom: 1px solid #f0f0f0;
+}
+
+.post-image-container {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.post-image {
+  max-width: 600px;
+  max-height: 400px;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .post-content p {

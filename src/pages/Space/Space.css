@@ -9,12 +9,18 @@
   margin-top: 0;
 }
 
+.space-posts-container .posts-list {
+  position: relative;
+  padding: 0;
+}
+
 .space-section .posts-list:empty,
 .space-section .posts-list:has(.no-posts-message) {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
+  min-height: 200px;
+  height: auto;
 }
 .space-header-hero {
   background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 50%, #6b1a26 100%);
@@ -466,6 +472,7 @@
     padding: 15px;
   }
 }
+
 
 .space-posts-header {
   display: flex;

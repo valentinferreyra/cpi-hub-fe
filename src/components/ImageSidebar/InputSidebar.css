@@ -1,0 +1,223 @@
+.input-sidebar {
+  width: 100%;
+  height: 36px;
+  background: #f8f9fa;
+  border: 1px solid #d0d7de;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 12px;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.input-sidebar.open {
+  background: #e9ecef;
+}
+
+.input-sidebar-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.textarea-with-image-container:focus-within .input-sidebar {
+  border-color: #d0d7de;
+}
+
+.image-btn {
+  padding: 4px;
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.image-btn:hover:not(:disabled) {
+  background: #0969da;
+  border-color: #0969da;
+}
+
+.image-btn:hover:not(:disabled) .upload-icon {
+  filter: brightness(0) invert(1);
+}
+
+.image-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upload-icon {
+  width: 16px;
+  height: 16px;
+  transition: filter 0.2s ease;
+}
+
+.image-preview-mini {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.preview-mini-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-image-mini {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: #f85149;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.remove-image-mini:hover:not(:disabled) {
+  background: #d1242f;
+  transform: scale(1.1);
+}
+
+.remove-image-mini:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Modal styles */
+.image-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.image-modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.image-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #f8f9fa;
+}
+
+.image-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #24292f;
+}
+
+.close-modal-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #656d76;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-modal-btn:hover {
+  background: #f6f8fa;
+  color: #24292f;
+}
+
+.image-modal-content {
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.image-modal-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #e1e5e9;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-secondary {
+  padding: 8px 16px;
+  border: 1px solid #d0d7de;
+  background: #fff;
+  color: #24292f;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: #f6f8fa;
+  border-color: #d0d7de;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .input-sidebar {
+    height: 36px;
+    padding: 0 8px;
+  }
+  
+  .image-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .image-preview-mini {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .image-modal {
+    width: 95%;
+    margin: 20px;
+  }
+}

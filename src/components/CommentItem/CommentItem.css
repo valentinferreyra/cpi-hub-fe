@@ -106,23 +106,22 @@
 
 .comment-menu-btn {
   background: transparent;
-  border: 2px solid #9f283b;
-  color: #9f283b;
+  border: none;
+  color: #6c757d;
   padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 18px;
   line-height: 1;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .comment-menu-btn:hover {
-  background: #9f283b;
-  color: #fff;
+  background: rgba(159, 40, 59, 0.08);
+  color: #9f283b;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.2);
-  border-color: #7a1f2e;
+  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.1);
 }
 
 .comment-menu-dropdown {
@@ -262,6 +261,25 @@
   letter-spacing: 0.1px;
   text-align: justify;
   padding: 0 4px;
+}
+
+.comment-image-container {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+
+.comment-image {
+  max-width: 300px;
+  max-height: 250px;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .edit-form {
@@ -522,8 +540,8 @@
 .comment-replies {
   margin-top: 24px;
   margin-left: 48px;
-  padding-left: 24px;
-  border-left: 3px solid transparent;
+  padding-left: 12px;
+  border-left: 3px solid #9f283b;
   background: linear-gradient(
     to right,
     rgba(159, 40, 59, 0.03) 0%,
@@ -543,16 +561,6 @@
   }
 }
 
-.comment-replies::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, #9f283b 0%, rgba(159, 40, 59, 0.3) 100%);
-  border-radius: 3px;
-}
 
 .comment-reply {
   background: linear-gradient(145deg, #fafbfc 0%, #ffffff 100%);
@@ -565,9 +573,9 @@
 }
 
 .comment-reply::before {
-  background: linear-gradient(180deg, #7a1f2e 0%, #9f283b 100%);
-  width: 3px;
+  display: none;
 }
+
 
 .comment-reply:hover {
   border-color: rgba(159, 40, 59, 0.12);
