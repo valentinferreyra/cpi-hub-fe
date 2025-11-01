@@ -261,6 +261,49 @@
   letter-spacing: 0.1px;
   text-align: justify;
   padding: 0 4px;
+  margin-bottom: 12px;
+}
+
+.comment-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 10px;
+  background: #f0f0f0;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+  width: fit-content;
+}
+
+.comment-like-btn,
+.comment-dislike-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comment-action-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.comment-actions .actions-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  padding: 0 2px;
 }
 
 .comment-image-container {
@@ -423,7 +466,6 @@
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease,
     box-shadow 0.2s ease;
-  margin-top: 12px;
   position: relative;
   overflow: hidden;
   letter-spacing: 0.3px;

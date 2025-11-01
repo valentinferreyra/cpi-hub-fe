@@ -190,6 +190,43 @@
   padding-top: 20px;
   margin-top: auto;
   border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 12px;
+  background: #f0f0f0;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+.like-btn,
+.dislike-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.actions-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  padding: 0 4px;
 }
 
 .comments-count {
