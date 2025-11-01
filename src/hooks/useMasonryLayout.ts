@@ -21,7 +21,6 @@ export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
       return;
     }
 
-    // Reset all positions
     children.forEach(child => {
       child.style.position = 'absolute';
       child.style.top = '0';
@@ -31,7 +30,6 @@ export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
       child.style.opacity = '0';
     });
 
-    // Wait for all images to load
     const waitForImages = (): Promise<void> => {
       return new Promise((resolve) => {
         const images = container.querySelectorAll('img');
@@ -62,31 +60,25 @@ export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
       });
     };
 
-    // Calculate positions after everything is loaded
     const positionCards = async () => {
       await waitForImages();
       
-      // Additional delay to ensure layout is stable
       setTimeout(() => {
         const columnHeights = new Array(columns).fill(0);
         const columnWidth = 100 / columns;
-
+        
         children.forEach((child) => {
-          // Find the shortest column
           const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
           const x = shortestColumnIndex * columnWidth;
           const y = columnHeights[shortestColumnIndex];
 
-          // Position the card
           child.style.left = `${x}%`;
           child.style.top = `${y}px`;
           child.style.opacity = '1';
 
-          // Update column height
           columnHeights[shortestColumnIndex] += child.offsetHeight + gap;
         });
 
-        // Set container height to accommodate all cards
         const maxHeight = Math.max(...columnHeights);
         container.style.height = `${maxHeight}px`;
       }, 100);
@@ -99,7 +91,6 @@ export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
     calculateLayout();
   }, [calculateLayout]);
 
-  // Recalculate on window resize
   useEffect(() => {
     const handleResize = () => {
       calculateLayout();

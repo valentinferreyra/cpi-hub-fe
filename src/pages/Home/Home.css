@@ -294,6 +294,8 @@
   position: relative;
   padding: 32px;
   background: white;
+  max-width: 1248px;
+  margin: 0 auto;
 }
 
 .posts-list .empty-posts {

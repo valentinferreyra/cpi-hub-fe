@@ -12,6 +12,8 @@
 .space-posts-container .posts-list {
   position: relative;
   padding: 0;
+  max-width: 1248px;
+  margin: 0 auto;
 }
 
 .space-section .posts-list:empty,
