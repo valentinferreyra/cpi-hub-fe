@@ -6,38 +6,34 @@ export const setErrorHandler = (handler: (message: string) => void) => {
   errorHandler = handler;
 };
 
+const getGenericErrorMessage = (statusCode: number): string => {
+  if (statusCode === 400) {
+    return 'Solicitud inválida. Por favor, verifica los datos ingresados.';
+  }
+  if (statusCode === 401) {
+    return 'Credenciales inválidas. Por favor, verifica tu email y contraseña.';
+  }
+  if (statusCode === 403) {
+    return 'No tienes permisos para realizar esta acción.';
+  }
+  if (statusCode === 404) {
+    return 'Recurso no encontrado.';
+  }
+  if (statusCode === 422) {
+    return 'Los datos proporcionados no son válidos. Por favor, verifica la información.';
+  }
+  if (statusCode === 500) {
+    return 'Error interno del servidor. Por favor, intenta más tarde.';
+  }
+  return 'Ha ocurrido un error. Por favor, intenta nuevamente.';
+};
+
 const isTechnicalMessage = (message: string): boolean => {
   const technicalPatterns = [
     /\.go:/
   ];
   
   return technicalPatterns.some(pattern => pattern.test(message));
-};
-
-const sanitizeMessage = (message: string, statusCode: number): string => {
-  if (isTechnicalMessage(message)) {
-    if (statusCode === 400) {
-      return 'Solicitud inválida. Por favor, verifica los datos ingresados.';
-    }
-    if (statusCode === 401) {
-      return 'Credenciales inválidas. Por favor, verifica tu email y contraseña.';
-    }
-    if (statusCode === 403) {
-      return 'No tienes permisos para realizar esta acción.';
-    }
-    if (statusCode === 404) {
-      return 'Recurso no encontrado.';
-    }
-    if (statusCode === 422) {
-      return 'Los datos proporcionados no son válidos. Por favor, verifica la información.';
-    }
-    if (statusCode === 500) {
-      return 'Error interno del servidor. Por favor, intenta más tarde.';
-    }
-    return 'Ha ocurrido un error. Por favor, intenta nuevamente.';
-  }
-  
-  return message;
 };
 
 const extractErrorMessage = (error: AxiosError): string => {
@@ -58,31 +54,16 @@ const extractErrorMessage = (error: AxiosError): string => {
     }
     
     if (message) {
-      return sanitizeMessage(message, statusCode);
+      if (isTechnicalMessage(message)) {
+        return getGenericErrorMessage(statusCode);
+      }
+      return message;
     }
     
     const statusText = error.response.statusText || '';
+    const genericMessage = getGenericErrorMessage(statusCode);
     
-    if (statusCode === 400) {
-      return 'Solicitud inválida. Por favor, verifica los datos ingresados.';
-    }
-    if (statusCode === 401) {
-      return 'No autorizado. Por favor, inicia sesión nuevamente.';
-    }
-    if (statusCode === 403) {
-      return 'No tienes permisos para realizar esta acción.';
-    }
-    if (statusCode === 404) {
-      return 'Recurso no encontrado.';
-    }
-    if (statusCode === 422) {
-      return 'Los datos proporcionados no son válidos. Por favor, verifica la información.';
-    }
-    if (statusCode === 500) {
-      return 'Error interno del servidor. Por favor, intenta más tarde.';
-    }
-    
-    return statusText || `Error ${statusCode}`;
+    return genericMessage || statusText || `Error ${statusCode}`;
   }
   
   if (error.request) {
