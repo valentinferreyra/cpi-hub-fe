@@ -12,7 +12,7 @@ interface TextareaWithImageProps {
   disabled?: boolean;
   currentImage?: string;
   className?: string;
-  onKeyPress?: (e: React.KeyboardEvent) => void;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
 const TextareaWithImage: React.FC<TextareaWithImageProps> = ({
@@ -25,7 +25,7 @@ const TextareaWithImage: React.FC<TextareaWithImageProps> = ({
   disabled = false,
   currentImage,
   className = "",
-  onKeyPress
+  onKeyDown
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [imageData, setImageData] = useState<string | null>(currentImage || null);
@@ -34,6 +34,7 @@ const TextareaWithImage: React.FC<TextareaWithImageProps> = ({
     if (currentImage !== imageData) {
       setImageData(currentImage || null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentImage]);
 
   const handleImageChange = (newImageData: string | null) => {
@@ -45,25 +46,25 @@ const TextareaWithImage: React.FC<TextareaWithImageProps> = ({
     onChange(e.target.value);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (onKeyPress) {
-      onKeyPress(e);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (onKeyDown) {
+      onKeyDown(e);
     }
   };
 
   return (
     <div className={`textarea-with-image-container ${className}`}>
-        <InputTopbar
-          onImageChange={handleImageChange}
-          currentImage={imageData || undefined}
-          disabled={disabled}
-        />
+      <InputTopbar
+        onImageChange={handleImageChange}
+        currentImage={imageData || undefined}
+        disabled={disabled}
+      />
       <div className="textarea-wrapper">
         <textarea
           ref={textareaRef}
           value={value}
           onChange={handleTextareaChange}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           rows={rows}
           maxLength={maxLength}
@@ -71,7 +72,7 @@ const TextareaWithImage: React.FC<TextareaWithImageProps> = ({
           className="textarea-with-image"
         />
       </div>
-      
+
       {maxLength && (
         <div className="character-count">
           {value.length}/{maxLength}

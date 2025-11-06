@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import uploadImageIcon from '../../assets/upload_image.png';
 import './InputSidebar.css';
@@ -50,6 +51,46 @@ const InputTopbar: React.FC<InputSidebarProps> = ({
     setTempImage(imageData);
   };
 
+  const modalContent = showModal ? (
+    <div className="image-modal-overlay" onClick={handleModalClose}>
+      <div className="image-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="image-modal-header">
+          <h3>Agregar imagen</h3>
+          <button
+            type="button"
+            className="close-modal-btn"
+            onClick={handleModalClose}
+          >
+            ×
+          </button>
+        </div>
+        <div className="image-modal-content">
+          <ImageUpload
+            onImageChange={handleTempImageChange}
+            currentImage={tempImage || undefined}
+            disabled={disabled}
+          />
+        </div>
+        <div className="image-modal-footer">
+          <button
+            type="button"
+            className="btn-cancel"
+            onClick={handleCancelImage}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            className="btn-accept"
+            onClick={handleAcceptImage}
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : null;
+
   return (
     <>
       <div className={`input-sidebar ${isOpen ? 'open' : ''}`}>
@@ -61,18 +102,18 @@ const InputTopbar: React.FC<InputSidebarProps> = ({
             disabled={disabled}
             title="Agregar imagen"
           >
-            <img 
-              src={uploadImageIcon} 
-              alt="Subir imagen" 
+            <img
+              src={uploadImageIcon}
+              alt="Subir imagen"
               className="upload-icon"
             />
           </button>
-          
+
           {currentImage && (
             <div className="image-preview-mini">
-              <img 
-                src={currentImage} 
-                alt="Preview" 
+              <img
+                src={currentImage}
+                alt="Preview"
                 className="preview-mini-image"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -92,45 +133,7 @@ const InputTopbar: React.FC<InputSidebarProps> = ({
         </div>
       </div>
 
-      {showModal && (
-        <div className="image-modal-overlay" onClick={handleModalClose}>
-          <div className="image-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="image-modal-header">
-              <h3>Agregar imagen</h3>
-              <button
-                type="button"
-                className="close-modal-btn"
-                onClick={handleModalClose}
-              >
-                ×
-              </button>
-            </div>
-            <div className="image-modal-content">
-              <ImageUpload
-                onImageChange={handleTempImageChange}
-                currentImage={tempImage || undefined}
-                disabled={disabled}
-              />
-            </div>
-            <div className="image-modal-footer">
-              <button
-                type="button"
-                className="btn-cancel"
-                onClick={handleCancelImage}
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                className="btn-accept"
-                onClick={handleAcceptImage}
-              >
-                Aceptar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {modalContent && createPortal(modalContent, document.body)}
     </>
   );
 };
