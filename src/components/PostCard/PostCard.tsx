@@ -4,6 +4,7 @@ import type { Post } from '../../types/post';
 import { formatPostDate } from '../../utils/dateUtils';
 import { useUserInfoModal } from '@/hooks';
 import UserInfoModal from '@/components/modals/UserInfoModal/UserInfoModal';
+import ImageLightbox from '@/components/ImageLightbox';
 import likeIcon from '../../assets/like.png';
 import dislikeIcon from '../../assets/dislike.png';
 import './PostCard.css';
@@ -15,6 +16,7 @@ interface PostCardProps {
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
   const maxLength = 160;
   const hasContent = post.content && post.content.trim();
@@ -40,6 +42,13 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const handleAuthorClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     handleUserClick(post.created_by.id);
+  };
+
+  const handleImageClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (post.image) {
+      setLightboxImage(post.image);
+    }
   };
 
   return (
@@ -87,10 +96,11 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           )}
           {post.image && (
             <div className="post-image-container">
-              <img 
-                src={post.image} 
+              <img
+                src={post.image}
                 alt="Imagen del post"
                 className="post-image"
+                onClick={handleImageClick}
                 onError={(e) => {
                   console.error('Error loading post image:', e);
                   e.currentTarget.style.display = 'none';
@@ -115,6 +125,13 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           </span>
         </div>
       </div>
+
+      {lightboxImage && (
+        <ImageLightbox
+          imageUrl={lightboxImage}
+          onClose={() => setLightboxImage(null)}
+        />
+      )}
     </>
   );
 };

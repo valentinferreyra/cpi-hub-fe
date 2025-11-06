@@ -6,6 +6,7 @@ import CommentItem from "@components/CommentItem/CommentItem";
 import EditPostModal from "@components/modals/EditPostModal/EditPostModal";
 import UserInfoModal from "@components/modals/UserInfoModal/UserInfoModal";
 import CommentForm from "../../components/CommentForm/CommentForm";
+import ImageLightbox from "../../components/ImageLightbox/ImageLightbox";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
@@ -30,6 +31,7 @@ export const Post = () => {
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
 
   const postMenuRef = useClickOutside<HTMLDivElement>(() => {
@@ -63,7 +65,7 @@ export const Post = () => {
 
     try {
       setIsSubmittingComment(true);
-      
+
       await addCommentToPost(currentUser!.id, post.id, content.trim(), undefined, image);
 
       setSuccessMessage('Comentario agregado correctamente');
@@ -283,10 +285,11 @@ export const Post = () => {
               <div>{post.content}</div>
               {post.image && (
                 <div className="post-image-container">
-                  <img 
-                    src={post.image} 
+                  <img
+                    src={post.image}
                     alt="Imagen del post"
                     className="post-image"
+                    onClick={() => setLightboxImage(post.image!)}
                     onError={(e) => {
                       console.error('Error loading post image:', e);
                       e.currentTarget.style.display = 'none';
@@ -363,6 +366,13 @@ export const Post = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {lightboxImage && (
+        <ImageLightbox
+          imageUrl={lightboxImage}
+          onClose={() => setLightboxImage(null)}
+        />
       )}
     </>
 

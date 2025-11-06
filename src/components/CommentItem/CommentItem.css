@@ -322,7 +322,12 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   object-fit: cover;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.comment-image:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(159, 40, 59, 0.12), 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
 .edit-form {
@@ -603,7 +608,6 @@
   }
 }
 
-
 .comment-reply {
   background: linear-gradient(145deg, #fafbfc 0%, #ffffff 100%);
   border-left-width: 0;
@@ -617,7 +621,6 @@
 .comment-reply::before {
   display: none;
 }
-
 
 .comment-reply:hover {
   border-color: rgba(159, 40, 59, 0.12);

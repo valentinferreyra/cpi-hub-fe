@@ -446,7 +446,12 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   object-fit: cover;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.post-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 32px rgba(159, 40, 59, 0.15), 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .post-content p {

@@ -1,0 +1,124 @@
+.image-lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: lightboxFadeIn 0.25s ease-out;
+  padding: 20px;
+}
+
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.image-lightbox-content {
+  position: relative;
+  max-width: 95vw;
+  max-height: 95vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lightboxScaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes lightboxScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 95vh;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 20px 80px rgba(159, 40, 59, 0.4), 0 10px 40px rgba(0, 0, 0, 0.6);
+  object-fit: contain;
+  cursor: default;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.lightbox-close-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: #9f283b;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 300;
+  line-height: 1;
+  z-index: 10002;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.lightbox-close-btn:hover {
+  background: #7a1f2e;
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.lightbox-close-btn:active {
+  transform: scale(0.95);
+  background: #6b1a26;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .image-lightbox-overlay {
+    padding: 10px;
+  }
+
+  .lightbox-close-btn {
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+
+  .lightbox-image {
+    max-height: 90vh;
+    border-radius: 8px;
+  }
+
+  .image-lightbox-content {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .lightbox-close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+  }
+}

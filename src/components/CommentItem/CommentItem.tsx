@@ -5,6 +5,7 @@ import { updateComment, deleteComment } from "../../api";
 import { useClickOutside, useUserInfoModal } from "../../hooks";
 import UserInfoModal from "@/components/modals/UserInfoModal/UserInfoModal";
 import CommentForm from "../CommentForm/CommentForm";
+import ImageLightbox from "../ImageLightbox/ImageLightbox";
 import likeIcon from "../../assets/like.png";
 import dislikeIcon from "../../assets/dislike.png";
 import "./CommentItem.css";
@@ -31,6 +32,7 @@ export const CommentItem = ({
   const [showMenu, setShowMenu] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
 
   const menuRef = useClickOutside<HTMLDivElement>(() => {
@@ -161,6 +163,7 @@ export const CommentItem = ({
                   src={comment.image}
                   alt="Imagen del comentario"
                   className="comment-image"
+                  onClick={() => setLightboxImage(comment.image!)}
                   onError={(e) => {
                     console.error('Error loading comment image:', e);
                     e.currentTarget.style.display = 'none';
@@ -248,6 +251,13 @@ export const CommentItem = ({
           </div>
         )}
       </div>
+
+      {lightboxImage && (
+        <ImageLightbox
+          imageUrl={lightboxImage}
+          onClose={() => setLightboxImage(null)}
+        />
+      )}
     </>
   );
 };

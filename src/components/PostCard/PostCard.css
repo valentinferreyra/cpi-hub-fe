@@ -167,8 +167,13 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   object-fit: cover;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease;
   display: block;
+}
+
+.post-image:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
 }
 
 .post-card .post-title {
@@ -250,7 +255,7 @@
   .post-card {
     max-width: 100%;
   }
-  
+
   .post-image {
     max-height: 250px;
   }
