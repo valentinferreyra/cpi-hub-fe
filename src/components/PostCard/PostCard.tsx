@@ -5,8 +5,7 @@ import { formatPostDate } from '../../utils/dateUtils';
 import { useUserInfoModal } from '@/hooks';
 import UserInfoModal from '@/components/modals/UserInfoModal/UserInfoModal';
 import ImageLightbox from '@/components/ImageLightbox';
-import likeIcon from '../../assets/like.png';
-import dislikeIcon from '../../assets/dislike.png';
+import ReactionButtons from '@/components/ReactionButtons';
 import './PostCard.css';
 
 interface PostCardProps {
@@ -112,13 +111,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
         <div className="post-footer">
           <div className="post-actions">
-            <button className="like-btn" onClick={(e) => e.stopPropagation()}>
-              <img src={likeIcon} alt="Like" className="action-icon" />
-            </button>
-            <span className="actions-count">100</span>
-            <button className="dislike-btn" onClick={(e) => e.stopPropagation()}>
-              <img src={dislikeIcon} alt="Dislike" className="action-icon" />
-            </button>
+            <ReactionButtons
+              entityType="post"
+              entityId={parseInt(post.id)}
+            />
           </div>
           <span className="comments-count">
             {post.comments.length} comentarios

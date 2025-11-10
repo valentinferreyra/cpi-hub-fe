@@ -1,0 +1,45 @@
+.reaction-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reaction-btn {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reaction-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.reaction-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.reaction-icon {
+  width: 20px;
+  height: 20px;
+  transition: filter 0.2s ease;
+}
+
+.reaction-btn.active .reaction-icon {
+  filter: brightness(0) saturate(100%) invert(20%) sepia(95%) saturate(2500%)
+    hue-rotate(340deg) brightness(90%) contrast(95%);
+}
+
+.reaction-count {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  min-width: 20px;
+  text-align: center;
+}

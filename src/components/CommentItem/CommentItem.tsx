@@ -1,13 +1,12 @@
 import { useState } from "react";
-import type { Comment } from "../../types/comment";
-import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
-import { updateComment, deleteComment } from "../../api";
-import { useClickOutside, useUserInfoModal } from "../../hooks";
+import type { Comment } from "@/types/comment";
+import { formatPostDetailDate, formatPostDetailTime } from "@/utils/dateUtils";
+import { updateComment, deleteComment } from "@/api";
+import { useClickOutside, useUserInfoModal } from "@/hooks";
 import UserInfoModal from "@/components/modals/UserInfoModal/UserInfoModal";
 import CommentForm from "../CommentForm/CommentForm";
 import ImageLightbox from "../ImageLightbox/ImageLightbox";
-import likeIcon from "../../assets/like.png";
-import dislikeIcon from "../../assets/dislike.png";
+import ReactionButtons from "@/components/ReactionButtons";
 import "./CommentItem.css";
 
 interface CommentItemProps {
@@ -184,13 +183,10 @@ export const CommentItem = ({
         {!isEditing && (
           <div className="comment-footer-actions">
             <div className="comment-actions">
-              <button className="comment-like-btn">
-                <img src={likeIcon} alt="Like" className="comment-action-icon" />
-              </button>
-              <span className="actions-count">100</span>
-              <button className="comment-dislike-btn">
-                <img src={dislikeIcon} alt="Dislike" className="comment-action-icon" />
-              </button>
+              <ReactionButtons
+                entityType="comment"
+                entityId={comment.id}
+              />
             </div>
             {!isReply && (
               <button

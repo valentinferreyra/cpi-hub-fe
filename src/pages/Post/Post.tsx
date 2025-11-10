@@ -7,15 +7,14 @@ import EditPostModal from "@components/modals/EditPostModal/EditPostModal";
 import UserInfoModal from "@components/modals/UserInfoModal/UserInfoModal";
 import CommentForm from "../../components/CommentForm/CommentForm";
 import ImageLightbox from "../../components/ImageLightbox/ImageLightbox";
+import ReactionButtons from "@/components/ReactionButtons";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { getPostById, addCommentToPost, updatePost, deletePost } from "../../api";
+import { getPostById, addCommentToPost, updatePost, deletePost } from "@/api";
 import type { Post as PostType } from "../../types/post";
 import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
 import { useClickOutside, useUserInfoModal } from "../../hooks";
-import likeIcon from "../../assets/like.png";
-import dislikeIcon from "../../assets/dislike.png";
 import "./Post.css";
 
 export const Post = () => {
@@ -144,6 +143,7 @@ export const Post = () => {
   const handleReplySubmit = async (parentCommentId: number, content: string, image?: string) => {
     if (!post) return;
 
+    // eslint-disable-next-line no-useless-catch
     try {
       await addCommentToPost(currentUser!.id, post.id, content, parentCommentId, image);
 
@@ -298,13 +298,10 @@ export const Post = () => {
                 </div>
               )}
               <div className="post-actions">
-                <button className="like-btn">
-                  <img src={likeIcon} alt="Like" className="action-icon" />
-                </button>
-                <span className="actions-count">100</span>
-                <button className="dislike-btn">
-                  <img src={dislikeIcon} alt="Dislike" className="action-icon" />
-                </button>
+                <ReactionButtons
+                  entityType="post"
+                  entityId={parseInt(post.id)}
+                />
               </div>
             </div>
 
