@@ -70,6 +70,13 @@
   height: 100px;
 }
 
+.reaction-btn:focus,
+.reaction-btn:active {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
 .reaction-btn:hover {
   background-color: rgba(0, 0, 0, 0.04);
   transform: scale(1.1);
@@ -100,14 +107,14 @@
 }
 
 .like-btn.active .reaction-icon {
-  filter: brightness(0) saturate(100%) invert(43%) sepia(96%) saturate(1234%)
-    hue-rotate(358deg) brightness(101%) contrast(101%);
+  filter: brightness(0) saturate(100%) invert(62%) sepia(94%) saturate(1200%)
+    hue-rotate(80deg) brightness(110%) contrast(110%);
   animation: likeAnimation 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dislike-btn.active .reaction-icon {
-  filter: brightness(0) saturate(100%) invert(29%) sepia(94%) saturate(2247%)
-    hue-rotate(220deg) brightness(95%) contrast(105%);
+  filter: brightness(0) saturate(100%) invert(32%) sepia(98%) saturate(2000%)
+    hue-rotate(-10deg) brightness(105%) contrast(110%);
   animation: dislikeAnimation 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -135,38 +142,31 @@
   }
 }
 
-.like-btn.active,
-.dislike-btn.active {
-  background: rgba(255, 255, 255, 0.5);
+.reaction-buttons .like-btn.active {
+  background: rgba(40, 201, 55, 0.18);
+}
+.reaction-buttons .dislike-btn.active {
+  background: rgba(255, 60, 60, 0.15);
 }
 
 .reaction-count {
   font-size: 15px;
   font-weight: 700;
-  background: linear-gradient(135deg, #495057 0%, #212529 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   min-width: 28px;
   text-align: center;
   padding: 0 6px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   z-index: 1;
+  color: #222;
 }
 
 .reaction-count.positive {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #28c937;
 }
 
 .reaction-count.negative {
-  background: linear-gradient(135deg, #4dabf7 0%, #3b5bdb 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ff3c3c;
 }
 
 .reaction-buttons:active {

@@ -100,6 +100,10 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
     }
   };
 
+  let countClass = 'reaction-count';
+  if (reactionScore > 0) countClass += ' positive';
+  else if (reactionScore < 0) countClass += ' negative';
+
   return (
     <div className="reaction-buttons">
       <button
@@ -109,7 +113,7 @@ export const ReactionButtons: React.FC<ReactionButtonsProps> = ({
       >
         <img src={likeIcon} alt="Like" className="reaction-icon" />
       </button>
-      <span className="reaction-count">{reactionScore}</span>
+      <span className={countClass}>{reactionScore}</span>
       <button
         className={`reaction-btn dislike-btn ${userReaction === 'dislike' ? 'active' : ''}`}
         onClick={() => handleReaction('dislike')}
