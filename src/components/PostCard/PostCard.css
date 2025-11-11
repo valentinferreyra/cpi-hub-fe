@@ -183,12 +183,6 @@
   transition: all 0.2s ease;
 }
 
-.post-date:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(198, 38, 65, 0.4);
-  background: linear-gradient(135deg, #d63450 0%, #9f283b 100%);
-}
-
 .post-content {
   margin-bottom: 16px;
 }
