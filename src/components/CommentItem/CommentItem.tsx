@@ -7,6 +7,7 @@ import UserInfoModal from "@/components/modals/UserInfoModal/UserInfoModal";
 import CommentForm from "../CommentForm/CommentForm";
 import ImageLightbox from "../ImageLightbox/ImageLightbox";
 import ReactionButtons from "@/components/ReactionButtons";
+import CommentsPill from "@/components/CommentsPill";
 import "./CommentItem.css";
 
 interface CommentItemProps {
@@ -194,6 +195,9 @@ export const CommentItem = ({
                 initialReactionId={userReactionIdsMap?.[`comment:${comment.id}`]}
               />
             </div>
+            {!isReply && comment.replies && comment.replies.length > 0 && (
+              <CommentsPill count={comment.replies.length} />
+            )}
             {!isReply && (
               <button
                 className={`reply-button ${replyingToCommentId === comment.id ? 'cancel-mode' : ''}`}

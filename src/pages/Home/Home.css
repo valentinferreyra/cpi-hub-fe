@@ -35,9 +35,7 @@
   background: white;
   border-radius: 16px;
   padding: 0;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(159, 40, 59, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(159, 40, 59, 0.08);
   overflow: hidden;
   position: relative;
 }
@@ -52,15 +50,22 @@
 }
 
 .posts-header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%
+    );
   pointer-events: none;
 }
 
@@ -294,8 +299,19 @@
   position: relative;
   padding: 32px;
   background: white;
-  max-width: 1248px;
+  max-width: 1400px;
   margin: 0 auto;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 24px;
+  grid-auto-rows: auto;
+}
+
+@media (max-width: 1200px) {
+  .posts-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 .posts-list .empty-posts {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from "react";
 
 interface MasonryOptions {
   columns: number;
@@ -7,7 +7,15 @@ interface MasonryOptions {
 
 export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { columns = 2, gap = 24 } = options || {};
+
+  // Determinar columnas según ancho de pantalla
+  const getResponsiveColumns = () => {
+    const width = window.innerWidth;
+    if (width >= 1200) return 2; // Pantallas grandes
+    return 1; // Pantallas medianas y pequeñas
+  };
+
+  const { gap = 24 } = options || {};
 
   const calculateLayout = useCallback(() => {
     if (!containerRef.current || items.length === 0) return;
@@ -16,24 +24,27 @@ export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
     const children = Array.from(container.children) as HTMLElement[];
 
     if (children.length === 0) {
-      container.style.height = 'auto';
-      container.style.minHeight = '200px';
+      container.style.height = "auto";
+      container.style.minHeight = "200px";
       return;
     }
 
-    children.forEach(child => {
-      child.style.position = 'absolute';
-      child.style.top = '0';
-      child.style.left = '0';
-      child.style.width = `calc(${100 / columns}% - ${gap / 2}px)`;
-      child.style.height = 'auto';
-      child.style.opacity = '0';
+    // Recalcular columnas dinámicamente
+    const currentColumns = getResponsiveColumns();
+
+    children.forEach((child) => {
+      child.style.position = "absolute";
+      child.style.top = "0";
+      child.style.left = "0";
+      child.style.width = `calc(${100 / currentColumns}% - ${gap / 2}px)`;
+      child.style.height = "auto";
+      child.style.opacity = "0";
     });
 
     const waitForImages = (): Promise<void> => {
       return new Promise((resolve) => {
-        const images = container.querySelectorAll('img');
-        
+        const images = container.querySelectorAll("img");
+
         if (images.length === 0) {
           resolve();
           return;
@@ -49,12 +60,12 @@ export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
           }
         };
 
-        images.forEach(img => {
+        images.forEach((img) => {
           if (img.complete && img.naturalHeight !== 0) {
             checkComplete();
           } else {
-            img.addEventListener('load', checkComplete);
-            img.addEventListener('error', checkComplete);
+            img.addEventListener("load", checkComplete);
+            img.addEventListener("error", checkComplete);
           }
         });
       });
@@ -62,19 +73,22 @@ export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
 
     const positionCards = async () => {
       await waitForImages();
-      
+
       setTimeout(() => {
-        const columnHeights = new Array(columns).fill(0);
-        const columnWidth = 100 / columns;
-        
+        const currentColumns = getResponsiveColumns();
+        const columnHeights = new Array(currentColumns).fill(0);
+        const columnWidth = 100 / currentColumns;
+
         children.forEach((child) => {
-          const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+          const shortestColumnIndex = columnHeights.indexOf(
+            Math.min(...columnHeights)
+          );
           const x = shortestColumnIndex * columnWidth;
           const y = columnHeights[shortestColumnIndex];
 
           child.style.left = `${x}%`;
           child.style.top = `${y}px`;
-          child.style.opacity = '1';
+          child.style.opacity = "1";
 
           columnHeights[shortestColumnIndex] += child.offsetHeight + gap;
         });
@@ -85,7 +99,7 @@ export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
     };
 
     positionCards();
-  }, [items, columns, gap]);
+  }, [items, gap]);
 
   useEffect(() => {
     calculateLayout();
@@ -96,8 +110,8 @@ export const useMasonryLayout = (items: any[], options?: MasonryOptions) => {
       calculateLayout();
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [calculateLayout]);
 
   return containerRef;

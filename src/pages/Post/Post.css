@@ -385,7 +385,7 @@
 
 .post-actions {
   display: flex;
-  gap: 0;
+  gap: 12px;
   align-items: center;
   margin-top: 16px;
   padding-top: 16px;

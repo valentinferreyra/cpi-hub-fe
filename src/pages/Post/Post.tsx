@@ -8,6 +8,7 @@ import UserInfoModal from "@components/modals/UserInfoModal/UserInfoModal";
 import CommentForm from "../../components/CommentForm/CommentForm";
 import ImageLightbox from "../../components/ImageLightbox/ImageLightbox";
 import ReactionButtons from "@/components/ReactionButtons";
+import CommentsPill from "@/components/CommentsPill";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
@@ -206,7 +207,7 @@ export const Post = () => {
       try {
         const res: UserLikeResponseEntity[] = await getUserLikes(currentUser.id, entities);
         const reactionMap: Record<string, 'like' | 'dislike' | null> = {};
-  const idsMap: Record<string, string | null> = {};
+        const idsMap: Record<string, string | null> = {};
         res.forEach((r) => {
           const key = `${r.entity_type}:${r.entity_id}`;
           reactionMap[key] = r.liked ? 'like' : r.disliked ? 'dislike' : null;
@@ -344,6 +345,7 @@ export const Post = () => {
                   initialUserReaction={userReactionsMap[`post:${parseInt(post.id)}`]}
                   initialReactionId={userReactionIdsMap[`post:${parseInt(post.id)}`]}
                 />
+                <CommentsPill count={post.comments.length} />
               </div>
             </div>
 

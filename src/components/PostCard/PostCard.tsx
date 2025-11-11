@@ -6,6 +6,7 @@ import { useUserInfoModal } from '@/hooks';
 import UserInfoModal from '@/components/modals/UserInfoModal/UserInfoModal';
 import ImageLightbox from '@/components/ImageLightbox';
 import ReactionButtons from '@/components/ReactionButtons';
+import CommentsPill from '@/components/CommentsPill';
 import './PostCard.css';
 
 interface PostCardProps {
@@ -112,8 +113,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, initialUserReaction, initialR
         </div>
 
         <div className="post-footer">
-          <div 
-            className="post-actions"
+          <div
+            className="postcard-actions"
             onClick={(e) => e.stopPropagation()}
           >
             <ReactionButtons
@@ -122,10 +123,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, initialUserReaction, initialR
               initialUserReaction={initialUserReaction}
               initialReactionId={initialReactionId}
             />
+            <CommentsPill count={post.comments.length} />
           </div>
-          <span className="comments-count">
-            {post.comments.length} comentarios
-          </span>
         </div>
       </div>
 

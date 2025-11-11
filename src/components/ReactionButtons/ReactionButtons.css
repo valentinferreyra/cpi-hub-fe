@@ -107,8 +107,8 @@
 }
 
 .like-btn.active .reaction-icon {
-  filter: brightness(0) saturate(100%) invert(62%) sepia(94%) saturate(1200%)
-    hue-rotate(80deg) brightness(110%) contrast(110%);
+  filter: brightness(0) saturate(100%) invert(62%) sepia(94%) saturate(1400%)
+    hue-rotate(80deg) brightness(80%) contrast(125%);
   animation: likeAnimation 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
