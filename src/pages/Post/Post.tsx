@@ -12,6 +12,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { getPostById, addCommentToPost, updatePost, deletePost } from "@/api";
+import { getUserLikes, type UserLikeRequestEntity, type UserLikeResponseEntity } from "@/api/reactions";
 import type { Post as PostType } from "../../types/post";
 import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
 import { useClickOutside, useUserInfoModal } from "../../hooks";
@@ -31,6 +32,8 @@ export const Post = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [userReactionsMap, setUserReactionsMap] = useState<Record<string, 'like' | 'dislike' | null>>({});
+  const [userReactionIdsMap, setUserReactionIdsMap] = useState<Record<string, string | null>>({});
   const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
 
   const postMenuRef = useClickOutside<HTMLDivElement>(() => {
@@ -182,6 +185,43 @@ export const Post = () => {
     fetchPostData();
   }, [post_id]);
 
+  useEffect(() => {
+    const fetchUserReactions = async () => {
+      if (!post || !currentUser) return;
+
+      const entities: UserLikeRequestEntity[] = [];
+      entities.push({ entity_type: 'post', entity_id: parseInt(post.id) });
+
+      const walkComments = (comments: PostType['comments']) => {
+        comments.forEach((c) => {
+          entities.push({ entity_type: 'comment', entity_id: c.id });
+          if (c.replies && c.replies.length > 0) {
+            walkComments(c.replies);
+          }
+        });
+      };
+
+      walkComments(post.comments || []);
+
+      try {
+        const res: UserLikeResponseEntity[] = await getUserLikes(currentUser.id, entities);
+        const reactionMap: Record<string, 'like' | 'dislike' | null> = {};
+  const idsMap: Record<string, string | null> = {};
+        res.forEach((r) => {
+          const key = `${r.entity_type}:${r.entity_id}`;
+          reactionMap[key] = r.liked ? 'like' : r.disliked ? 'dislike' : null;
+          idsMap[key] = r.reaction_id ?? null;
+        });
+        setUserReactionsMap(reactionMap);
+        setUserReactionIdsMap(idsMap);
+      } catch (e) {
+        console.error('Error prefetching user likes:', e);
+      }
+    };
+
+    fetchUserReactions();
+  }, [post, currentUser]);
+
   if (isLoading) {
     return (
       <div className="loading-container">
@@ -301,6 +341,8 @@ export const Post = () => {
                 <ReactionButtons
                   entityType="post"
                   entityId={parseInt(post.id)}
+                  initialUserReaction={userReactionsMap[`post:${parseInt(post.id)}`]}
+                  initialReactionId={userReactionIdsMap[`post:${parseInt(post.id)}`]}
                 />
               </div>
             </div>
@@ -317,6 +359,8 @@ export const Post = () => {
                     currentUserId={currentUser!.id}
                     onReplySubmit={handleReplySubmit}
                     onCommentUpdated={handleCommentUpdated}
+                    userReactionsMap={userReactionsMap}
+                    userReactionIdsMap={userReactionIdsMap}
                   />
                 ))}
 

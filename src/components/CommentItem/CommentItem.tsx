@@ -16,6 +16,8 @@ interface CommentItemProps {
   onReplySubmit: (parentCommentId: number, content: string, image?: string) => Promise<void>;
   isReply?: boolean;
   onCommentUpdated?: () => Promise<void> | void;
+  userReactionsMap?: Record<string, 'like' | 'dislike' | null>;
+  userReactionIdsMap?: Record<string, string | null>;
 }
 
 export const CommentItem = ({
@@ -25,6 +27,8 @@ export const CommentItem = ({
   onReplySubmit,
   isReply = false,
   onCommentUpdated,
+  userReactionsMap,
+  userReactionIdsMap,
 }: CommentItemProps) => {
   const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -186,6 +190,8 @@ export const CommentItem = ({
               <ReactionButtons
                 entityType="comment"
                 entityId={comment.id}
+                initialUserReaction={userReactionsMap?.[`comment:${comment.id}`]}
+                initialReactionId={userReactionIdsMap?.[`comment:${comment.id}`]}
               />
             </div>
             {!isReply && (
@@ -217,6 +223,8 @@ export const CommentItem = ({
                 onReplySubmit={onReplySubmit}
                 onCommentUpdated={onCommentUpdated}
                 isReply={true}
+                userReactionsMap={userReactionsMap}
+                userReactionIdsMap={userReactionIdsMap}
               />
             ))}
           </div>

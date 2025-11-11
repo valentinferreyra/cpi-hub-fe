@@ -10,9 +10,11 @@ import './PostCard.css';
 
 interface PostCardProps {
   post: Post;
+  initialUserReaction?: 'like' | 'dislike' | null;
+  initialReactionId?: string | null;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, initialUserReaction, initialReactionId }) => {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
@@ -110,10 +112,15 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </div>
 
         <div className="post-footer">
-          <div className="post-actions">
+          <div 
+            className="post-actions"
+            onClick={(e) => e.stopPropagation()}
+          >
             <ReactionButtons
               entityType="post"
               entityId={parseInt(post.id)}
+              initialUserReaction={initialUserReaction}
+              initialReactionId={initialReactionId}
             />
           </div>
           <span className="comments-count">

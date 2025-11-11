@@ -13,6 +13,19 @@ export interface Reaction {
   action: string;
 }
 
+export interface UserLikeRequestEntity {
+  entity_type: "post" | "comment";
+  entity_id: number;
+}
+
+export interface UserLikeResponseEntity {
+  entity_type: "post" | "comment";
+  entity_id: number;
+  liked: boolean;
+  disliked: boolean;
+  reaction_id?: string | null;
+}
+
 export const getReactionCount = async (
   entityType?: string,
   entityId?: number,
@@ -61,6 +74,31 @@ export const addReaction = async (
     return response.data;
   } catch (error) {
     console.error("Error adding reaction:", error);
+    throw error;
+  }
+};
+
+export const getUserLikes = async (
+  userId: number,
+  entities: UserLikeRequestEntity[]
+): Promise<UserLikeResponseEntity[]> => {
+  try {
+    if (!userId || entities.length === 0) return [];
+    const response = await api.post(`/users/${userId}/likes`, {
+      entities,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user likes:", error);
+    return [];
+  }
+};
+
+export const deleteReaction = async (reactionId: string): Promise<void> => {
+  try {
+    await api.delete(`/reactions/${reactionId}`);
+  } catch (error) {
+    console.error("Error deleting reaction:", error);
     throw error;
   }
 };
