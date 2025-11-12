@@ -151,20 +151,21 @@ export async function navigateToFirstSpace(page: Page): Promise<string> {
 }
 
 export async function joinSpace(page: Page) {
-  await page.waitForTimeout(1500);
-
   const joinButton = page
     .locator('button:has-text("Unirse"), button:has-text("Join")')
     .first();
 
   if (
     await joinButton
-      .waitFor({ state: "visible", timeout: 3000 })
+      .waitFor({ state: "visible", timeout: 5000 })
       .then(() => true)
       .catch(() => false)
   ) {
     await joinButton.click();
-    await page.waitForTimeout(1500);
+    await Promise.race([
+      joinButton.waitFor({ state: "detached", timeout: 5000 }).catch(() => {}),
+      page.waitForLoadState("networkidle").catch(() => {}),
+    ]);
   }
 }
 
@@ -174,7 +175,7 @@ export async function createPost(
     title: string;
     content: string;
   }
-) {
+): Promise<{ navigated: boolean }> {
   // Hacer clic en crear post
   const createPostButton = page
     .locator('button:has-text("Crear post"), button:has-text("+ Crear post")')
@@ -241,6 +242,21 @@ export async function createPost(
       .waitFor({ state: "visible", timeout: 3000 })
       .catch(() => {});
   }
+
+  return { navigated };
+}
+
+/**
+ * Abre un post desde la grilla actual buscando por título
+ */
+export async function openPostByTitle(page: Page, title: string) {
+  const titleLocator = page
+    .locator(".post-card .post-title", { hasText: title })
+    .first();
+
+  await titleLocator.waitFor({ state: "visible", timeout: 10_000 });
+  await titleLocator.click();
+  await page.waitForURL(/.*\/post\/\d+/, { timeout: 10_000 });
 }
 
 /**
