@@ -42,9 +42,6 @@ export async function registerUser(
   await page.waitForURL(/.*explorar/, { timeout: 15000 });
 }
 
-/**
- * Cierra el modal de bienvenida si está visible
- */
 export async function closeWelcomeModal(page: Page): Promise<boolean> {
   await page.waitForTimeout(500);
 
@@ -89,7 +86,6 @@ export async function closeWelcomeModal(page: Page): Promise<boolean> {
       ) {
         await textBtn.click().catch(() => {});
       } else {
-        // 3) Cualquier botón dentro del modal
         const anyBtn = modalLocator.locator("button").first();
         if (
           await anyBtn
@@ -105,7 +101,6 @@ export async function closeWelcomeModal(page: Page): Promise<boolean> {
       }
     }
 
-    // Esperar desprendimiento / invisibilidad
     const detached = await modalLocator
       .first()
       .waitFor({ state: "detached", timeout: 1000 })
@@ -135,28 +130,26 @@ export async function closeWelcomeModal(page: Page): Promise<boolean> {
   return true;
 }
 
-/**
- * Navega al primer space disponible
- */
 export async function navigateToFirstSpace(page: Page): Promise<string> {
-  const spaceCard = page.locator('.space-card, [class*="space"]').first();
-  await expect(spaceCard).toBeVisible({ timeout: 10000 });
+  const cards = page.locator(".explore-grid .space-card");
+  await cards.first().waitFor({ state: "visible", timeout: 15000 });
+
+  const firstCard = cards.first();
+  await firstCard.scrollIntoViewIfNeeded();
+  await expect(firstCard).toBeVisible({ timeout: 10000 });
 
   const spaceName =
-    (await spaceCard
-      .locator('h3, .space-name, [class*="space-title"]')
-      .first()
-      .textContent()) || "Unknown Space";
+    (await firstCard.locator(".space-card-name, h3").first().textContent()) ||
+    "Unknown Space";
 
-  await spaceCard.click();
+  await firstCard.click({ trial: true }).catch(() => {});
+  await firstCard.click();
+
   await page.waitForURL(/.*\/space\/\d+/, { timeout: 10000 });
 
   return spaceName;
 }
 
-/**
- * Se une a un space si no está unido
- */
 export async function joinSpace(page: Page) {
   await page.waitForTimeout(1500);
 
@@ -175,9 +168,6 @@ export async function joinSpace(page: Page) {
   }
 }
 
-/**
- * Crea un post en el space actual
- */
 export async function createPost(
   page: Page,
   postData: {
@@ -193,33 +183,64 @@ export async function createPost(
   await createPostButton.click();
 
   // Esperar modal
-  await page.waitForTimeout(1000);
+  const modal = page.locator(".create-post-modal");
+  await modal.waitFor({ state: "visible", timeout: 5000 });
 
   // Completar formulario
-  const titleInput = page
+  const titleInput = modal.locator('#post-title, input[name="title"]').first();
+  const contentInput = modal
     .locator(
-      'input[placeholder*="título"], input[placeholder*="Título"], input[name="title"], #title'
-    )
-    .first();
-  const contentInput = page
-    .locator(
-      'textarea[placeholder*="contenido"], textarea[placeholder*="Escribe"], textarea[name="content"], #content'
+      'textarea.textarea-with-image, textarea[placeholder*="descripción" i]'
     )
     .first();
 
+  await titleInput.click();
   await titleInput.fill(postData.title);
+  await contentInput.click();
   await contentInput.fill(postData.content);
 
   // Enviar
-  const submitPostButton = page
-    .locator(
-      'button:has-text("Crear"), button:has-text("Publicar"), button[type="submit"]'
-    )
-    .last();
+  const submitPostButton = modal
+    .locator('button.btn-create:has-text("Crear Post"), button.btn-create')
+    .first();
+  await expect(submitPostButton).toBeEnabled({ timeout: 5000 });
   await submitPostButton.click();
 
   // Esperar confirmación
-  await page.waitForTimeout(2000);
+  const navigated = await page
+    .waitForURL(/.*\/post\/\d+/, { timeout: 15000 })
+    .then(() => true)
+    .catch(() => false);
+
+  if (!navigated) {
+    const successToast = await page
+      .locator('.success-notification:has-text("Post creado correctamente")')
+      .first()
+      .waitFor({ state: "visible", timeout: 7000 })
+      .then(() => true)
+      .catch(() => false);
+
+    if (!successToast) {
+      const closed = await modal
+        .waitFor({ state: "detached", timeout: 3000 })
+        .then(() => true)
+        .catch(() => false);
+      if (!closed) {
+        // Reintento suave
+        await submitPostButton.click({ force: true }).catch(() => {});
+        await page.waitForTimeout(1000);
+      }
+    }
+  }
+
+  if (navigated) {
+    await page.waitForLoadState("domcontentloaded");
+    await page
+      .locator(".post-page")
+      .first()
+      .waitFor({ state: "visible", timeout: 3000 })
+      .catch(() => {});
+  }
 }
 
 /**
@@ -237,7 +258,6 @@ export async function takeScreenshot(page: Page, name: string) {
  * Espera a que desaparezca el indicador de carga
  */
 export async function waitForLoadingToFinish(page: Page) {
-  // Esperar a que desaparezcan los spinners de carga
   const loadingSpinner = page
     .locator('.loading-spinner, .spinner, [class*="loading"]')
     .first();
@@ -249,6 +269,5 @@ export async function waitForLoadingToFinish(page: Page) {
     // si no aparece visible, continuamos
   }
 
-  // Esperar un poco más para asegurar que todo terminó de cargar
   await page.waitForTimeout(500);
 }

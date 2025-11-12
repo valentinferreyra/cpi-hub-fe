@@ -149,7 +149,7 @@ test('test con helpers', async ({ page }) => {
 
 La configuración de Playwright está en `playwright.config.ts`:
 
-- **baseURL**: `http://localhost:5173`
+- **baseURL**: `http://localhost:3000`
 - **Navegadores**: Chromium, Firefox, WebKit
 - **Screenshots**: Solo en fallos
 - **Videos**: Solo en fallos
@@ -166,7 +166,7 @@ La configuración de Playwright está en `playwright.config.ts`:
 
 1. **Usa el inspector de Playwright** para generar locators:
    ```bash
-   npx playwright codegen http://localhost:5173
+   npx playwright codegen http://localhost:3000
    ```
 
 2. **Los tests deberían ser independientes** - Cada test debe poder ejecutarse solo

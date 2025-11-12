@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { closeWelcomeModal } from "./helpers/test-utils";
+import { closeWelcomeModal, navigateToFirstSpace } from "./helpers/test-utils";
 
 test("Flujo completo: Registro → Explorar → Unirse a Space → Crear Post", async ({
   page,
@@ -22,54 +22,78 @@ test("Flujo completo: Registro → Explorar → Unirse a Space → Crear Post", 
   // 2️⃣ EXPLORAR
   await expect(page.locator('h2:has-text("Explorar")')).toBeVisible();
 
-  // Cerrar modal de bienvenida usando helper robusto
   await closeWelcomeModal(page);
 
   await page.waitForTimeout(2000);
 
   // 3️⃣ ENTRAR A UN SPACE
-  const spaceCard = page.locator('.space-card, [class*="space"]').first();
-  await expect(spaceCard).toBeVisible({ timeout: 10000 });
-
-  await spaceCard.click();
-  await page.waitForURL(/.*\/space\/\d+/, { timeout: 10000 });
+  await navigateToFirstSpace(page);
 
   // 4️⃣ UNIRSE AL SPACE
   await page.waitForTimeout(1500);
 
-  const joinButton = page.locator('button:has-text("Unirse")').first();
+  const joinButton = page
+    .locator('.join-space-btn, button:has-text("Unirse")')
+    .first();
   if (await joinButton.isVisible({ timeout: 3000 }).catch(() => false)) {
     await joinButton.click();
     await page.waitForTimeout(1500);
   }
 
   // 5️⃣ CREAR POST
-  const createPostBtn = page.locator('button:has-text("Crear post")').first();
+  const createPostBtn = page
+    .locator('button.create-post-btn, button:has-text("Crear post")')
+    .first();
   await expect(createPostBtn).toBeVisible({ timeout: 5000 });
   await createPostBtn.click();
 
-  await page.waitForTimeout(1000);
+  const modal = page.locator(".create-post-modal");
+  await modal.waitFor({ state: "visible", timeout: 5000 });
 
-  const titleInput = page
-    .locator('input[placeholder*="título"], input[name="title"]')
-    .first();
-  const contentInput = page
-    .locator('textarea[placeholder*="contenido"], textarea[name="content"]')
+  const titleInput = modal.locator('#post-title, input[name="title"]').first();
+  const contentInput = modal
+    .locator(
+      'textarea.textarea-with-image, textarea[placeholder*="descripción" i]'
+    )
     .first();
 
   await titleInput.fill(`Post de prueba ${timestamp}`);
   await contentInput.fill("Contenido del post de prueba");
 
-  const submitBtn = page
-    .locator('button:has-text("Crear"), button:has-text("Publicar")')
-    .last();
+  const submitBtn = modal
+    .locator('button.btn-create:has-text("Crear Post"), button.btn-create')
+    .first();
+  await expect(submitBtn).toBeEnabled({ timeout: 5000 });
   await submitBtn.click();
 
-  await page.waitForTimeout(2000);
+  const navigated = await page
+    .waitForURL(/.*\/post\/\d+/, { timeout: 15000 })
+    .then(() => true)
+    .catch(() => false);
 
-  // Validar que el post (por título) aparece en la página (optimista, puede adaptarse según UI real)
+  if (!navigated) {
+    const successToast = await page
+      .locator('.success-notification:has-text("Post creado correctamente")')
+      .first()
+      .waitFor({ state: "visible", timeout: 7000 })
+      .then(() => true)
+      .catch(() => false);
+    if (!successToast) {
+      await submitBtn.click({ force: true }).catch(() => {});
+      await page.waitForTimeout(1000);
+    }
+  }
+
+  // Dar tiempo a que la página del post cargue por completo
+  await page.waitForLoadState("domcontentloaded");
+  await page
+    .locator(".post-page")
+    .first()
+    .waitFor({ state: "visible", timeout: 3000 })
+    .catch(() => {});
+
   await expect(page.locator(`text=Post de prueba ${timestamp}`)).toBeVisible({
-    timeout: 5000,
+    timeout: 3000,
   });
 
   console.log("✅ Test completado (flujo principal)");
