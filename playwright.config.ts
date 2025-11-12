@@ -34,8 +34,8 @@ export default defineConfig({
     /* Screenshot on failure */
     screenshot: "only-on-failure",
 
-    /* Video on retry */
-    video: "retain-on-failure",
+    /* Save video even on success */
+    video: "on",
   },
 
   /* Configure projects for major browsers */
