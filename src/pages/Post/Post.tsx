@@ -6,10 +6,14 @@ import CommentItem from "@components/CommentItem/CommentItem";
 import EditPostModal from "@components/modals/EditPostModal/EditPostModal";
 import UserInfoModal from "@components/modals/UserInfoModal/UserInfoModal";
 import CommentForm from "../../components/CommentForm/CommentForm";
+import ImageLightbox from "../../components/ImageLightbox/ImageLightbox";
+import ReactionButtons from "@/components/ReactionButtons";
+import CommentsPill from "@/components/CommentsPill";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { getPostById, addCommentToPost, updatePost, deletePost } from "../../api";
+import { getPostById, addCommentToPost, updatePost, deletePost } from "@/api";
+import { getUserLikes, type UserLikeRequestEntity, type UserLikeResponseEntity } from "@/api/reactions";
 import type { Post as PostType } from "../../types/post";
 import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
 import { useClickOutside, useUserInfoModal } from "../../hooks";
@@ -28,6 +32,9 @@ export const Post = () => {
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [userReactionsMap, setUserReactionsMap] = useState<Record<string, 'like' | 'dislike' | null>>({});
+  const [userReactionIdsMap, setUserReactionIdsMap] = useState<Record<string, string | null>>({});
   const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
 
   const postMenuRef = useClickOutside<HTMLDivElement>(() => {
@@ -61,7 +68,7 @@ export const Post = () => {
 
     try {
       setIsSubmittingComment(true);
-      
+
       await addCommentToPost(currentUser!.id, post.id, content.trim(), undefined, image);
 
       setSuccessMessage('Comentario agregado correctamente');
@@ -140,9 +147,11 @@ export const Post = () => {
   const handleReplySubmit = async (parentCommentId: number, content: string, image?: string) => {
     if (!post) return;
 
+    // eslint-disable-next-line no-useless-catch
     try {
       await addCommentToPost(currentUser!.id, post.id, content, parentCommentId, image);
 
+      setSuccessMessage('Respuesta agregada correctamente');
       setShowSuccessMessage(true);
 
       setTimeout(() => {
@@ -152,10 +161,8 @@ export const Post = () => {
       const updatedPost = await getPostById(post.id);
       if (updatedPost) {
         setPost(updatedPost);
-        console.log('Post actualizado después de respuesta, comentarios:', updatedPost.comments);
       }
     } catch (error) {
-      console.error('Error al agregar respuesta:', error);
       throw error;
     }
   };
@@ -178,6 +185,43 @@ export const Post = () => {
 
     fetchPostData();
   }, [post_id]);
+
+  useEffect(() => {
+    const fetchUserReactions = async () => {
+      if (!post || !currentUser) return;
+
+      const entities: UserLikeRequestEntity[] = [];
+      entities.push({ entity_type: 'post', entity_id: parseInt(post.id) });
+
+      const walkComments = (comments: PostType['comments']) => {
+        comments.forEach((c) => {
+          entities.push({ entity_type: 'comment', entity_id: c.id });
+          if (c.replies && c.replies.length > 0) {
+            walkComments(c.replies);
+          }
+        });
+      };
+
+      walkComments(post.comments || []);
+
+      try {
+        const res: UserLikeResponseEntity[] = await getUserLikes(currentUser.id, entities);
+        const reactionMap: Record<string, 'like' | 'dislike' | null> = {};
+        const idsMap: Record<string, string | null> = {};
+        res.forEach((r) => {
+          const key = `${r.entity_type}:${r.entity_id}`;
+          reactionMap[key] = r.liked ? 'like' : r.disliked ? 'dislike' : null;
+          idsMap[key] = r.reaction_id ?? null;
+        });
+        setUserReactionsMap(reactionMap);
+        setUserReactionIdsMap(idsMap);
+      } catch (e) {
+        console.error('Error prefetching user likes:', e);
+      }
+    };
+
+    fetchUserReactions();
+  }, [post, currentUser]);
 
   if (isLoading) {
     return (
@@ -282,10 +326,11 @@ export const Post = () => {
               <div>{post.content}</div>
               {post.image && (
                 <div className="post-image-container">
-                  <img 
-                    src={post.image} 
+                  <img
+                    src={post.image}
                     alt="Imagen del post"
                     className="post-image"
+                    onClick={() => setLightboxImage(post.image!)}
                     onError={(e) => {
                       console.error('Error loading post image:', e);
                       e.currentTarget.style.display = 'none';
@@ -293,6 +338,15 @@ export const Post = () => {
                   />
                 </div>
               )}
+              <div className="post-actions">
+                <ReactionButtons
+                  entityType="post"
+                  entityId={parseInt(post.id)}
+                  initialUserReaction={userReactionsMap[`post:${parseInt(post.id)}`]}
+                  initialReactionId={userReactionIdsMap[`post:${parseInt(post.id)}`]}
+                />
+                <CommentsPill count={post.comments.length} />
+              </div>
             </div>
 
             <div className="post-comments">
@@ -307,6 +361,8 @@ export const Post = () => {
                     currentUserId={currentUser!.id}
                     onReplySubmit={handleReplySubmit}
                     onCommentUpdated={handleCommentUpdated}
+                    userReactionsMap={userReactionsMap}
+                    userReactionIdsMap={userReactionIdsMap}
                   />
                 ))}
 
@@ -353,6 +409,13 @@ export const Post = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {lightboxImage && (
+        <ImageLightbox
+          imageUrl={lightboxImage}
+          onClose={() => setLightboxImage(null)}
+        />
       )}
     </>
 

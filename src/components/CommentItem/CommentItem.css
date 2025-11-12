@@ -261,6 +261,45 @@
   letter-spacing: 0.1px;
   text-align: justify;
   padding: 0 4px;
+  margin-bottom: 12px;
+}
+
+.comment-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 0;
+  align-items: center;
+}
+
+.comment-like-btn,
+.comment-dislike-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comment-action-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.comment-actions .actions-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  padding: 0 2px;
 }
 
 .comment-image-container {
@@ -279,7 +318,12 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   object-fit: cover;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.comment-image:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(159, 40, 59, 0.12), 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
 .edit-form {
@@ -423,7 +467,6 @@
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease,
     box-shadow 0.2s ease;
-  margin-top: 12px;
   position: relative;
   overflow: hidden;
   letter-spacing: 0.3px;
@@ -561,7 +604,6 @@
   }
 }
 
-
 .comment-reply {
   background: linear-gradient(145deg, #fafbfc 0%, #ffffff 100%);
   border-left-width: 0;
@@ -575,7 +617,6 @@
 .comment-reply::before {
   display: none;
 }
-
 
 .comment-reply:hover {
   border-color: rgba(159, 40, 59, 0.12);

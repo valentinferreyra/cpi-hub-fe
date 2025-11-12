@@ -47,7 +47,7 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
   return (
     <div className="user-posts-section">
       <h3>Posts recientes</h3>
-      
+
       {isLoading ? (
         <div className="loading-container">
           <div className="loading-spinner"></div>
@@ -60,22 +60,22 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
               <PostCard key={post.id} post={post} />
             ))}
           </div>
-          
+
           {getTotalPages() > 1 && (
             <div className="pagination-container">
-              <button 
+              <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className="pagination-btn"
               >
                 ← Anterior
               </button>
-              
+
               <span className="pagination-info">
                 Página {currentPage} de {getTotalPages()}
               </span>
-              
-              <button 
+
+              <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage >= getTotalPages()}
                 className="pagination-btn"

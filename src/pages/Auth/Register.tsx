@@ -14,7 +14,6 @@ function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [image, setImage] = useState('');
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const [uploadType, setUploadType] = useState<'url' | 'file'>('url');
@@ -47,37 +46,21 @@ function Register() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!name.trim()) {
-      setError('El nombre es obligatorio');
-      return;
-    }
-    if (!lastName.trim()) {
-      setError('El apellido es obligatorio');
-      return;
-    }
-    if (!email.trim()) {
-      setError('El email es obligatorio');
-      return;
-    }
-    if (!password.trim()) {
-      setError('La contraseña es obligatoria');
+    if (!name.trim() || !lastName.trim() || !email.trim() || !password.trim()) {
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
-      setError('Por favor, ingresa un email válido');
       return;
     }
 
     if (password.trim().length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
     try {
       setIsLoading(true);
-      setError('');
 
       const defaultImage = 'https://i.pinimg.com/736x/fb/6c/1f/fb6c1f3561169051c01cfb74d73d93b7.jpg';
       const userImage = image.trim() || defaultImage;
@@ -107,11 +90,6 @@ function Register() {
 
       navigate('/explorar');
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message || 'Error al registrarse');
-      } else {
-        setError('Error al registrarse');
-      }
     } finally {
       setIsLoading(false);
     }
@@ -125,11 +103,6 @@ function Register() {
       </div>
       <div className="auth-box">
         <form className="auth-form" onSubmit={handleRegister}>
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
           <div className="auth-form-row">
             <div className="auth-form-group">
               <label htmlFor="name" className="auth-form-label">Nombre</label>

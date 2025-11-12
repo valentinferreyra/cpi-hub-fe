@@ -36,8 +36,9 @@ const CommentForm: React.FC<CommentFormProps> = ({
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
       handleSubmit();
     }
   };
@@ -53,22 +54,36 @@ const CommentForm: React.FC<CommentFormProps> = ({
           rows={5}
           disabled={isSubmitting || isLoading}
           currentImage={image || undefined}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
         />
-        <div className="comment-actions">
-          <button
-            className={`comment-submit-btn ${content.trim() && !isSubmitting && !isLoading ? "active" : "disabled"}`}
-            disabled={!content.trim() || isSubmitting || isLoading}
-            onClick={handleSubmit}
-            aria-label="Enviar comentario"
-          >
-            {isSubmitting ? "..." : ">"}
-          </button>
-        </div>
+        <button
+          className={`comment-submit-btn ${content.trim() && !isSubmitting && !isLoading ? "active" : ""}`}
+          disabled={!content.trim() || isSubmitting || isLoading}
+          onClick={handleSubmit}
+          aria-label="Enviar comentario"
+        >
+          {isSubmitting ? (
+            <span className="submit-spinner">⏳</span>
+          ) : (
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          )}
+        </button>
       </div>
 
       <div className="comment-form-help">
-        <small>Presiona Ctrl+Enter para enviar rápidamente</small>
+        <small>💡 Presiona Ctrl+Enter para enviar rápidamente</small>
       </div>
     </div>
   );

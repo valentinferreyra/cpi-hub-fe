@@ -1,10 +1,13 @@
 import { useState } from "react";
-import type { Comment } from "../../types/comment";
-import { formatPostDetailDate, formatPostDetailTime } from "../../utils/dateUtils";
-import { updateComment, deleteComment } from "../../api";
-import { useClickOutside, useUserInfoModal } from "../../hooks";
+import type { Comment } from "@/types/comment";
+import { formatPostDetailDate, formatPostDetailTime } from "@/utils/dateUtils";
+import { updateComment, deleteComment } from "@/api";
+import { useClickOutside, useUserInfoModal } from "@/hooks";
 import UserInfoModal from "@/components/modals/UserInfoModal/UserInfoModal";
 import CommentForm from "../CommentForm/CommentForm";
+import ImageLightbox from "../ImageLightbox/ImageLightbox";
+import ReactionButtons from "@/components/ReactionButtons";
+import CommentsPill from "@/components/CommentsPill";
 import "./CommentItem.css";
 
 interface CommentItemProps {
@@ -14,6 +17,8 @@ interface CommentItemProps {
   onReplySubmit: (parentCommentId: number, content: string, image?: string) => Promise<void>;
   isReply?: boolean;
   onCommentUpdated?: () => Promise<void> | void;
+  userReactionsMap?: Record<string, 'like' | 'dislike' | null>;
+  userReactionIdsMap?: Record<string, string | null>;
 }
 
 export const CommentItem = ({
@@ -23,12 +28,15 @@ export const CommentItem = ({
   onReplySubmit,
   isReply = false,
   onCommentUpdated,
+  userReactionsMap,
+  userReactionIdsMap,
 }: CommentItemProps) => {
   const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
 
   const menuRef = useClickOutside<HTMLDivElement>(() => {
@@ -159,6 +167,7 @@ export const CommentItem = ({
                   src={comment.image}
                   alt="Imagen del comentario"
                   className="comment-image"
+                  onClick={() => setLightboxImage(comment.image!)}
                   onError={(e) => {
                     console.error('Error loading comment image:', e);
                     e.currentTarget.style.display = 'none';
@@ -176,13 +185,28 @@ export const CommentItem = ({
           />
         )}
 
-        {!isReply && !isEditing && (
-          <button
-            className={`reply-button ${replyingToCommentId === comment.id ? 'cancel-mode' : ''}`}
-            onClick={replyingToCommentId === comment.id ? handleCancelReply : handleReplyClick}
-          >
-            <span>{replyingToCommentId === comment.id ? 'Cancelar' : 'Responder'}</span>
-          </button>
+        {!isEditing && (
+          <div className="comment-footer-actions">
+            <div className="comment-actions">
+              <ReactionButtons
+                entityType="comment"
+                entityId={comment.id}
+                initialUserReaction={userReactionsMap?.[`comment:${comment.id}`]}
+                initialReactionId={userReactionIdsMap?.[`comment:${comment.id}`]}
+              />
+            </div>
+            {!isReply && comment.replies && comment.replies.length > 0 && (
+              <CommentsPill count={comment.replies.length} />
+            )}
+            {!isReply && (
+              <button
+                className={`reply-button ${replyingToCommentId === comment.id ? 'cancel-mode' : ''}`}
+                onClick={replyingToCommentId === comment.id ? handleCancelReply : handleReplyClick}
+              >
+                <span>{replyingToCommentId === comment.id ? 'Cancelar' : 'Responder'}</span>
+              </button>
+            )}
+          </div>
         )}
 
         {replyingToCommentId === comment.id && (
@@ -203,6 +227,8 @@ export const CommentItem = ({
                 onReplySubmit={onReplySubmit}
                 onCommentUpdated={onCommentUpdated}
                 isReply={true}
+                userReactionsMap={userReactionsMap}
+                userReactionIdsMap={userReactionIdsMap}
               />
             ))}
           </div>
@@ -233,6 +259,13 @@ export const CommentItem = ({
           </div>
         )}
       </div>
+
+      {lightboxImage && (
+        <ImageLightbox
+          imageUrl={lightboxImage}
+          onClose={() => setLightboxImage(null)}
+        />
+      )}
     </>
   );
 };
