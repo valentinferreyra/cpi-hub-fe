@@ -43,8 +43,6 @@ export async function registerUser(
 }
 
 export async function closeWelcomeModal(page: Page): Promise<boolean> {
-  await page.waitForTimeout(500);
-
   const modalLocator = page.locator(
     '.welcome-modal, [data-testid="welcome-modal"], .modal:has(.welcome-btn-primary), [role="dialog"]'
   );
@@ -109,9 +107,6 @@ export async function closeWelcomeModal(page: Page): Promise<boolean> {
     if (detached || !(await isModalVisible())) {
       return true;
     }
-
-    // Pequeño delay antes del próximo intento
-    await page.waitForTimeout(250);
   }
 
   if (await isModalVisible()) {
@@ -123,7 +118,6 @@ export async function closeWelcomeModal(page: Page): Promise<boolean> {
         if (el) el.remove();
       })
       .catch(() => {});
-    await page.waitForTimeout(200);
     return true;
   }
 
@@ -132,17 +126,15 @@ export async function closeWelcomeModal(page: Page): Promise<boolean> {
 
 export async function navigateToFirstSpace(page: Page): Promise<string> {
   const cards = page.locator(".explore-grid .space-card");
-  await cards.first().waitFor({ state: "visible", timeout: 15000 });
+  await cards.first().waitFor({ state: "visible", timeout: 10000 });
 
   const firstCard = cards.first();
   await firstCard.scrollIntoViewIfNeeded();
-  await expect(firstCard).toBeVisible({ timeout: 10000 });
 
   const spaceName =
     (await firstCard.locator(".space-card-name, h3").first().textContent()) ||
     "Unknown Space";
 
-  await firstCard.click({ trial: true }).catch(() => {});
   await firstCard.click();
 
   await page.waitForURL(/.*\/space\/\d+/, { timeout: 10000 });
@@ -195,9 +187,7 @@ export async function createPost(
     )
     .first();
 
-  await titleInput.click();
   await titleInput.fill(postData.title);
-  await contentInput.click();
   await contentInput.fill(postData.content);
 
   // Enviar
@@ -209,7 +199,7 @@ export async function createPost(
 
   // Esperar confirmación
   const navigated = await page
-    .waitForURL(/.*\/post\/\d+/, { timeout: 15000 })
+    .waitForURL(/.*\/post\/\d+/, { timeout: 10000 })
     .then(() => true)
     .catch(() => false);
 
@@ -217,7 +207,7 @@ export async function createPost(
     const successToast = await page
       .locator('.success-notification:has-text("Post creado correctamente")')
       .first()
-      .waitFor({ state: "visible", timeout: 7000 })
+      .waitFor({ state: "visible", timeout: 5000 })
       .then(() => true)
       .catch(() => false);
 
@@ -229,18 +219,12 @@ export async function createPost(
       if (!closed) {
         // Reintento suave
         await submitPostButton.click({ force: true }).catch(() => {});
-        await page.waitForTimeout(1000);
       }
     }
   }
 
   if (navigated) {
     await page.waitForLoadState("domcontentloaded");
-    await page
-      .locator(".post-page")
-      .first()
-      .waitFor({ state: "visible", timeout: 3000 })
-      .catch(() => {});
   }
 
   return { navigated };
@@ -254,9 +238,9 @@ export async function openPostByTitle(page: Page, title: string) {
     .locator(".post-card .post-title", { hasText: title })
     .first();
 
-  await titleLocator.waitFor({ state: "visible", timeout: 10_000 });
+  await titleLocator.waitFor({ state: "visible", timeout: 8000 });
   await titleLocator.click();
-  await page.waitForURL(/.*\/post\/\d+/, { timeout: 10_000 });
+  await page.waitForURL(/.*\/post\/\d+/, { timeout: 8000 });
 }
 
 /**
@@ -280,10 +264,8 @@ export async function waitForLoadingToFinish(page: Page) {
 
   try {
     await loadingSpinner.waitFor({ state: "visible", timeout: 2000 });
-    await loadingSpinner.waitFor({ state: "hidden", timeout: 10000 });
+    await loadingSpinner.waitFor({ state: "hidden", timeout: 8000 });
   } catch {
     // si no aparece visible, continuamos
   }
-
-  await page.waitForTimeout(500);
 }

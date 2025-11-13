@@ -56,6 +56,6 @@ test("Flujo completo: Registro → Explorar → Unirse a Space → Crear Post", 
     await expect(page).toHaveURL(/\/post\//);
     await expect(
       page.locator("h1.post-title", { hasText: postTitle })
-    ).toBeVisible({ timeout: 10_000 });
+    ).toBeVisible({ timeout: 5000 });
   });
 });
