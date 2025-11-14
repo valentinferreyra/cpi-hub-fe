@@ -10,3 +10,8 @@ export const createChatWebSocket = (spaceId: number, userId: number, username: s
   const wsUrl = `${WEBSOCKET_BASE_URL}/spaces/${spaceId}?user_id=${userId}&username=${fullName}`;
   return new WebSocket(wsUrl);
 };
+
+export const createNotificationWebSocket = (userId: number): WebSocket => {
+  const wsUrl = `${WEBSOCKET_BASE_URL}/notifications?user_id=${userId}`;
+  return new WebSocket(wsUrl);
+};

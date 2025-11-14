@@ -9,3 +9,4 @@ export { useClickOutside } from "./useClickOutside";
 export { useModal } from "./useModal";
 export { useUserInfoModal } from "./useUserInfoModal";
 export { useMasonryLayout } from "./useMasonryLayout";
+export { useNotifications } from "./useNotifications";
