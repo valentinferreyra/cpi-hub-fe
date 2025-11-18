@@ -11,7 +11,6 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { fetchData, setCurrentUser } = useAppContext();
 
@@ -19,39 +18,31 @@ function Login() {
     e.preventDefault();
 
     if (!email.trim() || !password.trim()) {
-      setError('Por favor, completa todos los campos');
       return;
     }
 
     try {
       setIsLoading(true);
-      setError('');
 
       const { token, user } = await login(email, password);
 
       localStorage.setItem('auth_token', token);
 
-      if (user) {
-        try {
-          setCurrentUser(user);
-        } catch (err) {
-          console.warn('setCurrentUser failed:', err);
-        }
-      } else {
-        try {
-          await fetchData();
-        } catch (err) {
-          console.warn('fetchData after register failed:', err);
+      try {
+        await fetchData();
+      } catch (err) {
+        console.warn('fetchData after login failed:', err);
+        if (user) {
+          try {
+            setCurrentUser(user);
+          } catch (setUserErr) {
+            console.warn('setCurrentUser failed:', setUserErr);
+          }
         }
       }
 
       navigate('/');
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message || 'Error al iniciar sesión');
-      } else {
-        setError('Error al iniciar sesión');
-      }
     } finally {
       setIsLoading(false);
     }
@@ -65,12 +56,7 @@ function Login() {
       </div>
       <div className="auth-box">
         <h2 className='auth-title'>Iniciar Sesión</h2>
-        <form className="auth-form" onSubmit={handleLogin}>
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
+        <form className="auth-form login-form" onSubmit={handleLogin}>
           <div className="auth-form-group">
             <label htmlFor="email" className="auth-form-label">Email</label>
             <input

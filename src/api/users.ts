@@ -1,5 +1,6 @@
 import api from "./client";
 import type { User } from "../types/user";
+import { getUserPosts, getUserComments } from "./index";
 
 interface LoginResponse {
   user: User;
@@ -127,6 +128,61 @@ export const addSpaceToUser = async (
   userId: number,
   spaceId: number
 ): Promise<void> => {
-  const response = await api.put(`/users/${userId}/spaces/${spaceId}/add`);
-  return response.data;
+  try {
+    const response = await api.put(`/users/${userId}/spaces/${spaceId}/add`);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding space to user:", error);
+    throw error;
+  }
+};
+
+interface UserStats {
+  totalPosts: number;
+  totalComments: number;
+}
+
+export const getUserStats = async (userId: number): Promise<UserStats> => {
+  try {
+    // Obtener total de posts
+    const postsResponse = await getUserPosts(userId, 1, 1);
+    const totalPosts = postsResponse.total || 0;
+
+    // Obtener total de comentarios
+    const commentsResponse = await getUserComments(userId, 1, 1);
+    const totalComments = commentsResponse.total || 0;
+
+    return { totalPosts, totalComments };
+  } catch (error) {
+    console.error("Error getting user stats:", error);
+    return { totalPosts: 0, totalComments: 0 };
+  }
+};
+
+interface UpdateUserData {
+  id: number;
+  name?: string;
+  last_name?: string;
+  image?: string;
+}
+
+export const updateUser = async (userData: UpdateUserData): Promise<void> => {
+  try {
+    const payload: Record<string, string> = {};
+
+    if (userData.name !== undefined) {
+      payload.name = userData.name;
+    }
+    if (userData.last_name !== undefined) {
+      payload.last_name = userData.last_name;
+    }
+    if (userData.image !== undefined) {
+      payload.image = userData.image;
+    }
+
+    await api.put(`/users/${userData.id}`, payload);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
 };

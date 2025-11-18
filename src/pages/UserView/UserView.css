@@ -61,7 +61,7 @@
   flex: 1;
 }
 
-.user-info-header {
+.user-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -90,14 +90,14 @@
   font-size: 1.25rem;
 }
 
-.user-name {
+.user-profile-section .user-name {
   font-size: 2.5rem;
   font-weight: 700;
   color: #2c3e50;
-  margin: 0 0 10px 0;
+  margin: 0 0 5px 0;
 }
 
-.user-email {
+.user-profile-section .user-email {
   font-size: 1.1rem;
   color: #7f8c8d;
   margin: 0 0 20px 0;
@@ -233,7 +233,7 @@
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   width: 300px;
-  height: 200px;
+  height: 250px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   border: 1px solid #e0e0e0;
@@ -514,7 +514,7 @@
     height: 100px;
   }
 
-  .user-name {
+  .user-profile-section .user-name {
     font-size: 2rem;
   }
 

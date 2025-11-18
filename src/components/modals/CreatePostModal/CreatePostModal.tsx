@@ -1,27 +1,30 @@
 import { useState } from "react";
+import TextareaWithImage from "../../TextareaWithImage/TextareaWithImage";
 import "./CreatePostModal.css";
 
 interface CreatePostModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreatePost: (title: string, content: string) => void;
+  onCreatePost: (title: string, content: string, image?: string) => void;
   isLoading?: boolean;
 }
 
 function CreatePostModal({ isOpen, onClose, onCreatePost, isLoading = false }: CreatePostModalProps) {
   const [postTitle, setPostTitle] = useState('');
   const [postContent, setPostContent] = useState('');
+  const [postImage, setPostImage] = useState<string | null>(null);
 
   const handleClose = () => {
     setPostTitle('');
     setPostContent('');
+    setPostImage(null);
     onClose();
   };
 
   const handleCreatePost = () => {
     if (!postTitle.trim() || !postContent.trim() || isLoading) return;
 
-    onCreatePost(postTitle, postContent);
+    onCreatePost(postTitle, postContent, postImage || undefined);
   };
 
   if (!isOpen) return null;
@@ -56,18 +59,16 @@ function CreatePostModal({ isOpen, onClose, onCreatePost, isLoading = false }: C
               <label htmlFor="post-content" className="form-label">
                 Descripción del post
               </label>
-              <textarea
-                id="post-content"
-                className="form-textarea"
-                placeholder="Escribe la descripción de tu post..."
+              <TextareaWithImage
                 value={postContent}
-                onChange={(e) => setPostContent(e.target.value)}
+                onChange={setPostContent}
+                onImageChange={setPostImage}
+                placeholder="Escribe la descripción de tu post..."
+                rows={6}
                 maxLength={300}
-                rows={4}
+                disabled={isLoading}
+                currentImage={postImage || undefined}
               />
-              <div className="character-count">
-                {postContent.length}/300
-              </div>
             </div>
 
             <div className="form-actions">

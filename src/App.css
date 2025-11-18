@@ -2,6 +2,36 @@
   --cpi-hub-color: #9F283B;
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-center-margin {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.margin-left-16 {
+  margin-left: 16px;
+}
+
+.margin-top-4 {
+  margin-top: 4px;
+}
+
 .App {
   text-align: left;
   min-height: 100vh;

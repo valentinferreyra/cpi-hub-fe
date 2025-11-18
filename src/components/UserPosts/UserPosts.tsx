@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PostCard from '../PostCard/PostCard';
 import { getUserPosts } from '../../api';
 import type { Post } from '../../types/post';
+import { useMasonryLayout } from '../../hooks';
 import './UserPosts.css';
 
 interface UserPostsProps {
@@ -14,6 +15,8 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [pageSize] = useState(5);
+
+  const masonryRef = useMasonryLayout(userPosts);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -44,7 +47,7 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
   return (
     <div className="user-posts-section">
       <h3>Posts recientes</h3>
-      
+
       {isLoading ? (
         <div className="loading-container">
           <div className="loading-spinner"></div>
@@ -52,27 +55,27 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
         </div>
       ) : userPosts.length > 0 ? (
         <>
-          <div className="posts-grid">
+          <div ref={masonryRef} className="posts-grid">
             {userPosts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </div>
-          
+
           {getTotalPages() > 1 && (
             <div className="pagination-container">
-              <button 
+              <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className="pagination-btn"
               >
                 ← Anterior
               </button>
-              
+
               <span className="pagination-info">
                 Página {currentPage} de {getTotalPages()}
               </span>
-              
-              <button 
+
+              <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage >= getTotalPages()}
                 className="pagination-btn"

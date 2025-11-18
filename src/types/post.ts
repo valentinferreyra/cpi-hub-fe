@@ -4,6 +4,7 @@ export interface Post {
   id: string;
   title: string;
   content: string;
+  image?: string; 
   created_at: string;
   created_by: SimpleUser;
   updated_at: string;
@@ -13,13 +14,13 @@ export interface Post {
 }
 
 export interface SimpleUser {
-    id: string;
-    name: string;
-    last_name: string;
-    image: string;
+  id: number;
+  name: string;
+  last_name: string;
+  image: string;
 }
 
 export interface SimpleSpace {
-    id: string;
-    name: string;
+  id: string;
+  name: string;
 }
