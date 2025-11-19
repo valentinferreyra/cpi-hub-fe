@@ -10,6 +10,8 @@
     4px 0 20px rgba(0, 0, 0, 0.15);
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-separator {
@@ -19,10 +21,28 @@
   width: 100%;
 }
 
-.sidebar-container {
+.sidebar-top-section {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  flex-shrink: 0;
+}
+
+.sidebar-spaces-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  /* Ocultar scrollbar en diferentes navegadores */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
+}
+
+/* Ocultar scrollbar en Chrome, Safari y Opera */
+.sidebar-spaces-container::-webkit-scrollbar {
+  display: none;
 }
 
 .sidebar-item {
