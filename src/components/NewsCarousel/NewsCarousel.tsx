@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import type { News } from "../../types/news";
 import { getNews } from "../../api";
 import "./NewsCarousel.css";
@@ -23,28 +23,42 @@ function NewsCarousel() {
     fetchNews();
   }, []);
 
-  useEffect(() => {
-    if (news.length === 0) return;
+  const intervalRef = useRef<number | null>(null);
 
-    const interval = setInterval(() => {
+  const startAutoAdvance = useCallback(() => {
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+    }
+    if (news.length === 0) return;
+    intervalRef.current = window.setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % news.length);
     }, 5000);
-
-    return () => clearInterval(interval);
   }, [news.length]);
+
+  useEffect(() => {
+    startAutoAdvance();
+    return () => {
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [startAutoAdvance]);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
+    startAutoAdvance();
   };
 
   const goToPrevious = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? news.length - 1 : prevIndex - 1
     );
+    startAutoAdvance();
   };
 
   const goToNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % news.length);
+    startAutoAdvance();
   };
 
   const isValidUrl = (url?: string) => !!url && /^https?:\/\//.test(url.trim());
