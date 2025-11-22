@@ -83,6 +83,16 @@ export const updateComment = async (
   }
 };
 
+export const getCommentById = async (commentId: number): Promise<Comment | null> => {
+  try {
+    const response = await api.get(`/comments/${commentId}`);
+    return response.data.data || response.data;
+  } catch (error) {
+    console.error("Error getting comment by id:", error);
+    return null;
+  }
+};
+
 export const deleteComment = async (commentId: number): Promise<void> => {
   try {
     await api.delete(`/comments/${commentId}`);

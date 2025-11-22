@@ -24,24 +24,18 @@ const NotificationToast: React.FC<NotificationToastProps> = ({ notification, onC
 
   if (!notification) return null;
 
-  const getNotificationMessage = (notif: Notification): string => {
-    if (notif.type === 'reaction') {
-      const entityName = notif.entity_type === 'post' ? 'post' : 'comentario';
-      return `Alguien reaccionó a tu ${entityName}`;
-    }
-    return 'Nueva notificación';
-  };
-
   const handleClick = () => {
-    const postId = notification.post_id ?? notification.entity_id;
-    navigate(`/post/${postId}`);
+    if (notification.url) {
+      navigate(notification.url);
+    }
     onClose();
   };
 
   return createPortal(
     <div className="notification-toast" onClick={handleClick}>
       <div className="notification-toast-content">
-        <p className="notification-toast-message">{getNotificationMessage(notification)}</p>
+        <p className="notification-toast-title">{notification.title}</p>
+        <p className="notification-toast-message">{notification.description}</p>
       </div>
     </div>,
     document.body

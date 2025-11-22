@@ -71,6 +71,8 @@ export const Post = () => {
 
       await addCommentToPost(currentUser!.id, post.id, content.trim(), undefined, image);
 
+      // La notificación se crea automáticamente vía WebSocket cuando el backend procesa el comentario
+
       setSuccessMessage('Comentario agregado correctamente');
       setShowSuccessMessage(true);
 
