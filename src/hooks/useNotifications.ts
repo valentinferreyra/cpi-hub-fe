@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { createNotificationWebSocket } from '../api/websocket';
-import { getNotifications, getUnreadCount, markNotificationAsRead, markAllNotificationsAsRead } from '../api/notifications';
-import type { Notification, NotificationMessage } from '../types/notification';
+import { getNotifications, getUnreadCount, markNotificationAsRead, markAllNotificationsAsRead, createNotification } from '../api/notifications';
+import { getUserById } from '../api/users';
+import type { Notification } from '../types/notification';
+import type { EventMessage } from '../types/event';
+import { transformEventToNotification } from '../utils/notificationTransformer';
 
 interface UseNotificationsProps {
   currentUser: { id: number } | null;
@@ -26,7 +29,6 @@ export const useNotifications = ({
   const hasLoadedInitialNotifications = useRef(false);
   const currentUserIdRef = useRef<number | null>(null);
 
-  // Resetear cuando cambia el usuario
   useEffect(() => {
     if (currentUser?.id !== currentUserIdRef.current) {
       hasLoadedInitialNotifications.current = false;
@@ -38,7 +40,6 @@ export const useNotifications = ({
     }
   }, [currentUser?.id]);
 
-  // Cargar notificaciones iniciales desde el backend
   useEffect(() => {
     if (!enabled || !currentUser || hasLoadedInitialNotifications.current) {
       return;
@@ -91,27 +92,58 @@ export const useNotifications = ({
           }
         };
 
-        socket.onmessage = (event) => {
+        socket.onmessage = async (event) => {
           try {
-            const message: NotificationMessage = JSON.parse(event.data);
+            const message: EventMessage = JSON.parse(event.data);
             
-            if (message.type === 'notification') {
-              if (processedNotificationIds.current.has(message.data.id)) {
-                return;
+            if (message.type === 'event' && message.data.target_user_id === currentUser.id) {
+              if ((message.data.type === 'comment_created' || message.data.type === 'comment_reply_created') && message.data.user_id) {
+                try {
+                  const user = await getUserById(message.data.user_id);
+                  
+                  if (user) {
+                    message.data.metadata.user_first_name = user.name;
+                    message.data.metadata.user_last_name = user.last_name;
+                  }
+                } catch (error) {
+                  console.error('Error fetching user data:', error);
+                }
               }
               
-              processedNotificationIds.current.add(message.data.id);
+              const notification = transformEventToNotification(message.data, currentUser.id);
               
-              setNotifications(prev => [message.data, ...prev]);
-              
-              if (!message.data.read) {
-                setUnreadCount(prev => prev + 1);
-                // Mostrar toast solo para notificaciones no leídas
-                setToastNotification(message.data);
+              if (notification) {
+                try {
+                  const savedNotification = await createNotification(notification);
+                  
+                  if (processedNotificationIds.current.has(savedNotification.id)) {
+                    return;
+                  }
+                  
+                  processedNotificationIds.current.add(savedNotification.id);
+                  
+                  setNotifications(prev => [savedNotification, ...prev]);
+                  
+                  if (!savedNotification.read) {
+                    setUnreadCount(prev => prev + 1);
+                    setToastNotification(savedNotification);
+                  }
+                } catch (error) {
+                  console.error('Error creating notification:', error);
+                  const tempNotification: Notification = {
+                    ...notification,
+                    id: `temp-${Date.now()}`,
+                    read: false,
+                    created_at: new Date().toISOString(),
+                  };
+                  setNotifications(prev => [tempNotification, ...prev]);
+                  setUnreadCount(prev => prev + 1);
+                  setToastNotification(tempNotification);
+                }
               }
             }
           } catch (error) {
-            console.error('Error parsing notification message:', error);
+            console.error('Error processing event:', error);
           }
         };
 
