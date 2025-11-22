@@ -3,6 +3,7 @@ import Sidebar from "@components/Sidebar/Sidebar";
 import Topbar from "@components/Topbar/Topbar";
 import PostCard from "@components/PostCard/PostCard";
 import Breadcrumb from "@components/Breadcrumb/Breadcrumb";
+import NewsCarousel from "@components/NewsCarousel";
 import { useEffect, useState } from "react";
 import "./Home.css";
 import { useAppContext } from "../../context/AppContext";
@@ -94,6 +95,7 @@ function Home() {
               <h2 className="posts-title">Últimas novedades</h2>
             )}
           </div>
+          {!selectedSpace && <NewsCarousel />}
           <div ref={masonryRef} className="posts-list">
             {(() => {
               if (!Array.isArray(postsToShow)) {
