@@ -35,6 +35,7 @@ export const Post = () => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [userReactionsMap, setUserReactionsMap] = useState<Record<string, 'like' | 'dislike' | null>>({});
   const [userReactionIdsMap, setUserReactionIdsMap] = useState<Record<string, string | null>>({});
+  const [showCommentForm, setShowCommentForm] = useState(false);
   const { showUserInfoModal, isLoadingUserInfo, viewedUser, handleUserClick, closeUserInfoModal } = useUserInfoModal();
 
   const postMenuRef = useClickOutside<HTMLDivElement>(() => {
@@ -85,6 +86,8 @@ export const Post = () => {
         setPost(updatedPost);
         console.log('Post actualizado, comentarios:', updatedPost.comments);
       }
+
+      setShowCommentForm(false);
     } catch (error) {
       console.error('Error adding comment:', error);
     } finally {
@@ -353,6 +356,21 @@ export const Post = () => {
 
             <div className="post-comments">
               <h3>Comentarios</h3>
+              {!showCommentForm ? (
+                <button
+                  className="add-comment-button"
+                  onClick={() => setShowCommentForm(true)}
+                >
+                  Agregar comentario
+                </button>
+              ) : (
+                <CommentForm
+                  onSubmit={handleAddComment}
+                  placeholder="Escribe tu comentario..."
+                  isLoading={isSubmittingComment}
+                  onCancel={() => setShowCommentForm(false)}
+                />
+              )}
               {post.comments
                 .filter(comment => !comment.parent_comment_id)
                 .map((comment) => (
@@ -367,12 +385,6 @@ export const Post = () => {
                     userReactionIdsMap={userReactionIdsMap}
                   />
                 ))}
-
-              <CommentForm
-                onSubmit={handleAddComment}
-                placeholder="Escribe tu comentario..."
-                isLoading={isSubmittingComment}
-              />
             </div>
           </div>
         </div>

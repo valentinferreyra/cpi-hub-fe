@@ -8,6 +8,7 @@ import CommentForm from "../CommentForm/CommentForm";
 import ImageLightbox from "../ImageLightbox/ImageLightbox";
 import ReactionButtons from "@/components/ReactionButtons";
 import CommentsPill from "@/components/CommentsPill";
+import downRightArrowIcon from "@/assets/down-right-arrow.png";
 import "./CommentItem.css";
 
 interface CommentItemProps {
@@ -111,6 +112,13 @@ export const CommentItem = ({
       )}
 
       <div className={`comment ${isReply ? "comment-reply" : ""}`}>
+        {isReply && (
+          <img
+            src={downRightArrowIcon}
+            alt="Respuesta a comentario"
+            className="reply-indicator-icon"
+          />
+        )}
         <div className="comment-header">
           <div className="comment-author-info">
             <img

@@ -3,7 +3,7 @@
   border-radius: 20px;
   padding: 24px 28px;
   margin-bottom: 20px;
-  border: 1px solid rgba(159, 40, 59, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
@@ -12,20 +12,13 @@
 }
 
 .comment::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(180deg, #9f283b 0%, #7a1f2e 100%);
-  border-radius: 20px 0 0 20px;
+  display: none;
 }
 
 .comment:hover {
-  box-shadow: 0 6px 24px rgba(159, 40, 59, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06),
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 1);
-  border-color: rgba(159, 40, 59, 0.15);
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
 .comment-header {
@@ -49,7 +42,7 @@
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(159, 40, 59, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(255, 255, 255, 0.5);
   transition: transform 0.2s ease;
 }
@@ -129,7 +122,7 @@
   top: calc(100% + 8px);
   right: 0;
   background: white;
-  border: 2px solid rgba(159, 40, 59, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   min-width: 150px;
@@ -331,7 +324,7 @@
   padding: 16px;
   background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
   border-radius: 16px;
-  border: 2px solid rgba(159, 40, 59, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .edit-actions {
@@ -396,10 +389,10 @@
 }
 
 .comment-input:focus {
-  border-color: #9f283b;
+  border-color: rgba(0, 0, 0, 0.2);
   background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(159, 40, 59, 0.08),
-    0 4px 12px rgba(159, 40, 59, 0.1), inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 3px rgba(0, 0, 0, 0.05);
   transform: translateY(-1px);
 }
 
@@ -456,10 +449,10 @@
   background: linear-gradient(
     135deg,
     transparent 0%,
-    rgba(159, 40, 59, 0.02) 100%
+    rgba(0, 0, 0, 0.02) 100%
   );
-  color: #9f283b;
-  border: 2px solid #9f283b;
+  color: #666;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 8px 20px;
   border-radius: 12px;
   font-size: 13px;
@@ -472,7 +465,7 @@
   letter-spacing: 0.3px;
   text-transform: uppercase;
   font-size: 12px;
-  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .reply-button span {
@@ -481,12 +474,12 @@
 }
 
 .reply-button:hover {
-  background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 100%);
-  color: white;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.08) 100%);
+  color: #333;
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(159, 40, 59, 0.25),
-    0 2px 8px rgba(159, 40, 59, 0.2);
-  border-color: #7a1f2e;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.2);
 }
 
 .reply-button:active {
@@ -512,8 +505,8 @@
   padding: 20px;
   background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
   border-radius: 16px;
-  border: 2px solid rgba(159, 40, 59, 0.1);
-  box-shadow: 0 4px 16px rgba(159, 40, 59, 0.08),
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04),
     inset 0 1px 2px rgba(255, 255, 255, 0.8);
   position: relative;
   overflow: hidden;
@@ -532,14 +525,7 @@
 }
 
 .reply-form::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #9f283b 0%, #7a1f2e 100%);
-  border-radius: 16px 16px 0 0;
+  display: none;
 }
 
 .reply-form .comment-input-container {
@@ -550,24 +536,15 @@
   min-height: 80px;
   padding: 16px 70px 16px 18px;
   background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
-  border-color: rgba(159, 40, 59, 0.15);
-  box-shadow: inset 0 2px 6px rgba(159, 40, 59, 0.05),
-    0 2px 8px rgba(0, 0, 0, 0.03);
-}
-
-.reply-form .comment-input {
-  min-height: 80px;
-  padding: 16px 70px 16px 18px;
-  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
-  border-color: rgba(159, 40, 59, 0.15);
-  box-shadow: inset 0 2px 6px rgba(159, 40, 59, 0.05),
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03),
     0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .reply-form .comment-input:focus {
-  border-color: #9f283b;
-  box-shadow: 0 0 0 4px rgba(159, 40, 59, 0.1),
-    0 4px 12px rgba(159, 40, 59, 0.12), inset 0 2px 4px rgba(159, 40, 59, 0.08);
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.06), inset 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 .reply-actions {
@@ -584,12 +561,6 @@
   margin-top: 24px;
   margin-left: 48px;
   padding-left: 12px;
-  border-left: 3px solid #9f283b;
-  background: linear-gradient(
-    to right,
-    rgba(159, 40, 59, 0.03) 0%,
-    transparent 100%
-  );
   border-radius: 0 16px 16px 0;
   position: relative;
   animation: fadeIn 0.3s ease-out;
@@ -608,10 +579,12 @@
   background: linear-gradient(145deg, #fafbfc 0%, #ffffff 100%);
   border-left-width: 0;
   margin-bottom: 16px;
-  border: 1px solid rgba(159, 40, 59, 0.08);
-  box-shadow: 0 2px 12px rgba(159, 40, 59, 0.06),
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  padding-left: 40px;
 }
 
 .comment-reply::before {
@@ -619,8 +592,8 @@
 }
 
 .comment-reply:hover {
-  border-color: rgba(159, 40, 59, 0.12);
-  box-shadow: 0 4px 16px rgba(159, 40, 59, 0.1),
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
@@ -640,4 +613,14 @@
 
 .comment-reply .comment-date {
   font-size: 12px;
+}
+
+.reply-indicator-icon {
+  position: absolute;
+  left: 12px;
+  top: 24px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
+  z-index: 1;
 }

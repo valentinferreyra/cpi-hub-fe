@@ -8,6 +8,7 @@ interface CommentFormProps {
   isLoading?: boolean;
   initialContent?: string;
   initialImage?: string;
+  onCancel?: () => void;
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({
@@ -15,7 +16,8 @@ const CommentForm: React.FC<CommentFormProps> = ({
   placeholder = "Escribe tu comentario...",
   isLoading = false,
   initialContent = "",
-  initialImage
+  initialImage,
+  onCancel
 }) => {
   const [content, setContent] = useState(initialContent);
   const [image, setImage] = useState<string | null>(initialImage || null);
@@ -82,8 +84,20 @@ const CommentForm: React.FC<CommentFormProps> = ({
         </button>
       </div>
 
-      <div className="comment-form-help">
-        <small>💡 Presiona Ctrl+Enter para enviar rápidamente</small>
+      <div className="comment-form-actions">
+        {onCancel && (
+          <button
+            className="comment-cancel-btn"
+            onClick={onCancel}
+            disabled={isSubmitting || isLoading}
+            type="button"
+          >
+            Cancelar
+          </button>
+        )}
+        <div className="comment-form-help">
+          <small>💡 Presiona Ctrl+Enter para enviar rápidamente</small>
+        </div>
       </div>
     </div>
   );

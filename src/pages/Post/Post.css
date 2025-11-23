@@ -486,6 +486,34 @@
   border-radius: 3px;
 }
 
+.add-comment-button {
+  background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(159, 40, 59, 0.25), 0 2px 6px rgba(159, 40, 59, 0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-comment-button:hover {
+  background: linear-gradient(135deg, #7a1f2e 0%, #6b1a26 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(159, 40, 59, 0.35), 0 4px 10px rgba(159, 40, 59, 0.2);
+}
+
+.add-comment-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(159, 40, 59, 0.25);
+}
+
 .comment-form-integrated {
   margin-top: 32px;
   padding: 24px;
