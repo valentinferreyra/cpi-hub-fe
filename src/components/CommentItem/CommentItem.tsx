@@ -55,6 +55,7 @@ export const CommentItem = ({
   const handleSubmitReply = async (content: string, image?: string) => {
     try {
       await onReplySubmit(comment.id, content, image);
+      setReplyingToCommentId(null);
     } catch (error) {
       console.error("Error sending reply:", error);
     }
@@ -206,12 +207,12 @@ export const CommentItem = ({
             {!isReply && comment.replies && comment.replies.length > 0 && (
               <CommentsPill count={comment.replies.length} />
             )}
-            {!isReply && (
+            {!isReply && replyingToCommentId !== comment.id && (
               <button
-                className={`reply-button ${replyingToCommentId === comment.id ? 'cancel-mode' : ''}`}
-                onClick={replyingToCommentId === comment.id ? handleCancelReply : handleReplyClick}
+                className="reply-button"
+                onClick={handleReplyClick}
               >
-                <span>{replyingToCommentId === comment.id ? 'Cancelar' : 'Responder'}</span>
+                <span>Responder</span>
               </button>
             )}
           </div>
@@ -221,6 +222,7 @@ export const CommentItem = ({
           <CommentForm
             onSubmit={handleSubmitReply}
             placeholder="Escribe tu respuesta..."
+            onCancel={handleCancelReply}
           />
         )}
 

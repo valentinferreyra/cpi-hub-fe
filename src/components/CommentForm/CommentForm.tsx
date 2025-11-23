@@ -31,6 +31,9 @@ const CommentForm: React.FC<CommentFormProps> = ({
       await onSubmit(content.trim(), image || undefined);
       setContent("");
       setImage(null);
+      if (onCancel) {
+        onCancel();
+      }
     } catch (error) {
       console.error("Error submitting comment:", error);
     } finally {
