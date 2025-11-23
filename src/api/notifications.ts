@@ -1,5 +1,5 @@
 import api from "./client";
-import type { Notification } from "../types/notification";
+import type { Notification, CreateNotificationDTO } from "../types/notification";
 
 export interface NotificationsResponse {
   data: Notification[];
@@ -11,6 +11,18 @@ export interface NotificationsResponse {
 export interface UnreadCountResponse {
   count: number;
 }
+
+export const createNotification = async (
+  notification: CreateNotificationDTO
+): Promise<Notification> => {
+  try {
+    const response = await api.post('/notifications', notification);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating notification:', error);
+    throw error;
+  }
+};
 
 export const getNotifications = async (
   userId: number,

@@ -8,6 +8,7 @@ import CommentForm from "../CommentForm/CommentForm";
 import ImageLightbox from "../ImageLightbox/ImageLightbox";
 import ReactionButtons from "@/components/ReactionButtons";
 import CommentsPill from "@/components/CommentsPill";
+import downRightArrowIcon from "@/assets/down-right-arrow.png";
 import "./CommentItem.css";
 
 interface CommentItemProps {
@@ -54,6 +55,7 @@ export const CommentItem = ({
   const handleSubmitReply = async (content: string, image?: string) => {
     try {
       await onReplySubmit(comment.id, content, image);
+      setReplyingToCommentId(null);
     } catch (error) {
       console.error("Error sending reply:", error);
     }
@@ -111,6 +113,13 @@ export const CommentItem = ({
       )}
 
       <div className={`comment ${isReply ? "comment-reply" : ""}`}>
+        {isReply && (
+          <img
+            src={downRightArrowIcon}
+            alt="Respuesta a comentario"
+            className="reply-indicator-icon"
+          />
+        )}
         <div className="comment-header">
           <div className="comment-author-info">
             <img
@@ -198,12 +207,12 @@ export const CommentItem = ({
             {!isReply && comment.replies && comment.replies.length > 0 && (
               <CommentsPill count={comment.replies.length} />
             )}
-            {!isReply && (
+            {!isReply && replyingToCommentId !== comment.id && (
               <button
-                className={`reply-button ${replyingToCommentId === comment.id ? 'cancel-mode' : ''}`}
-                onClick={replyingToCommentId === comment.id ? handleCancelReply : handleReplyClick}
+                className="reply-button"
+                onClick={handleReplyClick}
               >
-                <span>{replyingToCommentId === comment.id ? 'Cancelar' : 'Responder'}</span>
+                <span>Responder</span>
               </button>
             )}
           </div>
@@ -213,6 +222,7 @@ export const CommentItem = ({
           <CommentForm
             onSubmit={handleSubmitReply}
             placeholder="Escribe tu respuesta..."
+            onCancel={handleCancelReply}
           />
         )}
 
