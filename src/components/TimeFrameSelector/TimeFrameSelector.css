@@ -1,0 +1,59 @@
+.time-frame-selector {
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.time-frame-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.time-frame-button {
+  padding: 12px 24px;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.time-frame-button:hover {
+  border-color: #9f283b;
+  background: #f8fafc;
+  color: #9f283b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(159, 40, 59, 0.15);
+}
+
+.time-frame-button.active {
+  background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 100%);
+  border-color: #9f283b;
+  color: white;
+  box-shadow: 0 4px 12px rgba(159, 40, 59, 0.3);
+}
+
+.time-frame-button:active {
+  transform: translateY(0);
+}
+
+.time-frame-button:focus {
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .time-frame-buttons {
+    gap: 8px;
+  }
+
+  .time-frame-button {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+}
