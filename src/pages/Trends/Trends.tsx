@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Sidebar from '@components/Sidebar/Sidebar';
 import Topbar from '@components/Topbar/Topbar';
 import TimeFrameSelector from '@components/TimeFrameSelector/TimeFrameSelector';
+import TrendingViewSelector, { type TrendingView } from '@components/TrendingViewSelector/TrendingViewSelector';
 import TrendingPostsSection from '@components/TrendingSection/TrendingPostsSection';
 import TrendingCommentsSection from '@components/TrendingSection/TrendingCommentsSection';
 import TrendingUsersSection from '@components/TrendingSection/TrendingUsersSection';
@@ -13,6 +14,7 @@ import './Trends.css';
 function Trends() {
   const { currentUser, selectSpace } = useAppContext();
   const [selectedTimeFrame, setSelectedTimeFrame] = useState<TimeFrame>('24h');
+  const [selectedView, setSelectedView] = useState<TrendingView>('posts');
   const [trendingPosts, setTrendingPosts] = useState<TrendingPost[]>([]);
   const [trendingComments, setTrendingComments] = useState<TrendingComment[]>([]);
   const [trendingUsers, setTrendingUsers] = useState<TrendingUser[]>([]);
@@ -31,7 +33,7 @@ function Trends() {
   const [hasMoreComments, setHasMoreComments] = useState(true);
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
 
-  const PAGE_SIZE_POSTS = 6;
+  const PAGE_SIZE_POSTS = 9;
   const PAGE_SIZE_COMMENTS = 5;
   const PAGE_SIZE_USERS = 9;
 
@@ -73,6 +75,9 @@ function Trends() {
 
   const handleTimeFrameChange = (timeFrame: TimeFrame) => {
     setSelectedTimeFrame(timeFrame);
+  };
+  const handleViewChange = (view: TrendingView) => {
+    setSelectedView(view);
   };
 
   const handleLoadMorePosts = async () => {
@@ -142,33 +147,42 @@ function Trends() {
             </p>
           </div>
 
+          <TrendingViewSelector selectedView={selectedView} onChange={handleViewChange} />
+
           <TimeFrameSelector
             selectedTimeFrame={selectedTimeFrame}
             onTimeFrameChange={handleTimeFrameChange}
           />
 
+
           <div className="trends-sections">
-            <TrendingPostsSection
-              posts={trendingPosts}
-              isLoading={isLoadingPosts}
-              isLoadingMore={isLoadingMorePosts}
-              hasMore={hasMorePosts}
-              onLoadMore={handleLoadMorePosts}
-            />
-            <TrendingCommentsSection
-              comments={trendingComments}
-              isLoading={isLoadingComments}
-              isLoadingMore={isLoadingMoreComments}
-              hasMore={hasMoreComments}
-              onLoadMore={handleLoadMoreComments}
-            />
-            <TrendingUsersSection
-              users={trendingUsers}
-              isLoading={isLoadingUsers}
-              isLoadingMore={isLoadingMoreUsers}
-              hasMore={hasMoreUsers}
-              onLoadMore={handleLoadMoreUsers}
-            />
+            {selectedView === 'posts' && (
+              <TrendingPostsSection
+                posts={trendingPosts}
+                isLoading={isLoadingPosts}
+                isLoadingMore={isLoadingMorePosts}
+                hasMore={hasMorePosts}
+                onLoadMore={handleLoadMorePosts}
+              />
+            )}
+            {selectedView === 'comments' && (
+              <TrendingCommentsSection
+                comments={trendingComments}
+                isLoading={isLoadingComments}
+                isLoadingMore={isLoadingMoreComments}
+                hasMore={hasMoreComments}
+                onLoadMore={handleLoadMoreComments}
+              />
+            )}
+            {selectedView === 'users' && (
+              <TrendingUsersSection
+                users={trendingUsers}
+                isLoading={isLoadingUsers}
+                isLoadingMore={isLoadingMoreUsers}
+                hasMore={hasMoreUsers}
+                onLoadMore={handleLoadMoreUsers}
+              />
+            )}
           </div>
         </div>
       </div>
