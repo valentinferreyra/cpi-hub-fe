@@ -149,10 +149,12 @@ function Trends() {
 
           <TrendingViewSelector selectedView={selectedView} onChange={handleViewChange} />
 
-          <TimeFrameSelector
-            selectedTimeFrame={selectedTimeFrame}
-            onTimeFrameChange={handleTimeFrameChange}
-          />
+          <div className="trends-filters-row">
+            <TimeFrameSelector
+              selectedTimeFrame={selectedTimeFrame}
+              onTimeFrameChange={handleTimeFrameChange}
+            />
+          </div>
 
 
           <div className="trends-sections">

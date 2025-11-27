@@ -82,6 +82,14 @@
   gap: 48px;
 }
 
+/* Filtro secundario (timeframe) menos prominente */
+.trends-filters-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+  margin-top: -12px;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .trends-container {

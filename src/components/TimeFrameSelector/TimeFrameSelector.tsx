@@ -20,18 +20,21 @@ const TimeFrameSelector: React.FC<TimeFrameSelectorProps> = ({
 }) => {
   return (
     <div className="time-frame-selector">
-      <div className="time-frame-buttons">
+      <label htmlFor="timeframe-select" className="time-frame-label">
+        Período:
+      </label>
+      <select
+        id="timeframe-select"
+        className="time-frame-dropdown"
+        value={selectedTimeFrame}
+        onChange={(e) => onTimeFrameChange(e.target.value as TimeFrame)}
+      >
         {TIME_FRAME_OPTIONS.map((option) => (
-          <button
-            key={option.value}
-            className={`time-frame-button ${selectedTimeFrame === option.value ? 'active' : ''
-              }`}
-            onClick={() => onTimeFrameChange(option.value)}
-          >
+          <option key={option.value} value={option.value}>
             {option.label}
-          </button>
+          </option>
         ))}
-      </div>
+      </select>
     </div>
   );
 };
