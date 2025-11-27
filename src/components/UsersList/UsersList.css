@@ -294,21 +294,34 @@
 }
 
 .users-list::-webkit-scrollbar {
-  width: 6px;
+  width: 0; /* hide */
+  height: 0;
+  display: none;
 }
 
 .users-list::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
+  background: transparent;
 }
 
 .users-list::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
+  background: transparent;
 }
 
 .users-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: transparent;
+}
+
+/* Hide scrollbar but allow scroll (Firefox + legacy + WebKit) */
+.users-list,
+.users-list-content {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge legacy */
+}
+
+.users-list-content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .users-list .user-item * {
