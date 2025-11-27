@@ -98,6 +98,69 @@ export const useWebSocket = ({
     socketRef.current.onclose = () => {
       console.log('Disconnected from WebSocket');
       setConnectionStatus('disconnected');
+
+      if (currentUser && spaceId) {
+        setTimeout(() => {
+          if (currentUser && spaceId && !socketRef.current) {
+            const fullName = `${currentUser.name} ${currentUser.last_name}`;
+            setConnectionStatus('connecting');
+            socketRef.current = createChatWebSocket(Number(spaceId), currentUser.id, fullName);
+            
+            socketRef.current.onopen = () => {
+              setConnectionStatus('connected');
+            };
+            
+            socketRef.current.onmessage = (event) => {
+              try {
+                const rawData = JSON.parse(event.data);
+
+                let message: ChatMessage;
+                if (typeof rawData === 'string') {
+                  try {
+                    message = JSON.parse(rawData) as ChatMessage;
+                  } catch {
+                    console.error("Error parsing string message:", rawData);
+                    return;
+                  }
+                } else {
+                  message = rawData as ChatMessage;
+                }
+
+                if (message.type === 'join') {
+                  const joinKey = `${message.user_id}-${message.space_id}-${message.username}`;
+                  if (processedJoins.current.has(joinKey)) {
+                    console.log("Join already processed, ignoring:", joinKey);
+                    return;
+                  }
+                  processedJoins.current.add(joinKey);
+                  
+                  const messageId = `join-${message.user_id}-${Date.now()}`;
+                  onJoinMessage(messageId, message.username);
+                  return;
+                }
+
+                if (message.type === 'chat' && !message.data?.content) {
+                  return;
+                }
+
+                setMessages((prevMessages) => [...prevMessages, message]);
+              } catch (error) {
+                console.error("Error parsing message:", error);
+              }
+            };
+            
+            socketRef.current.onclose = () => {
+              console.log('Disconnected from WebSocket');
+              setConnectionStatus('disconnected');
+            };
+            
+            socketRef.current.onerror = (error) => {
+              console.error('WebSocket error:', error);
+              setConnectionStatus('disconnected');
+            };
+          }
+        }, 3000);
+      }
     };
 
     socketRef.current.onerror = (error) => {
