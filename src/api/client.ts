@@ -73,13 +73,33 @@ const extractErrorMessage = (error: AxiosError): string => {
   return error.message || 'Ha ocurrido un error inesperado.';
 };
 
+// Construir la baseURL correctamente
+const getBaseURL = (): string => {
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  
+  if (!apiBaseUrl) {
+    if (import.meta.env.DEV) {
+      return "/v1";
+    }
+    console.warn("VITE_API_BASE_URL no está configurada, usando backend por defecto");
+    return "https://cpi-hub-api.onrender.com/v1";
+  }
+  
+  const cleanUrl = apiBaseUrl.replace(/\/v1\/?$/, "");
+  return `${cleanUrl}/v1`;
+};
+
 const api = axios.create({
-  baseURL: (import.meta.env.VITE_API_BASE_URL || "") + "/v1",
+  baseURL: getBaseURL(),
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+if (import.meta.env.DEV) {
+  console.log("API Base URL:", api.defaults.baseURL);
+}
 
 api.interceptors.request.use(
   (config) => {
@@ -87,6 +107,11 @@ api.interceptors.request.use(
     if (token && config.headers) {
       config.headers.Authorization = `${token}`;
     }
+    
+    if (import.meta.env.PROD) {
+      console.log(`[API Request] ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
+    }
+    
     return config;
   },
   (error) => {
@@ -99,6 +124,18 @@ api.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
+    // Log detallado del error para debug
+    console.error("[API Error]", {
+      message: error.message,
+      url: error.config?.url,
+      baseURL: error.config?.baseURL,
+      fullURL: error.config ? `${error.config.baseURL}${error.config.url}` : 'N/A',
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      request: error.request ? 'Request made but no response' : 'No request made',
+    });
+    
     if (errorHandler) {
       const message = extractErrorMessage(error);
       errorHandler(message);
