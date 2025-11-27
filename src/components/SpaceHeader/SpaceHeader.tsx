@@ -1,5 +1,6 @@
 import React from 'react';
-import type { Space, User } from '../../types/space';
+import type { Space } from '../../types/space';
+import type { User } from '../../types/user';
 import { useUserInfoModal } from '@/hooks';
 import UserInfoModal from '@/components/modals/UserInfoModal/UserInfoModal';
 import './SpaceHeader.css';
@@ -8,7 +9,7 @@ interface SpaceHeaderProps {
   space: Space;
   currentUser: User | null;
   isUserInSpace: boolean;
-  settingsRef: React.RefObject<HTMLDivElement>;
+  settingsRef: React.RefObject<HTMLDivElement | null>;
   showSettingsDropdown: boolean;
   onJoinSpace: () => void;
   onSettingsClick: (e: React.MouseEvent) => void;

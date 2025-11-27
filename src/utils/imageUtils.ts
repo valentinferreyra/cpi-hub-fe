@@ -92,7 +92,7 @@ export const compressBase64Image = async (
       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
       
       const mimeType = getBase64MimeType(base64);
-      const compressedBase64 = canvas.toBlob((blob) => {
+      canvas.toBlob((blob) => {
         if (blob) {
           const reader = new FileReader();
           reader.onload = () => resolve(reader.result as string);

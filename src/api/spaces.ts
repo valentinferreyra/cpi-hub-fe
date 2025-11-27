@@ -1,5 +1,6 @@
 import api from "./client";
-import type { Space, SpaceUser } from "../types/space";
+import type { Space } from "../types/space";
+import type { SpaceUser } from "../types/user";
 
 export const getSpaceById = async (spaceId: number): Promise<Space | null> => {
   try {

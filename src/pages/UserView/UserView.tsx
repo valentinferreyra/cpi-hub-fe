@@ -14,7 +14,7 @@ import './UserView.css';
 const UserView: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
-  const { currentUser, isLoading, fetchData } = useAppContext();
+  const { currentUser, isLoading } = useAppContext();
 
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);

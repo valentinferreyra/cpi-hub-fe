@@ -25,7 +25,7 @@ const Search: React.FC<SearchProps> = ({
   const [showResults, setShowResults] = useState(false);
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
-  const debounceRef = useRef<number | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const hasAnyResults =
     searchResults.posts.length > 0 ||
@@ -248,7 +248,7 @@ const Search: React.FC<SearchProps> = ({
                           >#{post.space.name}</span>
                           <span
                             className="search-result-author clickable"
-                            onClick={(e) => handleAuthorClick(e, parseInt(post.created_by.id))}
+                            onClick={(e) => handleAuthorClick(e, post.created_by.id)}
                           >
                             por {post.created_by.name} {post.created_by.last_name}
                           </span>
