@@ -168,7 +168,7 @@
 .btn-cancel:hover {
   background-color: #e5e7eb;
   border-color: #9f283b;
-  color: #7a1f2e;
+  color: #374151;
 }
 
 .btn-create {
@@ -205,4 +205,28 @@
   .btn-create {
     width: 100%;
   }
+}
+
+/* Thin Bordeaux Scrollbars within the modal */
+.create-post-modal,
+.create-post-modal * {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #7a1f2e transparent; /* Firefox */
+}
+
+.create-post-modal::-webkit-scrollbar,
+.create-post-modal *::-webkit-scrollbar {
+  width: 6px; /* thin */
+  height: 6px; /* for horizontal if any */
+}
+
+.create-post-modal::-webkit-scrollbar-thumb,
+.create-post-modal *::-webkit-scrollbar-thumb {
+  background-color: #7a1f2e; /* bordeaux */
+  border-radius: 8px;
+}
+
+.create-post-modal::-webkit-scrollbar-track,
+.create-post-modal *::-webkit-scrollbar-track {
+  background: transparent;
 }
