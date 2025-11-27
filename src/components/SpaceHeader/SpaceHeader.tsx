@@ -3,6 +3,7 @@ import type { Space } from '../../types/space';
 import type { User } from '../../types/user';
 import { useUserInfoModal } from '@/hooks';
 import UserInfoModal from '@/components/modals/UserInfoModal/UserInfoModal';
+import settingsIcon from "/src/assets/settings.png";
 import './SpaceHeader.css';
 
 interface SpaceHeaderProps {
@@ -59,7 +60,7 @@ const SpaceHeader: React.FC<SpaceHeaderProps> = ({
                 <div className="space-settings-container" ref={settingsRef}>
                   <button className="space-settings-btn" onClick={onSettingsClick}>
                     <img
-                      src="/src/assets/settings.png"
+                      src={settingsIcon}
                       alt="Configuración"
                       className="space-settings-icon"
                     />
