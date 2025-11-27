@@ -34,7 +34,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
     setOpenDropdown(openDropdown === spaceId ? null : spaceId);
   };
 
-  const handleLeaveSpace = (spaceId: number) => {
+  const handleLeaveSpace = (_spaceId: number) => {
     setOpenDropdown(null);
   };
 
