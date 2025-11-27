@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Topbar.css';
 import Search from '../Search/Search';
-import Messages from '../Messages/Messages';
 import Notifications from '../Notifications/Notifications';
 import cpihubLogo from '../../assets/cpihub-logo.png';
 import unqLogo from '../../assets/unq-logo.png';
@@ -86,7 +85,6 @@ const Topbar: React.FC<TopbarProps> = ({ currentUser }) => {
 
         <div className="topbar-right">
           <div className="actions-container">
-            <Messages />
             <Notifications />
             {currentUser && (
               <div className="user-menu-container" ref={menuRef}>

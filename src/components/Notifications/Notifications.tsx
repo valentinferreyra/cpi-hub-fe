@@ -51,8 +51,9 @@ const Notifications: React.FC<NotificationsProps> = ({ className = "" }) => {
     markAsRead(notification.id);
     setIsDropdownOpen(false);
     
-    const postId = notification.post_id ?? notification.entity_id;
-    navigate(`/post/${postId}`);
+    if (notification.url) {
+      navigate(notification.url);
+    }
   };
 
   const handleToggleDropdown = () => {
@@ -63,13 +64,6 @@ const Notifications: React.FC<NotificationsProps> = ({ className = "" }) => {
     markAllAsRead();
   };
 
-  const getNotificationMessage = (notification: Notification): string => {
-    if (notification.type === 'reaction') {
-      const entityName = notification.entity_type === 'post' ? 'post' : 'comentario';
-      return `Alguien reaccionó a tu ${entityName}`;
-    }
-    return 'Nueva notificación';
-  };
 
   if (!currentUser) {
     return null;
@@ -131,8 +125,9 @@ const Notifications: React.FC<NotificationsProps> = ({ className = "" }) => {
                   onClick={() => handleNotificationClick(notification)}
                 >
                   <div className="notification-content">
+                    <p className="notification-title">{notification.title}</p>
                     <p className="notification-message">
-                      {getNotificationMessage(notification)}
+                      {notification.description}
                     </p>
                     <small className="notification-time">
                       {formatDateShort(notification.created_at)}

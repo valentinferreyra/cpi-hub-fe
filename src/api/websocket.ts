@@ -1,4 +1,4 @@
-const WEBSOCKET_BASE_URL = 'ws://localhost:8080/v1/ws';
+const WEBSOCKET_BASE_URL = (import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8080') + '/v1/ws';
 
 export const createUserConnectionWebSocket = (userId: number): WebSocket => {
   const wsUrl = `${WEBSOCKET_BASE_URL}/user-connection?user_id=${userId}`;

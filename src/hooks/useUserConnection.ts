@@ -8,16 +8,10 @@ export const useUserConnection = ({
   const [userStatuses, setUserStatuses] = useState<Map<number, boolean>>(new Map());
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected');
   const socketRef = useRef<WebSocket | null>(null);
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    if (!currentUser) {
-      if (socketRef.current) {
-        socketRef.current.close();
-        socketRef.current = null;
-      }
-      setConnectionStatus('disconnected');
-      return;
-    }
+  const setupWebSocket = () => {
+    if (!currentUser) return;
 
     if (socketRef.current) {
       socketRef.current.close();
@@ -48,17 +42,47 @@ export const useUserConnection = ({
 
     socketRef.current.onclose = () => {
       setConnectionStatus('disconnected');
+      
+      if (currentUser && reconnectTimeoutRef.current === null) {
+        reconnectTimeoutRef.current = setTimeout(() => {
+          reconnectTimeoutRef.current = null;
+          if (currentUser && !socketRef.current) {
+            setupWebSocket();
+          }
+        }, 3000); // Reconectar después de 3 segundos
+      }
     };
 
     socketRef.current.onerror = (error) => {
       console.error('Error in UserConnection WebSocket:', error);
       setConnectionStatus('disconnected');
     };
+  };
+
+  useEffect(() => {
+    if (!currentUser) {
+      if (socketRef.current) {
+        socketRef.current.close();
+        socketRef.current = null;
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
+      }
+      setConnectionStatus('disconnected');
+      return;
+    }
+
+    setupWebSocket();
 
     return () => {
       if (socketRef.current) {
         socketRef.current.close();
         socketRef.current = null;
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
       }
     };
   }, [currentUser?.id]);
