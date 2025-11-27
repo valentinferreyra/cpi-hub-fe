@@ -1,0 +1,137 @@
+.trends-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.trends-container {
+  position: absolute;
+  top: 80px;
+  right: 5px;
+  left: 270px;
+  bottom: 3px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #9f283b #f0f0f0;
+}
+
+/* Estilos para Chrome/Safari/Edge */
+.trends-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.trends-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.trends-container::-webkit-scrollbar-thumb {
+  background: #9f283b;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.trends-container::-webkit-scrollbar-thumb:hover {
+  background: #7a1f2e;
+}
+
+.trends-content {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(159, 40, 59, 0.08);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.trends-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.trends-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 0 0 12px 0;
+}
+
+.trends-title::before {
+  content: "🔥 ";
+  filter: none;
+}
+
+.trends-title::after {
+  content: "Tendencias";
+  background: linear-gradient(135deg, #9f283b 0%, #7a1f2e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.trends-subtitle {
+  font-size: 18px;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 400;
+}
+
+.trends-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* Filtro secundario (timeframe) menos prominente */
+.trends-filters-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+  margin-top: -12px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .trends-container {
+    left: 220px;
+  }
+
+  .trends-content {
+    padding: 24px;
+  }
+
+  .trends-title {
+    font-size: 30px;
+  }
+
+  .trends-subtitle {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .trends-container {
+    left: 0;
+    top: 60px;
+  }
+
+  .trends-content {
+    padding: 16px;
+  }
+
+  .trends-title {
+    font-size: 24px;
+  }
+
+  .trends-subtitle {
+    font-size: 14px;
+  }
+
+  .trends-header {
+    margin-bottom: 24px;
+  }
+
+  .trends-sections {
+    gap: 32px;
+  }
+}
