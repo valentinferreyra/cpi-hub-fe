@@ -4,6 +4,8 @@ import type { Space } from '../../types/space';
 import spaceChatIcon from '../../assets/space_chat.png';
 import downArrowIcon from '../../assets/down_arrow.png';
 import rightArrowIcon from '../../assets/right_arrow_2.png';
+import trendsIcon from '../../assets/trends.png';
+import exploreIcon from '../../assets/explore.png';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -42,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
             onClick={handleTrendsClick}
           >
             <img
-              src="/src/assets/trends.png"
+              src={trendsIcon}
               alt="Tendencias"
               className="sidebar-icon trends-icon"
             />
@@ -53,7 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
             onClick={handleExploreClick}
           >
             <img
-              src="/src/assets/explore.png"
+              src={exploreIcon}
               alt="Explorar"
               className="sidebar-icon"
             />
@@ -73,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
           onClick={handleTrendsClick}
         >
           <img
-            src="/src/assets/trends.png"
+            src={trendsIcon}
             alt="Tendencias"
             className="sidebar-icon trends-icon"
           />
@@ -84,7 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
           onClick={handleExploreClick}
         >
           <img
-            src="/src/assets/explore.png"
+            src={exploreIcon}
             alt="Explorar"
             className="sidebar-icon"
           />
