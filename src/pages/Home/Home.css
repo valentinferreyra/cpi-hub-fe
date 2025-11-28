@@ -328,6 +328,7 @@
   margin: 0;
   padding: 40px;
   text-align: center;
+  grid-column: 1 / -1;
 }
 
 .posts-placeholder {
