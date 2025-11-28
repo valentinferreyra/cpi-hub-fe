@@ -324,12 +324,22 @@
   cursor: not-allowed;
 }
 
-.loading-container {
+.user-view-page:only-child,
+.user-view-page > .loading-container:only-child {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.user-view-page > .loading-container {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
   color: #7f8c8d;
 }
 
