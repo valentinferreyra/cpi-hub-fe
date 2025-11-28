@@ -117,10 +117,13 @@ const Settings: React.FC = () => {
     );
   }
 
+
+
   const breadcrumbItems = [
-    { label: 'Inicio', path: '/' },
-    { label: 'Ajustes', path: '/settings' }
+    { label: 'Inicio', path: '/', onClick: () => navigate('/') },
+    { label: 'Ajustes', path: '/settings', isActive: true }
   ];
+
 
   return (
     <div className="settings-page">
