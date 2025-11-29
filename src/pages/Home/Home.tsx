@@ -98,16 +98,7 @@ function Home() {
           {!selectedSpace && <NewsCarousel />}
           <div ref={masonryRef} className="posts-list">
             {(() => {
-              if (!Array.isArray(postsToShow)) {
-                return (
-                  <div className="empty-posts">
-                    <h3>No hay posts disponibles</h3>
-                    <p>Te invitamos a explorar nuestros <Link to="/explorar">spaces</Link> para encontrar contenido de tu interés y unirte a las conversaciones que más te apasionen.</p>
-                  </div>
-                );
-              }
-
-              if (postsToShow.length === 0) {
+              if (!Array.isArray(postsToShow) || postsToShow.length === 0) {
                 return (
                   <div className="empty-posts">
                     <h3>No hay posts disponibles</h3>
