@@ -6,6 +6,8 @@ import downArrowIcon from '../../assets/down_arrow.png';
 import rightArrowIcon from '../../assets/right_arrow_2.png';
 import trendsIcon from '../../assets/trends.png';
 import exploreIcon from '../../assets/explore.png';
+import { useUnreadChatMessages } from '../../hooks/useUnreadChatMessages';
+import { useAppContext } from '../../context/AppContext';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -17,6 +19,11 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSpacesExpanded, setIsSpacesExpanded] = useState(true);
+  const { currentUser } = useAppContext();
+  const { getUnreadCount } = useUnreadChatMessages({ 
+    spaces: spaces || [], 
+    currentUser 
+  });
 
   const handleSpaceClick = (space: Space) => {
     onSpaceClick(space);
@@ -120,8 +127,16 @@ const Sidebar: React.FC<SidebarProps> = ({ spaces, onSpaceClick }) => {
                 className={`sidebar-chat-link${isChatActive ? ' active-chat' : ''}`}
                 onClick={() => navigate(`/space/${space.id}/chat`)}
               >
-                <img src={spaceChatIcon} alt="Chat" className="sidebar-chat-icon" />
-                Chat
+                <div className="sidebar-chat-link-content">
+                  <img src={spaceChatIcon} alt="Chat" className="sidebar-chat-icon" />
+                  <span>Chat</span>
+                  {getUnreadCount(space.id) > 0 && (
+                    <span 
+                      className="sidebar-chat-unread-dot" 
+                      title={`${getUnreadCount(space.id)} mensaje${getUnreadCount(space.id) > 1 ? 's' : ''} nuevo${getUnreadCount(space.id) > 1 ? 's' : ''}`}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           );
