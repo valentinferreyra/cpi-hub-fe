@@ -99,14 +99,6 @@ function Home() {
           <div ref={masonryRef} className="posts-list">
             {(() => {
               if (!Array.isArray(postsToShow) || postsToShow.length === 0) {
-                if (selectedSpace) {
-                  return (
-                    <div className="empty-posts">
-                      <h3>No hay posts disponibles</h3>
-                      <p>Explora otros <Link to="/explorar">spaces</Link> o crea el primer post aquí.</p>
-                    </div>
-                  );
-                }
                 return (
                   <div className="empty-posts">
                     <h3>No hay posts disponibles</h3>
